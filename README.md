@@ -1,7 +1,5 @@
 # ConvertRoadwaysXODR
 
-`python parseOpenDrive.py [--filename file]`
-
 `roadways.py` - OpenDrive Classes  
 
-`parseOpenDrive.py` - Main Parser
+`open_drive_parser.py` - Main Parser
