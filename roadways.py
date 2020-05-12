@@ -38,10 +38,10 @@ class VectorScene:
 
 class Road:
     def __init__(self, name = "", id = 0, length = 0, junction = 0):
-        self.name = ""
-        self.id = 0
-        self.length = 0
-        self.junction = 0
+        self.name = name
+        self.id = id
+        self.length = length
+        self.junction = junction
         self.roadPredecessor = None
         self.roadSuccessor = None
         self.type_s = ""
