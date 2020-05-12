@@ -128,9 +128,3 @@ def parseOpenDrive(filename="test_data/Town02.xodr"):
         parseRoad(roadways, road)
     for junc in root.findall("junction"):
         parseJunction(roadways, junc)
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='Process some integers.')
-    parser.add_argument('--filename', default="test_data/Town02.xodr")
-    args = parser.parse_args()
-    parseOpenDrive(args.filename)
