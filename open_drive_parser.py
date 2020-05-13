@@ -31,44 +31,61 @@ class OpenDriveParser:
             elif child.tag == "geoReference":
                 roadways.header.newGeoReference(child.text)
 
-    def __parseLanes(self, lanes):
+    def __parse_lanes(self, lanes):
         output = rw.Lanes()
         laneOffset = lanes.findall("laneOffset")
         for lo in laneOffset:
             att = lo.attrib
+            # Standard has "t_grEqZero" as element of [0, inf)
             offset = rw.LaneOffset(
-                att["s"], att["a"], att["b"], att["c"], att["d"])
+                float(att["s"]),
+                float(att["a"]),
+                float(att["b"]),
+                float(att["c"]),
+                float(att["d"])
+            )
             output.laneOffset.append(offset)
         laneSection = lanes.findall("laneSection")
         for ls in laneSection:
-            section = rw.LaneSection(ls.attrib["s"])
+            section = rw.LaneSection(float(ls.attrib["s"]))
             left = lanes.findall("laneSection/left/lane")
             right = lanes.findall("laneSection/right/lane")
             center = lanes.findall("laneSection/center/lane")
             for i, side in enumerate([left, right, center]):
                 for l in side:
                     att = l.attrib
-                    lane = rw.Lane(att["id"], att["type"], att["level"])
+                    lane = rw.Lane(
+                        int(att["id"]),
+                        att["type"],
+                        bool(att["level"])
+                    )
                     pred = l.find("link/predecessor")
                     if pred is not None:
-                        lane.predecessorId = pred.attrib["id"]
+                        lane.predecessorId = int(pred.attrib["id"])
                     succ = l.find("link/successor")
                     if succ is not None:
-                        lane.successorId = succ.attrib["id"]
+                        lane.successorId = int(succ.attrib["id"])
                     width = l.find("width")
                     if width is not None:
                         att = width.attrib
                         lane.width = rw.Width(
-                            att["sOffset"], att["a"], att["b"], att["c"],
-                            att["d"])
+                            float(att["sOffset"]),
+                            float(att["a"]),
+                            float(att["b"]),
+                            float(att["c"]),
+                            float(att["d"])
+                        )
                     roadMark = l.find("roadMark")
                     if roadMark is not None:
                         att = roadMark.attrib
                         lane.roadMark = rw.RoadMark(
-                            att["sOffset"], att["type"], att["material"],
-                            att["laneChange"])
+                            float(att["sOffset"]),
+                            att["type"],
+                            att["material"],
+                            att["laneChange"]
+                        )
                         if "width" in att:
-                            lane.roadMark.width = att["width"]
+                            lane.roadMark.width = float(att["width"])
                     vl = l.find("userData/vectorLane")
                     if vl is not None:
                         lane.travelDir = vl.attrib["travelDir"]
@@ -124,7 +141,7 @@ class OpenDriveParser:
             e = rw.Elevation(att["s"], att["a"], att["b"], att["c"], att["d"])
             r.elevationProfile.append(e)
         lanes = road.find("lanes")
-        r.lanes = self.__parseLanes(lanes)
+        r.lanes = self.__parse_lanes(lanes)
         roadways.roads[r.id] = r
 
     def __parseJunction(self, roadways, junc):
