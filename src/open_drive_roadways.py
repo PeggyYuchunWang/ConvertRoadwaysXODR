@@ -139,6 +139,7 @@ class LaneOffset:
 class LaneSection:
     def __init__(self, s=0):
         self.s = float(s)
+        self.single_side = False
         self.left = {}
         self.center = {}
         self.right = {}

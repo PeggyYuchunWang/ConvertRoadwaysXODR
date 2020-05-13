@@ -48,7 +48,10 @@ class OpenDriveParser:
             output.laneOffset.append(offset)
         laneSection = lanes.findall("laneSection")
         for ls in laneSection:
-            section = rw.LaneSection(float(ls.attrib["s"]))
+            att = ls.attrib
+            section = rw.LaneSection(float(att["s"]))
+            if "singleSide" in att:
+                section.single_side = utils.convertStringToBool(att["singleSide"])
             left = lanes.findall("laneSection/left/lane")
             right = lanes.findall("laneSection/right/lane")
             center = lanes.findall("laneSection/center/lane")
