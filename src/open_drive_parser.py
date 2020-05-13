@@ -197,7 +197,7 @@ class OpenDriveParser:
             j.connections.append(c)
         roadways.junctions[j.id] = j
 
-    def parse_file(self, filename="test_data/Town02.xodr"):
+    def parse_file(self, filename="test_data/CarlaExs/Town02.xodr"):
         print("parsing ", filename)
         root = ET.parse(filename).getroot()
         for header in root.findall("header"):
