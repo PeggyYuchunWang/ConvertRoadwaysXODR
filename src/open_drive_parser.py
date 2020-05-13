@@ -1,7 +1,5 @@
 import xml.etree.ElementTree as ET
-import roadways as rw
-import argparse
-
+import src.open_drive_roadways as rw
 
 class OpenDriveParser:
     def __init__(self):
@@ -181,3 +179,4 @@ class OpenDriveParser:
             self.__parse_road(self.data, road)
         for junc in root.findall("junction"):
             self.__parseJunction(self.data, junc)
+        print("done parse")
