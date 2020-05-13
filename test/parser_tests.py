@@ -8,6 +8,9 @@ class ParserTests(unittest.TestCase):
         self.parser = OpenDriveParser()
         self.parser.parse_file("test_data/OpenDriveExs/Ex_Crosswalk.xodr")
 
+    def tearDown(self):
+        self.parser = None
+
     def test_header(self):
         header = self.parser.data.header
         self.assertIsInstance(header, Header)
