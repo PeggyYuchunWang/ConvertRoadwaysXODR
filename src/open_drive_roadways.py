@@ -5,18 +5,17 @@ class OpenDriveRoadways:
         self.junctions = {}
 
 class Header:
-    def __init__(self, revMajor = "", revMinor = "", version = "",
-            date = "", north = "", south = "", east = "", west = "",
-            vendor = ""):
-        self.revMajor = revMajor
-        self.revMinor = revMinor
+    def __init__(self, revMajor = 0, revMinor = 0, version = "",
+            date = "", north = 0, south = 0, east = 0, west = 0):
+        self.revMajor = int(revMajor)
+        self.revMinor = int(revMinor)
         self.version = version
         self.date = date
-        self.north = north
-        self.south = south
-        self.east = east
-        self.west = west
-        self.vendor = vendor
+        self.north = float(north)
+        self.south = float(south)
+        self.east = float(east)
+        self.west = float(west)
+        self.vendor = ""
         self.geoReference = None
         self.userData = None
 
@@ -37,34 +36,34 @@ class VectorScene:
         self.version = version
 
 class Road:
-    def __init__(self, name = "", id = 0, length = 0, junction = 0):
-        self.name = name
-        self.id = id
-        self.length = length
-        self.junction = junction
+    def __init__(self, id = 0, length = 0, junction = 0):
+        self.name = ""
+        self.id = int(id)
+        self.length = float(length)
+        self.junction = int(junction)
         self.roadPredecessor = None
         self.roadSuccessor = None
-        self.type_s = ""
+        self.type_s = 0
         self.type_type = ""
-        self.max_speed = ""
+        self.max_speed = 0
         self.speed_unit = ""
         self.planView = []
         self.elevationProfile = []
         self.lanes = None
 
 class elementType:
-    def __init__(self, type = "", id = "", contactPoint = None):
+    def __init__(self, type = "", id = 0, contactPoint = None):
         self.type = type
-        self.id = id
+        self.id = int(id)
         self.contactPoint = contactPoint
 
 class Geometry:
     def __init__(self, s = 0, x = 0, y = 0, hdg = 0, length = 0):
-        self.s = s
-        self.x = x
-        self.y = y
-        self.hdg = hdg
-        self.length = length
+        self.s = float(s)
+        self.x = float(x)
+        self.y = float(y)
+        self.hdg = float(hdg)
+        self.length = float(length)
         self.type = None
 
 class Line:
@@ -73,31 +72,55 @@ class Line:
 
 class Arc:
     def __init__(self, curvature = 0):
-        self.curvature = curvature
+        self.curvature = float(curvature)
+
+class Spiral:
+    def __init__(self, curveStart=0, curveEnd=0):
+        self.curveStart = curveStart
+        self.curveEnd = curveEnd
+
+class Poly3:
+    def __init__(self, a=0, b=0, c=0, d=0):
+        self.a = float(a)
+        self.b = float(b)
+        self.c = float(c)
+        self.d = float(d)
+
+class ParamPoly3:
+    def __init__(self, pRange="", aU=0, bU=0, cU=0, dU=0, aV=0, bV=0, cV=0, dV=0):
+        self.pRange = pRange
+        self.aU = float(aU)
+        self.bU = float(bU)
+        self.cU = float(cU)
+        self.dU = float(dU)
+        self.aV = float(aV)
+        self.bV = float(bV)
+        self.cV = float(cV)
+        self.dV = float(dV)
 
 class Elevation:
     def __init__(self, s=0, a=0, b=0, c=0, d=0):
-        self.s = s
-        self.a = a
-        self.b = b
-        self.c = c
-        self.d = d
+        self.s = float(s)
+        self.a = float(a)
+        self.b = float(b)
+        self.c = float(c)
+        self.d = float(d)
 
 class Width:
     def __init__(self, sOffset=0, a=0, b=0, c=0, d=0):
-        self.sOffset = sOffset
-        self.a = a
-        self.b = b
-        self.c = c
-        self.d = d
+        self.sOffset = float(sOffset)
+        self.a = float(a)
+        self.b = float(b)
+        self.c = float(c)
+        self.d = float(d)
 
 class RoadMark:
-    def __init__(self, sOffset=0, type="", material="", laneChange=""):
-        self.sOffset = sOffset
+    def __init__(self, sOffset=0, type="", laneChange=""):
+        self.sOffset = float(sOffset)
         self.type = type
-        self.material = material
+        self.material = ""
         self.laneChange = laneChange
-        self.width = ""
+        self.width = 0
 
 class Lanes:
     def __init__(self):
@@ -106,22 +129,22 @@ class Lanes:
 
 class LaneOffset:
     def __init__(self, s=0, a=0, b=0, c=0, d=0):
-        self.s = s
-        self.a = a
-        self.b = b
-        self.c = c
-        self.d = d
+        self.s = float(s)
+        self.a = float(a)
+        self.b = float(b)
+        self.c = float(c)
+        self.d = float(d)
 
 class LaneSection:
     def __init__(self, s=0):
-        self.s = s
-        self.left = []
-        self.center = []
-        self.right = []
+        self.s = float(s)
+        self.left = {}
+        self.center = {}
+        self.right = {}
 
 class Lane:
-    def __init__(self, id="", type="", level=""):
-        self.id = id
+    def __init__(self, id=0, type="", level=False):
+        self.id = int(id)
         self.type = type
         self.level = level
         self.lanePredecessorId = ""
@@ -136,11 +159,11 @@ class LaneLink:
         self.linkto = linkto
 
 class Connection:
-    def __init__(self, id="", incomingRoad="", connectingRoad="", contactPoint=""):
+    def __init__(self, id=""):
         self.id = id
-        self.incomingRoad = incomingRoad
-        self.connectingRoad = connectingRoad
-        self.contactPoint = contactPoint
+        self.incomingRoad = ""
+        self.connectingRoad = ""
+        self.contactPoint = ""
         self.laneLink = None
 
 class Junction:
