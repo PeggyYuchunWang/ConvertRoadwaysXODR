@@ -7,13 +7,20 @@ class OpenDriveParser:
     def __init__(self):
         self.data = rw.OpenDriveRoadways()
 
-    def __parseHeader(self, roadways, header):
+    def __parse_header(self, roadways, header):
         if header.attrib:
             att = header.attrib
             roadways.header = rw.Header(
-                att["revMajor"], att["revMinor"], att["version"], att["date"],
-                att["north"], att["south"], att["east"], att["west"],
-                att["vendor"])
+                int(att["revMajor"]),
+                int(att["revMinor"]),
+                att["version"],
+                att["date"],
+                float(att["north"]),
+                float(att["south"]),
+                float(att["east"]),
+                float(att["west"]),
+                att["vendor"]
+            )
         for child in header:
             if child.tag == "userData":
                 for v in child:
@@ -136,7 +143,7 @@ class OpenDriveParser:
     def parse_file(self, filename="test_data/Town02.xodr"):
         root = ET.parse(filename).getroot()
         for header in root.findall("header"):
-            self.__parseHeader(self.data, header)
+            self.__parse_header(self.data, header)
         for road in root.findall("road"):
             self.__parseRoad(self.data, road)
         for junc in root.findall("junction"):
