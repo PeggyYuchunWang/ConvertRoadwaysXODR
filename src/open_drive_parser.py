@@ -185,10 +185,14 @@ class OpenDriveParser:
     def __parseJunction(self, roadways, junc):
         att = junc.attrib
         j = rw.Junction(att["id"], att["name"])
+        if "type" in att:
+                j.type = att["type"]
         for connection in junc:
             att = connection.attrib
             c = rw.Connection(
                 att["id"])
+            if "type" in att:
+                c.type = att["type"]
             if "incomingRoad" in att:
                 c.incomingRoad = att["incomingRoad"]
             if "connectingRoad" in att:

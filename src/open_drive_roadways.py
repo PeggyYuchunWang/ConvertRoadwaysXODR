@@ -163,6 +163,7 @@ class LaneLink:
 class Connection:
     def __init__(self, id=""):
         self.id = id
+        self.type = "default"
         self.incomingRoad = ""
         self.connectingRoad = ""
         self.contactPoint = ""
@@ -172,4 +173,5 @@ class Junction:
     def __init__(self, id="", name=""):
         self.id = id
         self.name = name
+        self.type = "default"
         self.connections = []
