@@ -2,6 +2,7 @@ import xml.etree.ElementTree as ET
 import roadways as rw
 import argparse
 
+
 class OpenDriveParser:
     def __init__(self):
         self.data = rw.OpenDriveRoadways()
@@ -9,15 +10,17 @@ class OpenDriveParser:
     def __parseHeader(self, roadways, header):
         if header.attrib:
             att = header.attrib
-            roadways.header = rw.Header(att["revMajor"], att["revMinor"], att["version"],
-                att["date"], att["north"], att["south"], att["east"], att["west"],
+            roadways.header = rw.Header(
+                att["revMajor"], att["revMinor"], att["version"], att["date"],
+                att["north"], att["south"], att["east"], att["west"],
                 att["vendor"])
         for child in header:
             if child.tag == "userData":
                 for v in child:
                     if v.tag == "vectorScene":
                         att = v.attrib
-                        roadways.header.geoReference.vectorScene = rw.VectorScene(att["program"], att["version"])
+                        roadways.header.geoReference.vectorScene = rw.VectorScene(
+                            att["program"], att["version"])
             elif child.tag == "geoReference":
                 roadways.header.newGeoReference(child.text)
 
@@ -26,7 +29,8 @@ class OpenDriveParser:
         laneOffset = lanes.findall("laneOffset")
         for lo in laneOffset:
             att = lo.attrib
-            offset = rw.LaneOffset(att["s"], att["a"], att["b"], att["c"], att["d"])
+            offset = rw.LaneOffset(
+                att["s"], att["a"], att["b"], att["c"], att["d"])
             output.laneOffset.append(offset)
         laneSection = lanes.findall("laneSection")
         for ls in laneSection:
@@ -47,13 +51,15 @@ class OpenDriveParser:
                     width = l.find("width")
                     if width is not None:
                         att = width.attrib
-                        lane.width = rw.Width(att["sOffset"], att["a"], att["b"], att["c"],
+                        lane.width = rw.Width(
+                            att["sOffset"], att["a"], att["b"], att["c"],
                             att["d"])
                     roadMark = l.find("roadMark")
                     if roadMark is not None:
                         att = roadMark.attrib
-                        lane.roadMark = rw.RoadMark(att["sOffset"], att["type"],
-                            att["material"], att["laneChange"])
+                        lane.roadMark = rw.RoadMark(
+                            att["sOffset"], att["type"], att["material"],
+                            att["laneChange"])
                         if "width" in att:
                             lane.roadMark.width = att["width"]
                     vl = l.find("userData/vectorLane")
@@ -74,13 +80,15 @@ class OpenDriveParser:
         pred = road.find("link/predecessor")
         if pred is not None:
             att = pred.attrib
-            r.roadPredecessor = rw.elementType(att["elementType"], att["elementId"])
+            r.roadPredecessor = rw.elementType(
+                att["elementType"], att["elementId"])
             if "contactPoint" in att:
                 r.roadPredecessor.contactPoint = att["contactPoint"]
         succ = road.find("link/successor")
         if succ is not None:
             att = succ.attrib
-            r.roadSuccessor = rw.elementType(att["elementType"], att["elementId"])
+            r.roadSuccessor = rw.elementType(
+                att["elementType"], att["elementId"])
             if "contactPoint" in att:
                 r.roadSuccessor.contactPoint = att["contactPoint"]
         type = road.find("type")
@@ -93,7 +101,8 @@ class OpenDriveParser:
         geos = road.findall("planView/geometry")
         for g in geos:
             att = g.attrib
-            geo = rw.Geometry(att["s"], att["x"], att["y"], att["hdg"], att["length"])
+            geo = rw.Geometry(att["s"], att["x"], att["y"],
+                              att["hdg"], att["length"])
             for c in g:
                 if c.tag == "line":
                     geo.type = rw.Line()
@@ -116,7 +125,8 @@ class OpenDriveParser:
         j = rw.Junction(att["id"], att["name"])
         for connection in junc:
             att = connection.attrib
-            c = rw.Connection(att["id"], att["incomingRoad"], att["connectingRoad"],
+            c = rw.Connection(
+                att["id"], att["incomingRoad"], att["connectingRoad"],
                 att["contactPoint"])
             ll = connection.find("laneLink")
             c.laneLink = rw.LaneLink(ll.attrib["from"], ll.attrib["to"])
