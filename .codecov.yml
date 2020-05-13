@@ -1,0 +1,12 @@
+coverage:
+  status:
+    patch: no
+    changes: no
+    project:
+      default: false
+      src:
+        paths: "src/"
+        target: 75%
+      tests:
+        paths: "test/"
+        target: 100%
