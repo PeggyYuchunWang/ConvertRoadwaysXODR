@@ -1,8 +1,8 @@
 class OpenDriveRoadways:
     def __init__(self):
         self.header = None
-        self.roads = []
-        self.junctions = []
+        self.roads = {}
+        self.junctions = {}
 
 class Header:
     def __init__(self, revMajor = "", revMinor = "", version = "",

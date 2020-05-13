@@ -109,7 +109,7 @@ class OpenDriveParser:
             r.elevationProfile.append(e)
         lanes = road.find("lanes")
         r.lanes = self.__parseLanes(lanes)
-        roadways.roads.append(r)
+        roadways.roads[r.id] = r
 
     def __parseJunction(self, roadways, junc):
         att = junc.attrib
@@ -121,7 +121,7 @@ class OpenDriveParser:
             ll = connection.find("laneLink")
             c.laneLink = rw.LaneLink(ll.attrib["from"], ll.attrib["to"])
             j.connections.append(c)
-        roadways.junctions.append(j)
+        roadways.junctions[j.id] = j
 
     def parse_file(self, filename="test_data/Town02.xodr"):
         root = ET.parse(filename).getroot()
