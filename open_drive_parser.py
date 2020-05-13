@@ -98,47 +98,63 @@ class OpenDriveParser:
             output.laneSection.append(section)
         return output
 
-    def __parseRoad(self, roadways, road):
+    def __parse_road(self, roadways, road):
         att = road.attrib
-        r = rw.Road(att["name"], att["id"], att["length"], att["junction"])
+        r = rw.Road(
+            att["name"],
+            int(att["id"]),
+            float(att["length"]),
+            int(att["junction"])
+        )
         pred = road.find("link/predecessor")
         if pred is not None:
             att = pred.attrib
             r.roadPredecessor = rw.elementType(
-                att["elementType"], att["elementId"])
+                att["elementType"], int(att["elementId"]))
             if "contactPoint" in att:
                 r.roadPredecessor.contactPoint = att["contactPoint"]
         succ = road.find("link/successor")
         if succ is not None:
             att = succ.attrib
             r.roadSuccessor = rw.elementType(
-                att["elementType"], att["elementId"])
+                att["elementType"], int(att["elementId"]))
             if "contactPoint" in att:
                 r.roadSuccessor.contactPoint = att["contactPoint"]
         type = road.find("type")
         if type is not None:
-            r.type_s = type.attrib["s"]
+            r.type_s = float(type.attrib["s"])
             r.type_type = type.attrib["type"]
             for c in type:
-                r.max_speed = c.attrib["max"]
+                r.max_speed = float(c.attrib["max"])
                 r.speed_unit = c.attrib["unit"]
         geos = road.findall("planView/geometry")
         for g in geos:
             att = g.attrib
-            geo = rw.Geometry(att["s"], att["x"], att["y"],
-                              att["hdg"], att["length"])
+            geo = rw.Geometry(
+                float(att["s"]),
+                float(att["x"]),
+                float(att["y"]),
+                float(att["hdg"]),
+                float(att["length"])
+            )
             for c in g:
                 if c.tag == "line":
                     geo.type = rw.Line()
                 elif c.tag == "arc":
-                    geo.type = rw.Arc(c.attrib["curvature"])
+                    geo.type = rw.Arc(float(c.attrib["curvature"]))
                 else:
                     print("YIKES")
             r.planView.append(geo)
         elevations = road.findall("elevationProfile/elevation")
         for ele in elevations:
             att = ele.attrib
-            e = rw.Elevation(att["s"], att["a"], att["b"], att["c"], att["d"])
+            e = rw.Elevation(
+                float(att["s"]),
+                float(att["a"]),
+                float(att["b"]),
+                float(att["c"]),
+                float(att["d"])
+            )
             r.elevationProfile.append(e)
         lanes = road.find("lanes")
         r.lanes = self.__parse_lanes(lanes)
@@ -162,6 +178,6 @@ class OpenDriveParser:
         for header in root.findall("header"):
             self.__parse_header(self.data, header)
         for road in root.findall("road"):
-            self.__parseRoad(self.data, road)
+            self.__parse_road(self.data, road)
         for junc in root.findall("junction"):
             self.__parseJunction(self.data, junc)
