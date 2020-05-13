@@ -12,6 +12,7 @@ class OpenDriveParser:
             roadways.header = rw.Header(
                 int(att["revMajor"]),
                 int(att["revMinor"]),
+                att["name"],
                 att["version"],
                 att["date"],
                 float(att["north"]),
