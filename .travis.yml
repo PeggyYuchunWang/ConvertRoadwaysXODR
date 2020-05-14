@@ -13,7 +13,9 @@ install:
   - "pip install codecov"
 
 script:
-  - python run_tests.py
+  - coverage run run_tests.py
+  - coverage run main.py --folder test_data/CarlaExs/
+  - coverage run main.py --folder test_data/OpenDriveExs/
 
 after_success:
   - "codecov"
