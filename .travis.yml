@@ -14,8 +14,8 @@ install:
   - pip install pytest-cov
 # command to run tests
 script:
-  - coverage run main.py --folder test_data/CarlaExs/ --cov-report term --cov=app/test/
-  - coverage run main.py --folder test_data/OpenDriveExs/ --cov-report term --cov=app/test/
+  - coverage run main.py --folder test_data/CarlaExs/
+  - coverage run main.py --folder test_data/OpenDriveExs/
   
 after_success:
   - codecov
