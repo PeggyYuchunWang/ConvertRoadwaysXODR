@@ -11,6 +11,7 @@ python:
 install:
   - pip install -r requirements.txt
   - pip install coverage
+  - pip install pytest-cov
 # command to run tests
 script:
   - coverage run main.py --folder test_data/CarlaExs/ --cov-report term --cov=app/test/
