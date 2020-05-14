@@ -13,8 +13,8 @@ install:
   - pip install coverage
 # command to run tests
 script:
-  - python main.py --folder test_data/CarlaExs/ --cov-report term --cov=app/test/
-  - python main.py --folder test_data/OpenDriveExs/ --cov-report term --cov=app/test/
+  - coverage run main.py --folder test_data/CarlaExs/ --cov-report term --cov=app/test/
+  - coverage run main.py --folder test_data/OpenDriveExs/ --cov-report term --cov=app/test/
   
 after_success:
   - codecov
