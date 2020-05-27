@@ -9,9 +9,10 @@ if __name__ == "__main__":
     parser.add_argument('--folder', default="test_data/CarlaExs/")
     args = parser.parse_args()
     odp = OpenDriveParser()
-    onlyfiles = [f for f in listdir(args.folder) if isfile(join(args.folder, f))]
-    if ".DS_Store" in onlyfiles:
-        onlyfiles.remove(".DS_Store")
+    # onlyfiles = [f for f in listdir(args.folder) if isfile(join(args.folder, f))]
+    # if ".DS_Store" in onlyfiles:
+    #     onlyfiles.remove(".DS_Store")
     odp.parse_file(args.filename)
-    for f in onlyfiles:
-        odp.parse_file(args.folder+f)
+    print(odp.data.roads[1].lanes.laneSection[0])
+    # for f in onlyfiles:
+    #     odp.parse_file(args.folder+f)
