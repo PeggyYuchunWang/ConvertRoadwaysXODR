@@ -146,16 +146,20 @@ class OpenDriveParser:
             for c in g:
                 if c.tag == "line":
                     geo.type = rw.Line()
+                    geo.type_name = "line"
                 elif c.tag == "arc":
                     geo.type = rw.Arc(float(c.attrib["curvature"]))
+                    geo.type_name = "arc"
                 elif c.tag == "spiral":
                     att = c.attrib
                     geo.type = rw.Spiral(float(att["curvStart"]),
                             float(att["curvEnd"]))
+                    geo.type_name = "spiral"
                 elif c.tag == "poly3":
                     att = c.attrib
                     geo.type = rw.Poly3(float(att["a"]), float(att["b"]),
                             float(att["c"]), float(att["d"]))
+                    geo.type_name = "poly3"
                 elif c.tag == "paramPoly3":
                     att = c.attrib
                     geo.type = rw.ParamPoly3(att["pRange"], float(att["aU"]),
@@ -163,6 +167,7 @@ class OpenDriveParser:
                                 float(att["dU"]), float(att["aV"]),
                                 float(att["bV"]), float(att["cV"]),
                                 float(att["dV"]))
+                    geo.type_name = "paramPoly3"
                 else:
                     print(c)
                     print("YIKES")
