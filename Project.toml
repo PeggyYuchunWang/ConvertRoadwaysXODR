@@ -1,0 +1,11 @@
+name = "OpenDrive2Roadway"
+uuid = "b478468a-968f-4f20-bfa3-a00529f4778e"
+authors =[
+    "Peggy Wang <wangyuc@stanford.edu>",
+    "Alexander Koufos <akoufos@stanford.edu>"
+]
+version = "0.1.0"
+
+[deps]
+AutomotiveSimulator = "6aa42d20-6c96-11ea-1103-339224409280"
+PyCall = "438e738f-606a-5dbb-bf0a-cddfbfd45ab0"
