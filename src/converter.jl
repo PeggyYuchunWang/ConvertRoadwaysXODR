@@ -2,8 +2,8 @@ using PyCall
 using AutomotiveSimulator
 using AutomotiveVisualization
 
-function createCurve(id, laneindex, r, y)
-    tag = LaneTag(id, laneindex)
+function createCurve(segid, laneindex, r, y)
+    tag = LaneTag(segid, laneindex)
     curve = nothing
         if r.planView[1].type_name == "line"
             curve = gen_straight_curve(VecE2(0.0, y), VecE2(r.length, y), 10)
@@ -24,8 +24,8 @@ function OpenDriveToRoadwaysConverter(filename, roadIndex)
     odp.parse_file(filename)
     # AS roadway object
     rw = Roadway()
-    for (i, r) in odp.data.roads
-        if i == roadIndex
+    for (segid, r) in odp.data.roads
+        if segid == roadIndex
             roadseg = RoadSegment{Float64}(i)
             origin = VecSE2(0.0,0.0,0.0)
             for sect in r.lanes.laneSection
@@ -34,7 +34,7 @@ function OpenDriveToRoadwaysConverter(filename, roadIndex)
                 for (id, lane) in sort(sect.right, rev=true)
                     if lane.type == "driving"
                         laneindex += 1
-                        tag, curve = createCurve(i, laneindex, r, y)
+                        tag, curve = createCurve(segid, laneindex, r, y)
                         y += lane.width.a
                         push!(roadseg.lanes, Lane(tag, curve, width=lane.width.a))
                     end
@@ -42,7 +42,7 @@ function OpenDriveToRoadwaysConverter(filename, roadIndex)
                 for (id, lane) in sort(sect.left)
                     if lane.type == "driving"
                         laneindex += 1
-                        tag, curve = createCurve(i, laneindex, r, y)
+                        tag, curve = createCurve(segid, laneindex, r, y)
                         y += lane.width.a
                         push!(roadseg.lanes, Lane(tag, curve, width=lane.width.a))
                     end
