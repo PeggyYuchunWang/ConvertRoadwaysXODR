@@ -3,7 +3,7 @@ using AutomotiveSimulator
 using AutomotiveVisualization
 
 function createCurve(id, laneindex, r, y)
-    tag = LaneTag(id,laneindex)
+    tag = LaneTag(id, laneindex)
     curve = nothing
         if r.planView[1].type_name == "line"
             curve = gen_straight_curve(VecE2(0.0, y), VecE2(r.length, y), 10)
@@ -34,7 +34,7 @@ function OpenDriveToRoadwaysConverter(filename, roadIndex)
                 for (id, lane) in sort(sect.right, rev=true)
                     if lane.type == "driving"
                         laneindex += 1
-                        tag, curve = createCurve(id, laneindex, r, y)
+                        tag, curve = createCurve(i, laneindex, r, y)
                         y += lane.width.a
                         push!(roadseg.lanes, Lane(tag, curve, width=lane.width.a))
                     end
@@ -42,7 +42,7 @@ function OpenDriveToRoadwaysConverter(filename, roadIndex)
                 for (id, lane) in sort(sect.left)
                     if lane.type == "driving"
                         laneindex += 1
-                        tag, curve = createCurve(id, laneindex, r, y)
+                        tag, curve = createCurve(i, laneindex, r, y)
                         y += lane.width.a
                         push!(roadseg.lanes, Lane(tag, curve, width=lane.width.a))
                     end
@@ -55,8 +55,12 @@ function OpenDriveToRoadwaysConverter(filename, roadIndex)
 end
 
 # test data
-roadway = OpenDriveToRoadwaysConverter("test_data/OpenDriveExs/Ex_SingleLane.xodr", 1)
+roadway = OpenDriveToRoadwaysConverter("test_data/CarlaExs/Town01.xodr", 12)
+
+open("test.txt", "w") do io
+    write(io, roadway)
+end
 
 AutomotiveVisualization.colortheme["background"] = colorant"white"; # hide
-camera = StaticCamera(position=VecE2(10,0.0), zoom=5, canvas_height=100)
+camera = StaticCamera(position=VecE2(20,0.0), zoom=1, canvas_height=100)
 snapshot = render([roadway], camera=camera)
