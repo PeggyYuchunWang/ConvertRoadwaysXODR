@@ -26,7 +26,7 @@ function OpenDriveToRoadwaysConverter(filename, roadIndex)
     rw = Roadway()
     for (segid, r) in odp.data.roads
         if segid == roadIndex
-            roadseg = RoadSegment{Float64}(i)
+            roadseg = RoadSegment{Float64}(segid)
             origin = VecSE2(0.0,0.0,0.0)
             for sect in r.lanes.laneSection
                 laneindex = length(roadseg.lanes)
