@@ -2,11 +2,24 @@ using PyCall
 using AutomotiveSimulator
 using AutomotiveVisualization
 
-function createCurve(segid, laneindex, r, y)
+function createCurve(segid, laneindex, road_geom, lane)
     tag = LaneTag(segid, laneindex)
     curve = nothing
-        if r.planView[1].type_name == "line"
-            curve = gen_straight_curve(VecE2(0.0, y), VecE2(r.length, y), 10)
+        if road_geom.type_name == "line"
+            length = road_geom.length
+            width = float(lane.id)*lane.width.a/2.0
+            heading = road_geom.hdg
+            x1 = road_geom.x
+            x2 = road_geom.x + length*cos(heading)
+            y1 = road_geom.y
+            y2 = road_geom.y + length*sin(heading)
+            dx = width*sin(heading)
+            dy = width*cos(heading)
+            curve = gen_straight_curve(
+                VecE2(x1 + dx, -(y1 + dy)),
+                VecE2(x2 + dx, -(y2 + dy)),
+                10
+            )
         end
     return tag, curve
 end
@@ -26,24 +39,22 @@ function OpenDriveToRoadwaysConverter(filename, roadIndex)
     rw = Roadway()
     for (segid, r) in odp.data.roads
         if segid == roadIndex
-            roadseg = RoadSegment{Float64}(i)
-            origin = VecSE2(0.0,0.0,0.0)
+            roadseg = RoadSegment{Float64}(segid)
+            geom = r.planView[1]
             for sect in r.lanes.laneSection
-                laneindex = length(roadseg.lanes)
-                y = 0
+                laneindex = 0
                 for (id, lane) in sort(sect.right, rev=true)
                     if lane.type == "driving"
                         laneindex += 1
-                        tag, curve = createCurve(segid, laneindex, r, y)
-                        y += lane.width.a
+                        tag, curve = createCurve(segid, laneindex, geom, lane)
                         push!(roadseg.lanes, Lane(tag, curve, width=lane.width.a))
                     end
                 end
                 for (id, lane) in sort(sect.left)
                     if lane.type == "driving"
                         laneindex += 1
-                        tag, curve = createCurve(segid, laneindex, r, y)
-                        y += lane.width.a
+                        lane_width = lane.width.a
+                        tag, curve = createCurve(segid, laneindex, geom, lane)
                         push!(roadseg.lanes, Lane(tag, curve, width=lane.width.a))
                     end
                 end
