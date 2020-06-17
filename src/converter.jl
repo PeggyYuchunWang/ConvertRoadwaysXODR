@@ -64,10 +64,3 @@ function OpenDriveToRoadwaysConverter(filename, roadIndex)
     end
     return rw
 end
-
-# # test data
-# roadway = OpenDriveToRoadwaysConverter("test_data/CarlaExs/Town04.xodr", 39)
-
-# AutomotiveVisualization.colortheme["background"] = colorant"white"; # hide
-# camera = StaticCamera(position=VecE2(10,0.0), zoom=5, canvas_height=100)
-# snapshot = render([roadway], camera=camera)
