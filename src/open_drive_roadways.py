@@ -66,6 +66,7 @@ class Geometry:
         self.hdg = float(hdg)
         self.length = float(length)
         self.type = None
+        self.type_name = ""
 
 class Line:
     def __init__(self):
