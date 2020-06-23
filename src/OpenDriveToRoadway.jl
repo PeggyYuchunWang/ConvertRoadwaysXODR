@@ -1,4 +1,4 @@
-module OpenDrive2Roadway
+module OpenDriveToRoadway
 
 import AutomotiveSimulator
 import PyCall
