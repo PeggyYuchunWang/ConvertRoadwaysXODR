@@ -1,15 +1,16 @@
 import xml.etree.ElementTree as ET
-import src.open_drive_roadways as rw
+import src.parser.open_drive_roadways as rw
 import src.utils as utils
+import src.parser.open_drive_framework as framework
 
 class OpenDriveParser:
     def __init__(self):
-        self.data = rw.OpenDriveRoadways()
+        self.data = framework.Open_Drive_Framework()
 
-    def __parse_header(self, roadways, header):
+    def __parse_header(self, framework, header):
         if header.attrib:
             att = header.attrib
-            roadways.header = rw.Header(
+            framework.header = framework.Header(
                 int(att["revMajor"]),
                 int(att["revMinor"]),
                 att["name"],
@@ -21,16 +22,27 @@ class OpenDriveParser:
                 float(att["west"])
             )
             if "vendor" in att:
-                roadways.header.vendor = att["vendor"]
+                framework.header.vendor = att["vendor"]
         for child in header:
             if child.tag == "userData":
-                for v in child:
-                    if v.tag == "vectorScene":
-                        att = v.attrib
-                        roadways.header.geoReference.vectorScene = rw.VectorScene(
-                            att["program"], att["version"])
+                #I think that in ver1.6 User Data is not found in this way
+                continue
+                #for v in child:
+                #    if v.tag == "vectorScene":
+                #        att = v.attrib
+                #        framework.Geo_Reference.vectorScene = rw.VectorScene(
+                #            att["program"], att["version"])
             elif child.tag == "geoReference":
-                roadways.header.newGeoReference(child.text)
+                framework.geo_reference = framework.Geo_Reference(child.text)
+            elif child.tag == "offset":
+                if child.attrib:
+                    att = child.attrib
+                    framework.offset = framework.Offset(
+                        float(att["x"]),
+                        float(att["y"]),
+                        float(att["z"]),
+                        float(att["hdg"])
+                    )
 
     def __parse_lanes(self, lanes):
         output = rw.Lanes()

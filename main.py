@@ -1,4 +1,4 @@
-from src.open_drive_parser import OpenDriveParser
+from src.parser.open_drive_parser import OpenDriveParser
 import argparse
 from os import listdir
 from os.path import isfile, join
