@@ -1,7 +1,7 @@
 import unittest
 
 from src.parser.open_drive_parser import OpenDriveParser
-from src.parser.open_drive_roadways import Header
+from src.data.header import Header
 
 class ParserTests(unittest.TestCase):
     def setUp(self):
@@ -24,5 +24,4 @@ class ParserTests(unittest.TestCase):
         self.assertAlmostEqual(header.east, 0.0)
         self.assertAlmostEqual(header.west, 0.0)
         self.assertEqual(header.vendor, "")
-        self.assertIs(header.geoReference, None)
-        self.assertIs(header.userData, None)
+        
