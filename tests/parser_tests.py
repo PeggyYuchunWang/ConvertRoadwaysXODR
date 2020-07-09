@@ -1,7 +1,7 @@
 import unittest
 
-from src.open_drive_parser import OpenDriveParser
-from src.open_drive_roadways import Header
+from src.parser.open_drive_parser import OpenDriveParser
+from src.parser.open_drive_roadways import Header
 
 class ParserTests(unittest.TestCase):
     def setUp(self):
