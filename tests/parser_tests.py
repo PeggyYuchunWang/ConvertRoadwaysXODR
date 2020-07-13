@@ -2,6 +2,8 @@ import unittest
 
 from src.parser.open_drive_parser import OpenDriveParser
 from src.data.header import Header
+from src.data.geo_reference import Geo_Reference
+from src.data.offset import Offset
 
 class ParserTests(unittest.TestCase):
     def setUp(self):
@@ -14,14 +16,27 @@ class ParserTests(unittest.TestCase):
     def test_header(self):
         header = self.parser.data.header
         self.assertIsInstance(header, Header)
-        self.assertEqual(header.revMajor, 1)
-        self.assertEqual(header.revMinor, 6)
-        self.assertEqual(header.name, "")
-        self.assertEqual(header.version, "1.00")
-        self.assertEqual(header.date, "Wed Feb 26 17:41:13 2020")
-        self.assertAlmostEqual(header.north, 0.0)
-        self.assertAlmostEqual(header.south, 0.0)
-        self.assertAlmostEqual(header.east, 0.0)
-        self.assertAlmostEqual(header.west, 0.0)
-        self.assertEqual(header.vendor, "")
+        self.assertEqual(header.attrib["revMajor"], 1)
+        self.assertEqual(header.attrib["revMinor"], 6)
+        self.assertEqual(header.attrib["name"], "")
+        self.assertEqual(header.attrib["version"], "1.00")
+        self.assertEqual(header.attrib["date"], "Wed Feb 26 17:41:13 2020")
+        self.assertAlmostEqual(header.attrib["north"], 0.0)
+        self.assertAlmostEqual(header.attrib["south"], 0.0)
+        self.assertAlmostEqual(header.attrib['east'], 0.0)
+        self.assertAlmostEqual(header.attrib["west"], 0.0)
+        self.assertEqual(header.attrib["vendor"], "")
+        self.assertIsNone(header.geoReference)
+        self.assertIsNone(header.offset)
+
+    def test_geo_reference(self):
+        geo_ref = self.parser.data.geo_reference
+        self.assertIsNone(geo_ref)
+
+    def test_offset(self):
+        offset = self.parser.data.offset
+        self.assertIsNone(offset)
+
+    def test_road(self):
+        print('testing road')
         

@@ -1,16 +1,39 @@
 import xml.etree.ElementTree as ET
 import src.parser.open_drive_roadways as rw
 import src.utils as utils
-import src.parser.open_drive_framework as framework
+import src.data.open_drive_framework as odf
+
+from src.data.header import Header
+from src.data.geo_reference import Geo_Reference
+from src.data.offset import Offset
+from src.data.road import Road
 
 class OpenDriveParser:
     def __init__(self):
-        self.data = framework.Open_Drive_Framework()
+        self.data = odf.Open_Drive_Framework()
+
+    def parse_file(self, filename="test_data/CarlaExs/Town02.xodr"):
+        print("parsing: ", filename)
+        root = ET.parse(filename).getroot()
+        self.__parse(xml_root=root)  
+        print("done parsing: ", filename)    
+
+    def __parse(self, xml_root):
+        
+        #fills in the header node information
+        for header in xml_root.findall("header"):
+            self.__parse_header(self.data, header)
+
+        #for road in xml_root.findall("road"):
+        #    self.__parse_road(self.data, road)
+
+        #for junc in xml_root.findall("junction"):
+        #    self.__parseJunction(self.data, junc)
 
     def __parse_header(self, framework, header):
         if header.attrib:
             att = header.attrib
-            framework.header = framework.Header(
+            framework.header = Header(
                 int(att["revMajor"]),
                 int(att["revMinor"]),
                 att["name"],
@@ -22,7 +45,7 @@ class OpenDriveParser:
                 float(att["west"])
             )
             if "vendor" in att:
-                framework.header.vendor = att["vendor"]
+                framework.header.attrib["vendor"] = att["vendor"]
         for child in header:
             if child.tag == "userData":
                 #I think that in ver1.6 User Data is not found in this way
@@ -33,11 +56,11 @@ class OpenDriveParser:
                 #        framework.Geo_Reference.vectorScene = rw.VectorScene(
                 #            att["program"], att["version"])
             elif child.tag == "geoReference":
-                framework.geo_reference = framework.Geo_Reference(child.text)
+                framework.header.geoReference = Geo_Reference(child.text)
             elif child.tag == "offset":
                 if child.attrib:
                     att = child.attrib
-                    framework.offset = framework.Offset(
+                    framework.header.offset = Offset(
                         float(att["x"]),
                         float(att["y"]),
                         float(att["z"]),
@@ -115,7 +138,7 @@ class OpenDriveParser:
             output.laneSection.append(section)
         return output
 
-    def __parse_road(self, roadways, road):
+    def __parse_road(self, framework, road):
         att = road.attrib
         r = rw.Road(
             int(att["id"]),
@@ -197,7 +220,7 @@ class OpenDriveParser:
             r.elevationProfile.append(e)
         lanes = road.find("lanes")
         r.lanes = self.__parse_lanes(lanes)
-        roadways.roads[r.id] = r
+        framework.roads[r.id] = r
 
     def __parseJunction(self, roadways, junc):
         att = junc.attrib
@@ -222,13 +245,4 @@ class OpenDriveParser:
             j.connections.append(c)
         roadways.junctions[j.id] = j
 
-    def parse_file(self, filename="test_data/CarlaExs/Town02.xodr"):
-        print("parsing ", filename)
-        root = ET.parse(filename).getroot()
-        for header in root.findall("header"):
-            self.__parse_header(self.data, header)
-        for road in root.findall("road"):
-            self.__parse_road(self.data, road)
-        for junc in root.findall("junction"):
-            self.__parseJunction(self.data, junc)
-        print("done parsing")
+    
