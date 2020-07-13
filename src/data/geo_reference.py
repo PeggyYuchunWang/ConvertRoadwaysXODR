@@ -13,7 +13,7 @@ class Geo_Reference:
         Parameters
         ----------
         text : str
-            The proj-string that contains all parameters that define the 
+            proj-string that contains all parameters that define the 
             spatial reference system
     """
     def __init__(self, text = ""):

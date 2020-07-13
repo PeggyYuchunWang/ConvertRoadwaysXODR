@@ -8,13 +8,13 @@ class Offset:
         Parameters
         ----------
         x : float
-            The value by which the dataset is translated for x
+            Value by which the dataset is translated for x
         y : float 
-            The value by which the dataset is translated for y
+            Value by which the dataset is translated for y
         z : float 
-            The value by which the dataset is translated for z
+            Value by which the dataset is translated for z
         hdg : float
-            The value by which the dataset is rotated around the origin
+            Value by which the dataset is rotated around the origin
     """
     def __init__(self, x = 0, y = 0, z = 0, hdg = 0) -> None:
         self.x = float(x)
