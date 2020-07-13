@@ -24,8 +24,8 @@ class OpenDriveParser:
         for header in xml_root.findall("header"):
             self.__parse_header(self.data, header)
 
-        #for road in xml_root.findall("road"):
-        #    self.__parse_road(self.data, road)
+        for road in xml_root.findall("road"):
+            self.__parse_road(self.data, road)
 
         #for junc in xml_root.findall("junction"):
         #    self.__parseJunction(self.data, junc)
@@ -140,7 +140,7 @@ class OpenDriveParser:
 
     def __parse_road(self, framework, road):
         att = road.attrib
-        r = rw.Road(
+        r = Road(
             int(att["id"]),
             float(att["length"]),
             int(att["junction"])
@@ -150,10 +150,10 @@ class OpenDriveParser:
         pred = road.find("link/predecessor")
         if pred is not None:
             att = pred.attrib
-            r.roadPredecessor = rw.elementType(
+            r.predecessor = rw.elementType(
                 att["elementType"], int(att["elementId"]))
             if "contactPoint" in att:
-                r.roadPredecessor.contactPoint = att["contactPoint"]
+                r.predecessor.contactPoint = att["contactPoint"]
         succ = road.find("link/successor")
         if succ is not None:
             att = succ.attrib
@@ -205,7 +205,6 @@ class OpenDriveParser:
                     geo.type_name = "paramPoly3"
                 else:
                     print(c)
-                    print("YIKES")
             r.planView.append(geo)
         elevations = road.findall("elevationProfile/elevation")
         for ele in elevations:

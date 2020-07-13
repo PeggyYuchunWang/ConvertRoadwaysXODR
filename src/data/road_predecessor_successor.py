@@ -1,7 +1,25 @@
 class Road_Predecessor_Successor:
-    def __init__(self, id = 0, type = "", contact_point = "", element_s = None, element_dir = 0):
+    """
+        Represents the linkage between a road and its predecessor or its successor.
+
+        Parameters
+        ----------
+        id : int
+            ID of the linked element.
+        type : str
+            Type of the linked element. Either "road" or "junction."
+        contact_point : str
+            Contact point of the link on the linked element. Either "start" or "end."
+        element_s : int
+            Alternative to contact_point for virtual junctions. Signifies that the 
+            connection occurs within the predecessor. Only can be used for element type "road."
+        element_dir : int  
+            For when element_s is in use. Indicates the direction on the predecessor from 
+            which the road is entered.
+    """
+    def __init__(self, id = 0, type = "", contact_point = "", element_s = 0, element_dir = 0):
         self.id = int(id)
-        self.type = type #road or junction
-        self.contact_point = contact_point #eiher start for predecessor, or end for successor
-        self.element_s = element_s #only for virtual junctions, AKA contact_point is not at start or end
-        self.element_dir = element_dir #only for virtual junctions
+        self.type = str(type) 
+        self.contact_point = str(contact_point) 
+        self.element_s = int(element_s) 
+        self.element_dir = int(element_dir) 
