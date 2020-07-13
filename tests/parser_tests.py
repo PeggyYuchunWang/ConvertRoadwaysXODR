@@ -29,14 +29,6 @@ class ParserTests(unittest.TestCase):
         self.assertIsNone(header.geoReference)
         self.assertIsNone(header.offset)
 
-    def test_geo_reference(self):
-        geo_ref = self.parser.data.geo_reference
-        self.assertIsNone(geo_ref)
-
-    def test_offset(self):
-        offset = self.parser.data.offset
-        self.assertIsNone(offset)
-
     def test_road(self):
         print('testing road')
         
