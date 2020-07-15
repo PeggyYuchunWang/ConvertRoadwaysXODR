@@ -31,7 +31,7 @@ class Header():
         Attributes
         ----------
         attrib : dict
-            Attributes dictionary for the parameters specified above
+            Attributes dictionary for the parameters specified above.
         geoReference : Geo_Reference
             Information about the geographic reference for an OpenDRIVE dataset.
         offset : Offset

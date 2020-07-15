@@ -4,6 +4,7 @@ from src.parser.open_drive_parser import OpenDriveParser
 from src.data.header import Header
 from src.data.geo_reference import Geo_Reference
 from src.data.offset import Offset
+from src.data.road import Road
 
 class ParserTests(unittest.TestCase):
     def setUp(self):
@@ -30,5 +31,15 @@ class ParserTests(unittest.TestCase):
         self.assertIsNone(header.offset)
 
     def test_road(self):
-        print('testing road')
+        road = self.parser.data.roads["1"]
+        self.assertIsInstance(road, Road)
+        self.assertEqual(road.attrib["name"], "")
+        print(type(road.attrib["length"]))
+        self.assertEqual(road.attrib["length"], 5.0000000000000000e+01)
+        self.assertEqual(road.attrib["id"], 1)
+        self.assertEqual(road.attrib["junction"], -1)
+        self.assertEqual(road.attrib["rule"], "RHT")
+        self.assertIsNone(road.type)
+        self.assertIsNone(road.predecessor)
+        self.assertIsNone(road.successor)
         

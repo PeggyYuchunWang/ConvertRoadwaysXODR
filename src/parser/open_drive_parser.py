@@ -7,6 +7,8 @@ from src.data.header import Header
 from src.data.geo_reference import Geo_Reference
 from src.data.offset import Offset
 from src.data.road import Road
+from src.data.road_predecessor_successor import Road_Predecessor_Successor
+from src.data.road_type import Road_Type
 
 class OpenDriveParser:
     def __init__(self):
@@ -146,80 +148,98 @@ class OpenDriveParser:
             int(att["junction"])
         )
         if "name" in att:
-            r.name = att["name"]
+            r.attrib["name"] = att["name"]
+        if "rule" in att:
+            r.attrib["rule"] = att["rule"]
+        
         pred = road.find("link/predecessor")
         if pred is not None:
             att = pred.attrib
-            r.predecessor = rw.elementType(
-                att["elementType"], int(att["elementId"]))
+            r.predecessor = Road_Predecessor_Successor(int(att["id"]))
+            if "type" in att:
+                r.predecessor.attrib["type"] = att["type"]
             if "contactPoint" in att:
-                r.predecessor.contactPoint = att["contactPoint"]
+                r.predecessor.attrib["contactPoint"] = att["contactPoint"]
+            if "elementS" in att:
+                r.predecessor.attrib["elementS"] = int(att["elementS"])
+            if "elementDir" in att:
+                r.predecessor.attrib["elementDir"] = int(att["elementDir"])
+        
         succ = road.find("link/successor")
         if succ is not None:
             att = succ.attrib
-            r.roadSuccessor = rw.elementType(
-                att["elementType"], int(att["elementId"]))
+            r.successor = Road_Predecessor_Successor(int(att["id"]))
+            if "type" in att:
+                r.successor.attrib["type"] = att["type"]
             if "contactPoint" in att:
-                r.roadSuccessor.contactPoint = att["contactPoint"]
+                r.successor.attrib["contactPoint"] = att["contactPoint"]
+            if "elementS" in att:
+                r.successor.attrib["elementS"] = int(att["elementS"])
+            if "elementDir" in att:
+                r.successor.attrib["elementDir"] = int(att["elementDir"])
+
         type = road.find("type")
         if type is not None:
-            r.type_s = float(type.attrib["s"])
-            r.type_type = type.attrib["type"]
-            for c in type:
-                r.max_speed = float(c.attrib["max"])
-                r.speed_unit = c.attrib["unit"]
-        geos = road.findall("planView/geometry")
-        for g in geos:
-            att = g.attrib
-            geo = rw.Geometry(
+            att = type.attrib
+            r.type = Road_Type(
                 float(att["s"]),
-                float(att["x"]),
-                float(att["y"]),
-                float(att["hdg"]),
-                float(att["length"])
+                str(att["type"]),
+                str(att["country"])
             )
-            for c in g:
-                if c.tag == "line":
-                    geo.type = rw.Line()
-                    geo.type_name = "line"
-                elif c.tag == "arc":
-                    geo.type = rw.Arc(float(c.attrib["curvature"]))
-                    geo.type_name = "arc"
-                elif c.tag == "spiral":
-                    att = c.attrib
-                    geo.type = rw.Spiral(float(att["curvStart"]),
-                            float(att["curvEnd"]))
-                    geo.type_name = "spiral"
-                elif c.tag == "poly3":
-                    att = c.attrib
-                    geo.type = rw.Poly3(float(att["a"]), float(att["b"]),
-                            float(att["c"]), float(att["d"]))
-                    geo.type_name = "poly3"
-                elif c.tag == "paramPoly3":
-                    att = c.attrib
-                    geo.type = rw.ParamPoly3(att["pRange"], float(att["aU"]),
-                                float(att["bU"]), float(att["cU"]),
-                                float(att["dU"]), float(att["aV"]),
-                                float(att["bV"]), float(att["cV"]),
-                                float(att["dV"]))
-                    geo.type_name = "paramPoly3"
-                else:
-                    print(c)
-            r.planView.append(geo)
-        elevations = road.findall("elevationProfile/elevation")
-        for ele in elevations:
-            att = ele.attrib
-            e = rw.Elevation(
-                float(att["s"]),
-                float(att["a"]),
-                float(att["b"]),
-                float(att["c"]),
-                float(att["d"])
-            )
-            r.elevationProfile.append(e)
-        lanes = road.find("lanes")
-        r.lanes = self.__parse_lanes(lanes)
-        framework.roads[r.id] = r
+        
+        # geos = road.findall("planView/geometry")
+        # for g in geos:
+        #     att = g.attrib
+        #     geo = rw.Geometry(
+        #         float(att["s"]),
+        #         float(att["x"]),
+        #         float(att["y"]),
+        #         float(att["hdg"]),
+        #         float(att["length"])
+        #     )
+        #     for c in g:
+        #         if c.tag == "line":
+        #             geo.type = rw.Line()
+        #             geo.type_name = "line"
+        #         elif c.tag == "arc":
+        #             geo.type = rw.Arc(float(c.attrib["curvature"]))
+        #             geo.type_name = "arc"
+        #         elif c.tag == "spiral":
+        #             att = c.attrib
+        #             geo.type = rw.Spiral(float(att["curvStart"]),
+        #                     float(att["curvEnd"]))
+        #             geo.type_name = "spiral"
+        #         elif c.tag == "poly3":
+        #             att = c.attrib
+        #             geo.type = rw.Poly3(float(att["a"]), float(att["b"]),
+        #                     float(att["c"]), float(att["d"]))
+        #             geo.type_name = "poly3"
+        #         elif c.tag == "paramPoly3":
+        #             att = c.attrib
+        #             geo.type = rw.ParamPoly3(att["pRange"], float(att["aU"]),
+        #                         float(att["bU"]), float(att["cU"]),
+        #                         float(att["dU"]), float(att["aV"]),
+        #                         float(att["bV"]), float(att["cV"]),
+        #                         float(att["dV"]))
+        #             geo.type_name = "paramPoly3"
+        #         else:
+        #             print(c)
+        #     r.planView.append(geo)
+        # elevations = road.findall("elevationProfile/elevation")
+        # for ele in elevations:
+        #     att = ele.attrib
+        #     e = rw.Elevation(
+        #         float(att["s"]),
+        #         float(att["a"]),
+        #         float(att["b"]),
+        #         float(att["c"]),
+        #         float(att["d"])
+        #     )
+        #     r.elevationProfile.append(e)
+        # lanes = road.find("lanes")
+        # r.lanes = self.__parse_lanes(lanes)
+        # framework.roads[r.id] = r
+        framework.roads[r.attrib["id"]] = r
 
     def __parseJunction(self, roadways, junc):
         att = junc.attrib

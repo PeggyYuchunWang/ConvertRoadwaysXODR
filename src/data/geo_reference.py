@@ -17,4 +17,6 @@ class Geo_Reference:
             spatial reference system
     """
     def __init__(self, text = ""):
-        self.text = text
+        self.attrib = {
+            "text" : str(text)
+        }

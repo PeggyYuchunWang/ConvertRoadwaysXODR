@@ -1,4 +1,5 @@
 from src.data.road_predecessor_successor import Road_Predecessor_Successor
+from src.data.road_type import Road_Type
 
 class Road:
     """
@@ -19,6 +20,10 @@ class Road:
         
         Attributes
         ----------
+        attrib : dict
+            Attributes dictionary for the parameters specified above.
+        type : Road_Type
+            Object used to define the main purpose of a road.
         predecessor : Road_Predecessor_Successor
             Object used to represent the linkage between the current road 
             and the road that comes before it
@@ -26,11 +31,14 @@ class Road:
             Object used to represent the linkage between the current road
             and the road that comes after it
     """
-    def __init__(self, name = "", length = 0, id = 0, junction = 0, rule = "RHT"):
-        self.name = str("")
-        self.length = float(length)
-        self.id = int(id)
-        self.junction = int(junction)
-        self.rule = str(rule) #if no rule provided, RHT is assumed
+    def __init__(self, name = "", length = 0.0, id = 0, junction = 0, rule = "RHT") -> None:
+        self.attrib = {
+            "name" : str(""),
+            "length" : float(length),
+            "id" : int(id),
+            "junction" : int(junction),
+            "rule" : str(rule) 
+        } 
+        self.type = None
         self.predecessor = None
         self.successor = None
