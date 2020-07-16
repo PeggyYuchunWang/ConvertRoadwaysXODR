@@ -1,15 +1,25 @@
-"""
-    The interpolation of a cubic polynom in x/y coordinate system is described by:
-    y(x) = a + b*x + c*x^2 + d*x^3
-    Using the local u/v-coordinate system increases flexibility in the curve definition:
-    v(u) = a + b*u + c*u^2 + d*u^3
-    The u/v-coordinate system should be aligned with the s/t-coordinate system
-    at the segment's start position (Geometry.x, Geometry.y) and starting orientation
-    (Geometry.hdg). 
-"""
-import Geometry
-import abcd_base
+from abcd_base import ABCD_base
 
-class Poly3(Geometry, abcd_base):
-    def __init__(self, a = 0, b = 0, c = 0, d = 0):
+class Poly3(abcd_base):
+    """
+        Describes a part of the road's reference line as a cubic polynomial.
+        The polynomial is decribed in the local u/v coordinate system of the starting point.
+        The starting point is determined by the x, y and hdg variables of the 
+        parent Geometry element.
+
+        Found within a Geometry element.
+
+        Parameters
+        ----------
+        curv_start : float
+            Curvature at the start of the Spiral element.
+        curv_end : float
+            Curvature at the end of the Spiral element.
+
+        Attributes
+        ----------
+        attrib : dict
+            Attributes dictionary for the parameters specified above.
+    """
+    def __init__(self, a = 0, b = 0, c = 0, d = 0) -> None:
         abcd_base.__init__(self, a, b, c, d)

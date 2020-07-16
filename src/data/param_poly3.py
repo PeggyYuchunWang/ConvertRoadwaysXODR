@@ -6,7 +6,7 @@
 """
 import Geometry
 
-class ParamPoly3(Geometry):
+class Param_Poly3(Geometry):
     def __init__(self, aU=0, bU=0, cU=0, dU=0, aV=0, bV=0, cV=0, dV=0, pRange=""):
         self.aU = float(aU)
         self.bU = float(bU)
