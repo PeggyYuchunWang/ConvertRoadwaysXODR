@@ -9,12 +9,17 @@ from src.data.offset import Offset
 from src.data.road import Road
 from src.data.road_predecessor_successor import Road_Predecessor_Successor
 from src.data.road_type import Road_Type
+from src.data.geometry import Geometry
+from src.data.spiral import Spiral
+from src.data.arc import Arc
+from src.data.poly3 import Poly3
+from src.data.param_poly3 import Param_Poly3
 
 class OpenDriveParser:
     def __init__(self):
         self.data = odf.Open_Drive_Framework()
 
-    def parse_file(self, filename="test_data/CarlaExs/Town02.xodr"):
+    def parse_file(self, filename="test_data/carlaExs/Town02.xodr"):
         print("parsing: ", filename)
         root = ET.parse(filename).getroot()
         self.__parse(xml_root=root)  
@@ -58,7 +63,7 @@ class OpenDriveParser:
                 #        framework.Geo_Reference.vectorScene = rw.VectorScene(
                 #            att["program"], att["version"])
             elif child.tag == "geoReference":
-                framework.header.geoReference = Geo_Reference(child.text)
+                framework.header.geo_reference = Geo_Reference(child.text)
             elif child.tag == "offset":
                 if child.attrib:
                     att = child.attrib
@@ -122,7 +127,7 @@ class OpenDriveParser:
                         lane.roadMark = rw.RoadMark(
                             float(att["sOffset"]),
                             att["type"],
-                            att["laneChange"]
+                            att["lanechange"]
                         )
                         if "material" in att:
                             lane.roadMark.material = att["material"]
@@ -143,9 +148,9 @@ class OpenDriveParser:
     def __parse_road(self, framework, road):
         att = road.attrib
         r = Road(
-            int(att["id"]),
+            att["id"],
             float(att["length"]),
-            int(att["junction"])
+            att["junction"]
         )
         if "name" in att:
             r.attrib["name"] = att["name"]
@@ -155,28 +160,30 @@ class OpenDriveParser:
         pred = road.find("link/predecessor")
         if pred is not None:
             att = pred.attrib
-            r.predecessor = Road_Predecessor_Successor(int(att["id"]))
-            if "type" in att:
-                r.predecessor.attrib["type"] = att["type"]
+            r.predecessor = Road_Predecessor_Successor(
+                att["elementType"], 
+                int(att["elementId"])
+            )
             if "contactPoint" in att:
-                r.predecessor.attrib["contactPoint"] = att["contactPoint"]
+                r.predecessor.attrib["contact_point"] = att["contactPoint"]
             if "elementS" in att:
-                r.predecessor.attrib["elementS"] = int(att["elementS"])
+                r.predecessor.attrib["element_s"] = int(att["elementS"])
             if "elementDir" in att:
-                r.predecessor.attrib["elementDir"] = int(att["elementDir"])
+                r.predecessor.attrib["element_dir"] = int(att["elementDir"])
         
         succ = road.find("link/successor")
         if succ is not None:
             att = succ.attrib
-            r.successor = Road_Predecessor_Successor(int(att["id"]))
-            if "type" in att:
-                r.successor.attrib["type"] = att["type"]
+            r.successor = Road_Predecessor_Successor(
+                att["elementType"], 
+                int(att["elementId"])
+            )
             if "contactPoint" in att:
-                r.successor.attrib["contactPoint"] = att["contactPoint"]
+                r.successor.attrib["contact_point"] = att["contactPoint"]
             if "elementS" in att:
-                r.successor.attrib["elementS"] = int(att["elementS"])
+                r.successor.attrib["element_s"] = int(att["elementS"])
             if "elementDir" in att:
-                r.successor.attrib["elementDir"] = int(att["elementDir"])
+                r.successor.attrib["element_dir"] = int(att["elementDir"])
 
         type = road.find("type")
         if type is not None:
@@ -187,44 +194,47 @@ class OpenDriveParser:
                 str(att["country"])
             )
         
-        # geos = road.findall("planView/geometry")
-        # for g in geos:
-        #     att = g.attrib
-        #     geo = rw.Geometry(
-        #         float(att["s"]),
-        #         float(att["x"]),
-        #         float(att["y"]),
-        #         float(att["hdg"]),
-        #         float(att["length"])
-        #     )
-        #     for c in g:
-        #         if c.tag == "line":
-        #             geo.type = rw.Line()
-        #             geo.type_name = "line"
-        #         elif c.tag == "arc":
-        #             geo.type = rw.Arc(float(c.attrib["curvature"]))
-        #             geo.type_name = "arc"
-        #         elif c.tag == "spiral":
-        #             att = c.attrib
-        #             geo.type = rw.Spiral(float(att["curvStart"]),
-        #                     float(att["curvEnd"]))
-        #             geo.type_name = "spiral"
-        #         elif c.tag == "poly3":
-        #             att = c.attrib
-        #             geo.type = rw.Poly3(float(att["a"]), float(att["b"]),
-        #                     float(att["c"]), float(att["d"]))
-        #             geo.type_name = "poly3"
-        #         elif c.tag == "paramPoly3":
-        #             att = c.attrib
-        #             geo.type = rw.ParamPoly3(att["pRange"], float(att["aU"]),
-        #                         float(att["bU"]), float(att["cU"]),
-        #                         float(att["dU"]), float(att["aV"]),
-        #                         float(att["bV"]), float(att["cV"]),
-        #                         float(att["dV"]))
-        #             geo.type_name = "paramPoly3"
-        #         else:
-        #             print(c)
-        #     r.planView.append(geo)
+        geos = road.findall("planView/geometry")
+        for g in geos:
+            att = g.attrib
+            geo = Geometry(
+                float(att["s"]),
+                float(att["x"]),
+                float(att["y"]),
+                float(att["hdg"]),
+                float(att["length"])
+            )
+            for child in g:
+                if child.tag == "line":
+                    continue           
+                elif child.tag == "spiral":
+                    att = child.attrib
+                    geo.type = Spiral(
+                        float(att["curvStart"]),
+                        float(att["curvEnd"])
+                    )
+                elif child.tag == "arc":
+                    geo.type = Arc(float(child.attrib["curvature"]))
+                elif child.tag == "poly3":
+                    att = child.attrib
+                    geo.type = Poly3(
+                        float(att["a"]), 
+                        float(att["b"]),
+                        float(att["c"]), 
+                        float(att["d"])
+                    )
+                elif child.tag == "paramPoly3":
+                    att = child.attrib
+                    geo.type = Param_Poly3(att["pRange"], float(att["aU"]),
+                                float(att["bU"]), float(att["cU"]),
+                                float(att["dU"]), float(att["aV"]),
+                                float(att["bV"]), float(att["cV"]),
+                                float(att["dV"]))
+                    geo.type_name = "paramPoly3"
+                else:
+                    print(child)
+            r.planView.append(geo)
+
         # elevations = road.findall("elevationProfile/elevation")
         # for ele in elevations:
         #     att = ele.attrib
@@ -248,7 +258,7 @@ class OpenDriveParser:
                 j.type = att["type"]
         for connection in junc:
             att = connection.attrib
-            c = rw.Connection(
+            c = rw.connection(
                 att["id"])
             if "type" in att:
                 c.type = att["type"]
