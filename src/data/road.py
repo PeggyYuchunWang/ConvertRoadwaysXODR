@@ -30,6 +30,14 @@ class Road:
         successor : Road_Predecessor_Successor
             Object used to represent the linkage between the current road
             and the road that comes after it.
+        plan_view : list
+            List of geometrys describing the road's reference line.
+        elevation_profile : Elevation
+            Object used to describe the elevation of a road along its reference line. 
+        lateral_profile : dict
+            Dictionary to contain Lateral_Profile_Superelevation and a list of 
+            Lateral_Profile_Shape elements if needed. Defines the characteristics of the 
+            road surface's banking along the reference line.
     """
     def __init__(self, id = "", length = 0,  junction = "-1", rule = "RHT", name = "") -> None:
         self.attrib = {
@@ -42,3 +50,9 @@ class Road:
         self.type = None
         self.predecessor = None
         self.successor = None
+        self.plan_view = []
+        self.elevation_profile = None
+        self.lateral_profile = {
+            "super_elevation" : None,
+            "shapes" : []
+        }

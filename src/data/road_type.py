@@ -12,7 +12,7 @@ class Road_Type():
     Parameters
     ----------
     s : float
-        s-coordinate of start position.
+        Start position (s-coordinate).
     type : str
         Country code of the road (see ISO 3166-1 alpha-2 codes).
     country : str
@@ -22,11 +22,14 @@ class Road_Type():
     ----------
     attrib : dict
         Attributes dictionary for the parameters specified above.
+    speed : Road_Speed
+        Object to define the maximum speed allowed.
 """
-    def __init__(self, s = 0, type = "", country = ""):
+    def __init__(self, s = 0, type = "", country = "") -> None:
         self.attrib = {
             "s" : float(s),
             "type" : str(type),
             "country" : str(country)
         }
+        self.speed = None
         
