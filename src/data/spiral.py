@@ -1,11 +1,22 @@
-import Geometry
+class Spiral():
+    """
+        Describes a part of the road's reference line as a Spiral.
 
-class Spiral(Geometry):
-    def __init__(self, curvStart = 0, curvEnd = 0):
-        if curvStart == curvEnd:
-            #curvStart and curvEnd cannot be the same
-            print("invalid spiral instantiation")
-            return
-        self.curvStart = float(curvStart)
-        self.curvEnd = float(curvEnd)
+        Parameters
+        ----------
+        curv_start : float
+            Curvature at the start of the Spiral element.
+        curv_end : float
+            Curvature at the end of the Spiral element.
+
+        Attributes
+        ----------
+        attrib : dict
+            Attributes dictionary for the parameters specified above.
+    """
+    def __init__(self, curv_start = 0, curv_end = 0) -> None:
+        self.attrib = {
+            "curv_start" : float(curv_start),
+            "curv_end" : float(curv_end)
+        } 
         
