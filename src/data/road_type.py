@@ -7,16 +7,16 @@ class Road_Type():
     be added to specify national traffic rules. This will not
     be specified by OpenDRIVE. Only use ALPHA-r country codes.
 
-    Found within the Road element.
+    Found within a Road element.
 
     Parameters
     ----------
     s : float
-        s-coordinate of start position
+        s-coordinate of start position.
     type : str
-        Country code of the road (see ISO 3166-1 alpha-2 codes)
+        Country code of the road (see ISO 3166-1 alpha-2 codes).
     country : str
-        Country code of the road (see ISO 3166-1 alpha-2 codes)
+        Country code of the road (see ISO 3166-1 alpha-2 codes).
 
     Attributes
     ----------

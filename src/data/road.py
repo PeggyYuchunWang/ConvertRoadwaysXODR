@@ -7,16 +7,16 @@ class Road:
 
         Parameters
         ----------
-        name : str
-            Name of road. Can choose a name freely.
-        length : int
-            Total length of the reference line in the xy-plane.
         id : int
             Unique ID given to the road, stored within the database.
+        length : int
+            Total length of the reference line in the xy-plane.
         junction : int
-            Unique ID of the junction to which the road belongs 
+            Unique ID of the junction to which the road belongs.
         rule : str
             Basic rule for using the road. Right Hand Traffic default.
+        name : str
+            Name of road. Can choose a name freely.
         
         Attributes
         ----------
@@ -26,18 +26,18 @@ class Road:
             Object used to define the main purpose of a road.
         predecessor : Road_Predecessor_Successor
             Object used to represent the linkage between the current road 
-            and the road that comes before it
+            and the road that comes before it.
         successor : Road_Predecessor_Successor
             Object used to represent the linkage between the current road
-            and the road that comes after it
+            and the road that comes after it.
     """
-    def __init__(self, name = "", length = 0.0, id = 0, junction = 0, rule = "RHT") -> None:
+    def __init__(self, id = "", length = 0,  junction = "-1", rule = "RHT", name = "") -> None:
         self.attrib = {
-            "name" : str(""),
-            "length" : float(length),
-            "id" : int(id),
-            "junction" : int(junction),
-            "rule" : str(rule) 
+            "id" : str(id),            
+            "length" : float(length),           
+            "junction" : str(junction),
+            "rule" : str(rule),
+            "name" : str("") 
         } 
         self.type = None
         self.predecessor = None

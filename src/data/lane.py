@@ -11,8 +11,8 @@
 class Lane:
     def __init__(self, id = 0):
         self.id = int(id)
-        self.predecessor = None #another Lane type with an id
-        self.successor = None #another Lane type with an id
+        self.predecessor_id = None #another Lane type with an id
+        self.successor_id = None #another Lane type with an id
         self.type = None
         self.level = False #default --> apply superelevation
         self.lane_material = None
