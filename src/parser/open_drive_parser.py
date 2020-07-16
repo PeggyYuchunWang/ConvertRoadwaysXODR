@@ -9,11 +9,15 @@ from src.data.offset import Offset
 from src.data.road import Road
 from src.data.road_predecessor_successor import Road_Predecessor_Successor
 from src.data.road_type import Road_Type
+from src.data.road_speed import Road_Speed
 from src.data.geometry import Geometry
 from src.data.spiral import Spiral
 from src.data.arc import Arc
 from src.data.poly3 import Poly3
 from src.data.param_poly3 import Param_Poly3
+from src.data.elevation import Elevation
+from src.data.lateral_profile_superelevation import Lateral_Profile_Superelevation
+from src.data.lateral_profile_shape import Lateral_Profile_Shape
 
 class OpenDriveParser:
     def __init__(self):
@@ -193,6 +197,13 @@ class OpenDriveParser:
                 str(att["type"]),
                 str(att["country"])
             )
+            for child in type:
+                if child.tag == "speed":
+                    att = child.attrib
+                    r.type.speed = Road_Speed(
+                        float(att["max"]),
+                        att["unit"]
+                    )
         
         geos = road.findall("planView/geometry")
         for g in geos:
@@ -229,27 +240,51 @@ class OpenDriveParser:
                                 float(att["bU"]), float(att["cU"]),
                                 float(att["dU"]), float(att["aV"]),
                                 float(att["bV"]), float(att["cV"]),
-                                float(att["dV"]))
-                    geo.type_name = "paramPoly3"
+                    )
                 else:
-                    print(child)
-            r.planView.append(geo)
+                    print(child.tag)
+            r.plan_view.append(geo)
 
-        # elevations = road.findall("elevationProfile/elevation")
-        # for ele in elevations:
-        #     att = ele.attrib
-        #     e = rw.Elevation(
-        #         float(att["s"]),
-        #         float(att["a"]),
-        #         float(att["b"]),
-        #         float(att["c"]),
-        #         float(att["d"])
-        #     )
-        #     r.elevationProfile.append(e)
-        # lanes = road.find("lanes")
-        # r.lanes = self.__parse_lanes(lanes)
-        # framework.roads[r.id] = r
-        framework.roads[r.attrib["id"]] = r
+        elevations = road.findall("elevationProfile/elevation")
+        for ele in elevations:
+            att = ele.attrib
+            e = Elevation(
+                float(att["s"]),
+                float(att["a"]),
+                float(att["b"]),
+                float(att["c"]),
+                float(att["d"])
+            )
+            r.elevation_profile = e
+
+        lateral_profile = road.findall("lateralProfile")
+        for child in lateral_profile:
+            att = child.attrib
+            if child.tag == "superelevation":
+                se = Lateral_Profile_Superelevation(
+                    float(att["s"]),
+                    float(att["a"]),
+                    float(att["b"]),
+                    float(att["c"]),
+                    float(att["d"])
+                )
+                r.lateral_profile["super_elevation"] = se
+            elif child.tag == "shape":
+                s = Lateral_Profile_Shape(
+                    float(att["s"]),
+                    float(att["t"]),
+                    float(att["a"]),
+                    float(att["b"]),
+                    float(att["c"]),
+                    float(att["d"])
+                )
+                r.lateral_profile["shapes"].append(s)
+            else:
+                print(child.tag)
+
+        # r.lanes = self.__parse_lanes(road.find("lanes"))
+        # framework.roads[r.attrib["id"]] = r
+
 
     def __parseJunction(self, roadways, junc):
         att = junc.attrib

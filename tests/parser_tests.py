@@ -5,6 +5,8 @@ from src.data.header import Header
 from src.data.geo_reference import Geo_Reference
 from src.data.offset import Offset
 from src.data.road import Road
+from src.data.geometry import Geometry
+from src.data.elevation import Elevation
 
 class ParserTests(unittest.TestCase):
     def setUp(self):
@@ -42,4 +44,25 @@ class ParserTests(unittest.TestCase):
             self.assertIsNone(road.type)
             self.assertIsNone(road.predecessor)
             self.assertIsNone(road.successor)
+            
+            g = road.plan_view[0]
+            self.assertIsInstance(g, Geometry)
+            self.assertEqual(g.attrib["s"], 0)
+            self.assertEqual(g.attrib["x"], 0)
+            self.assertEqual(g.attrib["y"], 0)
+            self.assertEqual(g.attrib["hdg"], 1.5707963267948966e+00)
+            self.assertEqual(g.attrib["length"], 5.0000000000000000e+01)
+            self.assertIsNone(g.type)
+
+            e = road.elevation_profile
+            self.assertIsInstance(e, Elevation)
+            self.assertEqual(e.attrib["s"],0)
+            self.assertEqual(e.attrib["a"],0)
+            self.assertEqual(e.attrib["b"],0)
+            self.assertEqual(e.attrib["c"],0)
+            self.assertEqual(e.attrib["d"],0)
+
+            self.assertIsNone(road.lateral_profile["super_elevation"])
+            self.assertEqual(road.lateral_profile["shapes"], [])
+
         
