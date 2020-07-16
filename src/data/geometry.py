@@ -1,7 +1,7 @@
 from src.data.spiral import Spiral
 from src.data.arc import Arc
 from src.data.poly3 import Poly3
-from src.data.param_poly3 import ParamPoly3
+from src.data.param_poly3 import Param_Poly3
 
 class Geometry:
     """ 
