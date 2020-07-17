@@ -38,6 +38,8 @@ class Road:
             Dictionary to contain Lateral_Profile_Superelevation and a list of 
             Lateral_Profile_Shape elements if needed. Defines the characteristics of the 
             road surface's banking along the reference line.
+        lanes : Lanes
+            Object used to represent all lane sections.
     """
     def __init__(self, id = "", length = 0,  junction = "-1", rule = "RHT", name = "") -> None:
         self.attrib = {
@@ -56,3 +58,4 @@ class Road:
             "super_elevation" : None,
             "shapes" : []
         }
+        self.lanes = None
