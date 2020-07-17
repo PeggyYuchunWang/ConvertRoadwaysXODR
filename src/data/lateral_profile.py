@@ -1,4 +1,21 @@
-class Lateral_Profile(Lateral_Profile_Superelevation, Lateral_Profile_Shape):
-    def __init__(self, super_elevation = None, shape = None):
+from src.data.lateral_profile_superelevation import Lateral_Profile_Superelevation
+from src.data.lateral_profile_shape import Lateral_Profile_Shape
+
+class Lateral_Profile:
+    """
+    Using superelevation and shape definition, specifies the
+    elevation orthogonally to the reference line, that is in t-direction.
+
+    Found within a Road element.
+
+    Parameters
+    ----------
+    super_elevation : Lateral_Profile_Superelevation
+        Object to define a road section's roll angle around the s-axis.
+    shapes : list 
+        List of Lateral_Profile_Shape elements.
+
+    """
+    def __init__(self, super_elevation = None, shapes = []) -> None:
         self.super_elevation = super_elevation
-        self.shape = shape
+        self.shapes = shapes

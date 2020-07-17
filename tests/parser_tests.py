@@ -1,14 +1,36 @@
 import unittest
 
 from src.parser.open_drive_parser import OpenDriveParser
+
 from src.data.header import Header
 from src.data.geo_reference import Geo_Reference
 from src.data.offset import Offset
 from src.data.road import Road
+from src.data.road_predecessor_successor import Road_Predecessor_Successor
+from src.data.road_type import Road_Type
+from src.data.road_speed import Road_Speed
 from src.data.geometry import Geometry
+from src.data.spiral import Spiral
+from src.data.arc import Arc
+from src.data.poly3 import Poly3
+from src.data.param_poly3 import Param_Poly3
 from src.data.elevation import Elevation
 
+from src.data.lateral_profile import Lateral_Profile
+from src.data.lateral_profile_superelevation import Lateral_Profile_Superelevation
+from src.data.lateral_profile_shape import Lateral_Profile_Shape
+
 from src.data.lanes import Lanes
+from src.data.lane_offset import Lane_Offset
+from src.data.lane_section import Lane_Section
+from src.data.lane import Lane
+from src.data.lane_width import Lane_Width
+from src.data.lane_height import Lane_Height
+from src.data.lane_border import Lane_Border
+
+from src.data.road_mark import Road_Mark
+from src.data.road_mark_type import Road_Mark_Type
+from src.data.road_mark_line import Road_Mark_Line
 
 class ParserTests(unittest.TestCase):
     def setUp(self):
@@ -56,7 +78,7 @@ class ParserTests(unittest.TestCase):
             self.assertEqual(g.attrib["length"], 5.0000000000000000e+01)
             self.assertIsNone(g.type)
 
-            e = road.elevation_profile
+            e = road.elevation_profile[0]
             self.assertIsInstance(e, Elevation)
             self.assertEqual(e.attrib["s"],0)
             self.assertEqual(e.attrib["a"],0)
@@ -64,8 +86,8 @@ class ParserTests(unittest.TestCase):
             self.assertEqual(e.attrib["c"],0)
             self.assertEqual(e.attrib["d"],0)
 
-            self.assertIsNone(road.lateral_profile["super_elevation"])
-            self.assertEqual(road.lateral_profile["shapes"], [])
+            self.assertIsNone(road.lateral_profile.super_elevation)
+            self.assertEqual(len(road.lateral_profile.shapes), 0)
 
 
     def test_lanes(self):
@@ -79,6 +101,73 @@ class ParserTests(unittest.TestCase):
             ls = lanes.lane_sections[0]
             self.assertEqual(ls.attrib["s"],0)
             self.assertEqual(ls.attrib["single_side"],False)
+
+            lls = ls.left_lanes
+            self.assertEqual(len(lls),7)
+            ll = lls[0]
+            self.assertEqual(ll.attrib["id"],7)
+            self.assertEqual(ll.attrib["type"],"sidewalk")
+            self.assertEqual(ll.attrib["level"],False)
+
+            self.assertIsInstance(ll.width, Lane_Width)
+            self.assertEqual(ll.width.attrib["s_offset"],0)
+            self.assertEqual(ll.width.attrib["a"],3.0000000000000000e+00)
+            self.assertEqual(ll.width.attrib["b"],0)
+            self.assertEqual(ll.width.attrib["c"],0)
+            self.assertEqual(ll.width.attrib["d"],0)
+
+            self.assertIsInstance(ll.height, Lane_Height)
+            self.assertEqual(ll.height.attrib["s_offset"],0)
+            self.assertEqual(ll.height.attrib["inner"],1.2000000000000000e-01)
+            self.assertEqual(ll.height.attrib["outer"],1.2000000000000000e-01)
+
+            self.assertIsNone(ll.predecessor_id)
+            self.assertIsNone(ll.successor_id)
+            self.assertIsNone(ll.border)
+            self.assertIsNone(ll.road_mark)
+            self.assertIsNone(ll.material)
+            self.assertIsNone(ll.visibility)
+            self.assertIsNone(ll.speed)
+            self.assertIsNone(ll.access)
+            self.assertIsNone(ll.rule)
+
+            ll = lls[6]
+            self.assertEqual(ll.attrib["id"],1)
+            self.assertEqual(ll.attrib["type"],"driving")
+            self.assertEqual(ll.attrib["level"],False)
+
+            self.assertIsInstance(ll.width, Lane_Width)
+            self.assertEqual(ll.width.attrib["s_offset"],0)
+            self.assertEqual(ll.width.attrib["a"],3.2500000000000000e+00)
+            self.assertEqual(ll.width.attrib["b"],0)
+            self.assertEqual(ll.width.attrib["c"],0)
+            self.assertEqual(ll.width.attrib["d"],0)
+
+            self.assertIsNone(ll.predecessor_id)
+            self.assertIsNone(ll.successor_id)
+            self.assertIsNone(ll.height)
+            self.assertIsNone(ll.border)
+            self.assertIsNone(ll.road_mark)
+            self.assertIsNone(ll.material)
+            self.assertIsNone(ll.visibility)
+            self.assertIsNone(ll.speed)
+            self.assertIsNone(ll.access)
+            self.assertIsNone(ll.rule)
+
+            # fuck = l.find("fuck")
+            #         if fuck is not None:
+            #             att = fuck.attrib
+            #             lane.fuck = Lane_Fuck(
+            #                 float(att["sOffset"]),
+            #                 float(att["inner"]),
+            #                 float(att["outer"])
+            #             )
+            
+
+
+
+
+
 
             
 

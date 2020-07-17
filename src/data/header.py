@@ -26,17 +26,18 @@ class Header:
         west : float
             Minimum inertial x value.     
         vendor : str
-            Vendor name
+            Vendor name.
 
         Attributes
         ----------
         attrib : dict
             Attributes dictionary for the parameters specified above.
         geo_reference : Geo_Reference
-            Information about the geographic reference for an OpenDRIVE dataset.
+            Object to define the geographic reference for an OpenDRIVE dataset.
         offset : Offset
-            An offset of the whole dataset may be applied to avoid large coordinates and
-            enable inertial relocation and re-orientation of datasets.
+            Object to define an offset of the whole dataset that may be 
+            applied to avoid large coordinates and enable inertial 
+            relocation and re-orientation of datasets.
     """
 
     def __init__(self, rev_major = 0, rev_minor = 0, name = "", version = "", 

@@ -16,6 +16,7 @@ from src.data.arc import Arc
 from src.data.poly3 import Poly3
 from src.data.param_poly3 import Param_Poly3
 from src.data.elevation import Elevation
+from src.data.lateral_profile import Lateral_Profile
 from src.data.lateral_profile_superelevation import Lateral_Profile_Superelevation
 from src.data.lateral_profile_shape import Lateral_Profile_Shape
 
@@ -24,7 +25,13 @@ from src.data.lane_offset import Lane_Offset
 from src.data.lane_section import Lane_Section
 from src.data.lane import Lane
 from src.data.lane_width import Lane_Width
+from src.data.lane_height import Lane_Height
 from src.data.lane_border import Lane_Border
+from src.data.lane_material import Lane_Material
+from src.data.lane_visibility import Lane_Visibility
+from src.data.lane_access import Lane_Access
+from src.data.lane_rule import Lane_Rule
+from src.data.lane_speed import Lane_Speed
 
 from src.data.road_mark import Road_Mark
 from src.data.road_mark_type import Road_Mark_Type
@@ -183,7 +190,7 @@ class OpenDriveParser:
                                 float(att["bV"]), float(att["cV"]),
                     )
                 else:
-                    print(child.tag)
+                    print("unkown geometry child tag: ", child.tag)
             r.plan_view.append(geo)
 
         elevations = road.findall("elevationProfile/elevation")
@@ -196,11 +203,12 @@ class OpenDriveParser:
                 float(att["c"]),
                 float(att["d"])
             )
-            r.elevation_profile = e
+            r.elevation_profile.append(e)
 
         lateral_profile = road.findall("lateralProfile")
         for child in lateral_profile:
             att = child.attrib
+            r.lateral_profile = Lateral_Profile()
             if child.tag == "superelevation":
                 se = Lateral_Profile_Superelevation(
                     float(att["s"]),
@@ -209,7 +217,7 @@ class OpenDriveParser:
                     float(att["c"]),
                     float(att["d"])
                 )
-                r.lateral_profile["super_elevation"] = se
+                r.lateral_profile.super_elevation = se
             elif child.tag == "shape":
                 s = Lateral_Profile_Shape(
                     float(att["s"]),
@@ -219,9 +227,13 @@ class OpenDriveParser:
                     float(att["c"]),
                     float(att["d"])
                 )
-                r.lateral_profile["shapes"].append(s)
+                r.lateral_profile.shapes.append(s)
+            elif child.tag == "lateralProfile":
+                continue
             else:
-                print(child.tag)
+                print("unkown lateral profile child: ", child.tag)
+
+            
 
         r.lanes = self.__parse_lanes(road.find("lanes"))
         framework.roads[r.attrib["id"]] = r
@@ -241,7 +253,11 @@ class OpenDriveParser:
             )
             output.lane_offset = offset
         
-        laneSection = lanes.findall("laneSection")
+        self.__parse_lane_sections(output, lanes, lanes.findall("laneSection"))
+
+        return output
+
+    def __parse_lane_sections(self, output, lanes, laneSection):
         for ls in laneSection:
             att = ls.attrib
             section = Lane_Section(float(att["s"]))
@@ -289,60 +305,115 @@ class OpenDriveParser:
                             float(att["d"])
                         )
 
-                    
-                    road_mark = l.find("roadMark")
-                    if road_mark is not None:
-                        att = road_mark.attrib
-                        lane.road_mark = Road_Mark(
+                    height = l.find("height")
+                    if height is not None:
+                        att = height.attrib
+                        lane.height= Lane_Height(
                             float(att["sOffset"]),
-                            att["type"],
-                            att["color"]
+                            float(att["inner"]),
+                            float(att["outer"])
                         )
-                        if "material" in att:
-                            lane.road_mark.attrib["material"] = att["material"]
-                        if "width" in att:
-                            lane.road_mark.attrib["width"] = float(att["width"])
-                        if "laneChange" in att:
-                            lane.road_mark.attrib["lane_change"] = float(att["laneChange"])
-                        if "height" in att:
-                            lane.road_mark.attrib["height"] = float(att["height"])
-                        
-                        for child in road_mark:
-                            if child.tag == "type":
-                                att = child.attrib
-                                type = Road_Mark_Type(
-                                    att["name"],
-                                    float(att["width"])
-                                )
-                                for l in child:
-                                    att = l.attrib
-                                    line = Road_Mark_Line(
-                                        float(att["length"]),
-                                        float(att["space"]),
-                                        float(att["tOffset"]),
-                                        float(att["sOffset"]),
-                                        att["rule"],
-                                        float(att["width"])
-                                    )
-                                    type.lines.append(line)
-                                lane.road_mark.type = type
-                            else:
-                                print(child.tag)
+
+                    material = l.find("material")
+                    if material is not None:
+                        att = material.attrib
+                        lane.material = Lane_Material(
+                            float(att["sOffset"]),
+                            att["surface"],
+                            float(att["friction"])
+                        )
+                        if "roughness" in att:
+                            lane.road_mark.attrib["roughness"] = att["roughness"]
+                    
+                    visibility = l.find("visibility")
+                    if visibility is not None:
+                        att = visibility.attrib
+                        lane.visibility = Lane_Visibility(
+                            float(att["sOffset"]),
+                            float(att["forward"]),
+                            float(att["back"]),
+                            float(att["left"]),
+                            float(att["right"])
+                        )
+                    
+                    speed = l.find("speed")
+                    if speed is not None:
+                        att = speed.attrib
+                        lane.speed = Lane_Speed(
+                            float(att["sOffset"]),
+                            float(att["max"]),
+                            att["unit"]
+                        )
+
+                    access = l.find("access")
+                    if access is not None:
+                        att = access.attrib
+                        lane.access = Lane_Access(
+                            float(att["sOffset"]),
+                            att["rule"],
+                            att["restriction"]
+                        )
+
+                    rule = l.find("rule")
+                    if rule is not None:
+                        att = rule.attrib
+                        lane.rule = Lane_Rule(
+                            float(att["sOffset"]),
+                            att["value"]
+                        )
+
+                    self.__parse_road_mark(lane, l.find("roadMark"))
 
                     vl = l.find("userData/vectorLane")
                     if vl is not None:
                         lane.travelDir = vl.attrib["travelDir"]
 
                     if i == 0:
-                        section.left_lanes[lane.attrib["id"]] = lane
+                        section.left_lanes.append(lane)
                     elif i == 1:
-                        section.right_lanes[lane.attrib["id"]] = lane
+                        section.right_lanes.append(lane)
                     elif i == 2:
                         section.center_lane = lane
-
             output.lane_sections.append(section)
-        return output
 
+    def __parse_road_mark(self, lane, road_mark):
+        if road_mark is not None:
+            att = road_mark.attrib
+            lane.road_mark = Road_Mark(
+                float(att["sOffset"]),
+                att["type"],
+                att["color"]
+            )
+            if "material" in att:
+                lane.road_mark.attrib["material"] = att["material"]
+            if "width" in att:
+                lane.road_mark.attrib["width"] = float(att["width"])
+            if "laneChange" in att:
+                lane.road_mark.attrib["lane_change"] = att["laneChange"]
+            if "height" in att:
+                lane.road_mark.attrib["height"] = float(att["height"])
+            
+            for child in road_mark:
+                if child.tag == "type":
+                    att = child.attrib
+                    type = Road_Mark_Type(
+                        att["name"],
+                        float(att["width"])
+                    )
+                    for l in child:
+                        att = l.attrib
+                        line = Road_Mark_Line(
+                            float(att["length"]),
+                            float(att["space"]),
+                            float(att["tOffset"]),
+                            float(att["sOffset"]),
+                            att["rule"],
+                            float(att["width"])
+                        )
+                        type.lines.append(line)
+                    lane.road_mark.type = type
+                else:
+                    print(child.tag)
 
     def __parseJunction(self, roadways, junc):
         att = junc.attrib

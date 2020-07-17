@@ -24,7 +24,7 @@ class Road_Type():
         Attributes dictionary for the parameters specified above.
     speed : Road_Speed
         Object to define the maximum speed allowed.
-"""
+    """
     def __init__(self, s = 0, type = "", country = "") -> None:
         self.attrib = {
             "s" : float(s),

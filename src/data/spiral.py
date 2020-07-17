@@ -1,18 +1,20 @@
 class Spiral():
     """
-        Describes a part of the road's reference line as a Spiral.
+    Describes a part of the road's reference line as a Spiral.
 
-        Parameters
-        ----------
-        curv_start : float
-            Curvature at the start of the Spiral element.
-        curv_end : float
-            Curvature at the end of the Spiral element.
+    Found within a Geometry element.
 
-        Attributes
-        ----------
-        attrib : dict
-            Attributes dictionary for the parameters specified above.
+    Parameters
+    ----------
+    curv_start : float
+        Curvature at the start of the Spiral element.
+    curv_end : float
+        Curvature at the end of the Spiral element.
+
+    Attributes
+    ----------
+    attrib : dict
+        Attributes dictionary for the parameters specified above.
     """
     def __init__(self, curv_start = 0, curv_end = 0) -> None:
         self.attrib = {

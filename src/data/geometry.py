@@ -1,35 +1,32 @@
-from src.data.spiral import Spiral
-from src.data.arc import Arc
-from src.data.poly3 import Poly3
-from src.data.param_poly3 import Param_Poly3
-
 class Geometry:
     """ 
-        Allows for the generation of arbitrary road courses through the combination
-        of different geometry elements (Line, Spiral, Arc, Poly3 and Param_Poly3). 
-        To avoid leaps in the curvature, it is recommended to use spirals to combine lines with arcs. 
+    Allows for the generation of arbitrary road courses through the combination
+    of different geometry elements (Line, Spiral, Arc, Poly3 and Param_Poly3). 
+    To avoid leaps in the curvature, it is recommended to use spirals to combine lines with arcs. 
 
-        Parameters
-        ----------
-        s : float
-            Start posiiton (s-coordinate).
-        x : float
-            Start position (x inertial).
-        y : float
-            Start position (y-inertial).
-        hdg : float
-            Start orientation (inertial heading).
-        length : float
-            Length of the element's reference line.
+    Found within the plan_view of a Road element.
 
-        Attributes
-        ----------
-        attrib : dict
-            Attributes dictionary for the parameters specified above.
-        type : Spiral, Arc, Poly3, or Param_Poly3
-            Object that specifies more information about the actual geometry
-            of the Geometry element. If type = None, then the geometry specifies
-            a line.
+    Parameters
+    ----------
+    s : float
+        Start posiiton (s-coordinate).
+    x : float
+        Start position (x inertial).
+    y : float
+        Start position (y-inertial).
+    hdg : float
+        Start orientation (inertial heading).
+    length : float
+        Length of the element's reference line.
+
+    Attributes
+    ----------
+    attrib : dict
+        Attributes dictionary for the parameters specified above.
+    type : Spiral, Arc, Poly3, or Param_Poly3
+        Object that specifies more information about the actual geometry
+        of the Geometry element. If type = None, then the geometry specifies
+        a line.
     """
     def __init__(self, s = 0, x = 0, y = 0, hdg = 0, length = 0) -> None:
         self.attrib = {

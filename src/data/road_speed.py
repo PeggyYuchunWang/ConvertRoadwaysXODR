@@ -1,9 +1,13 @@
 class Road_Speed:
     """
+        Defines the maximum speed allowed on a road.
+
+        Found within a Road_Type element.
+
         Parameters
         ----------
         max : str, float
-            Maximum allowed speed. Either a string "no limit" or "undefined" or
+            Maximum allowed speed. Either a string "no limit" or "undefined," or
             a numerical value.
         unit : str
             Unit of the max speed parameter.
