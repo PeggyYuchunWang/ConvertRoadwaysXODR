@@ -8,6 +8,8 @@ from src.data.road import Road
 from src.data.geometry import Geometry
 from src.data.elevation import Elevation
 
+from src.data.lanes import Lanes
+
 class ParserTests(unittest.TestCase):
     def setUp(self):
         self.parser = OpenDriveParser()
@@ -64,5 +66,28 @@ class ParserTests(unittest.TestCase):
 
             self.assertIsNone(road.lateral_profile["super_elevation"])
             self.assertEqual(road.lateral_profile["shapes"], [])
+
+
+    def test_lanes(self):
+        for key in self.parser.data.roads:
+            r = self.parser.data.roads[key]
+            lanes = r.lanes
+            self.assertIsInstance(lanes, Lanes)
+
+            self.assertEqual(len(lanes.lane_sections), 1)
+
+            ls = lanes.lane_sections[0]
+            self.assertEqual(ls.attrib["s"],0)
+            self.assertEqual(ls.attrib["single_side"],False)
+
+            
+
+
+
+
+
+
+
+
 
         
