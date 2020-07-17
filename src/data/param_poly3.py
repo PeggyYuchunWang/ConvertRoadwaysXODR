@@ -2,6 +2,8 @@ class Param_Poly3():
     """
         Describes a part of a road's reference line as a parametric cubic curve.
 
+        Found within a Geometry element.
+
          Parameters
         ----------
         aU : float
