@@ -1,16 +1,37 @@
-"""
-    Lanes may be split into mulitple lane sections. Each Lane_Section
-    contains a fixed number of lanes. If the number of lanes change,
-    a new Lane_Section is required.
-"""
-import Lane
-import Lane_Width
-
 class Lane_Section:
-    
-    def __init__(self, s = 0, singleSide = False, center_lane = None):
-        self.s = float(s)
-        self.singleSide = bool(singleSide)
-        self.center_lane = center_lane #Lane.py type with id=0
+    """
+        Contains a fixed number of lanes. A new Lane_Section is
+        required when the number of lanes changes. 
+
+        Found within a Lanes element.
+
+        Parameters
+        ----------
+        s : float
+            Start position (s-coordinate).
+        single_side : bool
+            Specifies if the lane section is valid for only one
+            side (left, center or right), depending on the child elements
+
+        Attributes
+        ----------
+        attrib : dict
+            Attributes dictionary for the parameters specified above.
+        center_lane : Lane
+            The center Lane element with an ID of zero.
+        left_lanes : list
+            List of lanes to the left of the center_lane. Every left Lane must
+            have a negative ID value.
+        right_lanes : list
+            List of lanes to the right of the center_lane. Every left Lane must
+            have a negative ID value.
+    """
+    def __init__(self, s = 0) -> None:
+        self.attrib = {
+            "s" : float(s),
+            "single_side" : False
+        }      
+        self.center_lane = None
         self.left_lanes = []
         self.right_lanes = []
+        

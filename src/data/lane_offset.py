@@ -1,12 +1,31 @@
-"""
-    Used to shift the center lane away from the road reference line.
-    Lane_Offset should not be used together with Lateral_Profile_Shape.
-    
-"""
-from abcd_base import abcd_base
+import src.data.abcd_base as abcd_base
 
-class Lane_Offset(abcd_base):
-    def __init__(self, s = 0, a = 0, b = 0, c = 0, d = 0):
-        abcd_base.__init__(self, a, b, c, d)
-        self.s = float(s)
+class Lane_Offset(abcd_base.ABCD_base):
+    """
+        Describes the shift of the center lane away from the
+        road reference line.
+
+        Found within a Lane element.
+
+        Parameters
+        ----------
+        s : float
+            Start position (s-coordinate).
+        a : float
+            Generic parameter a.
+        b : float
+            Generic parameter b.
+        c : float
+            Generic parameter c.
+        d : float
+            Generic parameter d.
+
+        Attributes
+        ----------
+        attrib : dict
+            Attributes dictionary for the parameters specified above.
+    """
+    def __init__(self, s = 0, a = 0, b = 0, c = 0, d = 0) -> None:
+        super().__init__(self, a, b, c, d)
+        self.attrib["s"] = float(s)
         
