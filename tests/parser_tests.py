@@ -32,6 +32,13 @@ from src.data.road_mark import Road_Mark
 from src.data.road_mark_type import Road_Mark_Type
 from src.data.road_mark_line import Road_Mark_Line
 
+from src.data.junction import Junction
+from src.data.junction_connection import Junction_Connection
+from src.data.junction_lane_link import Junction_Lane_Link
+from src.data.junction_predecessor_successor import Junction_Predecessor_Successor
+from src.data.junction_group import Junction_Group
+from src.data.junction_controller import Junction_Controller
+
 class ParserTests(unittest.TestCase):
     def setUp(self):
         self.parser = OpenDriveParser()
@@ -154,14 +161,35 @@ class ParserTests(unittest.TestCase):
             self.assertIsNone(ll.access)
             self.assertIsNone(ll.rule)
 
-            # fuck = l.find("fuck")
-            #         if fuck is not None:
-            #             att = fuck.attrib
-            #             lane.fuck = Lane_Fuck(
-            #                 float(att["sOffset"]),
-            #                 float(att["inner"]),
-            #                 float(att["outer"])
-            #             )
+    def test_junctions(self):
+        for key in self.parser.data.junctions:
+            j = self.parser.data.junctions[key]
+            self.assertIsInstance(j, Junction)
+            self.assertEqual(j.attrib["name"], "")
+            self.assertEqual(j.attrib["id"], "1")
+            self.assertEqual(j.attrib["type"], "default")
+            
+            self.assertEqual(len(j.connections),1)
+            c = j.connections[0]
+            self.assertEqual(c.attrib["id"], "0")
+            self.assertEqual(c.attrib["incoming_road"], "6")
+            self.assertEqual(c.attrib["connecting_road"], "2")
+            self.assertEqual(c.attrib["contact_point"], "start")
+            self.assertIsNone(c.connections.predecessor)
+            self.assertIsNone(c.connections.successor)
+
+            self.assertEqual(len(c.lane_links), 3)
+            ll = c.lane_links[0]
+            self.assertEqual(ll.attrib["from_id"], 1)
+            self.assertEqual(ll.attrib["to_id"], -1)
+
+            self.assertEqual(len(j.controllers), 4)
+            c = j.controllers[0]
+            self.assertEqual(ll.attrib["id"], "2")
+            self.assertEqual(ll.attrib["type"], "0")
+
+
+
             
 
 

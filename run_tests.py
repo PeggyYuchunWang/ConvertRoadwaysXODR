@@ -9,6 +9,7 @@ def suite():
     #suite.addTest(ParserTests("test_offset"))
     suite.addTest(ParserTests("test_road"))
     suite.addTest(ParserTests("test_lanes"))
+    suite.addTest(ParserTests("test_junctions"))
 
     return suite
 

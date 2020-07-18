@@ -6,16 +6,19 @@ import src.data.open_drive_framework as odf
 from src.data.header import Header
 from src.data.geo_reference import Geo_Reference
 from src.data.offset import Offset
+
 from src.data.road import Road
 from src.data.road_predecessor_successor import Road_Predecessor_Successor
 from src.data.road_type import Road_Type
 from src.data.road_speed import Road_Speed
+
 from src.data.geometry import Geometry
 from src.data.spiral import Spiral
 from src.data.arc import Arc
 from src.data.poly3 import Poly3
 from src.data.param_poly3 import Param_Poly3
 from src.data.elevation import Elevation
+
 from src.data.lateral_profile import Lateral_Profile
 from src.data.lateral_profile_superelevation import Lateral_Profile_Superelevation
 from src.data.lateral_profile_shape import Lateral_Profile_Shape
@@ -36,6 +39,16 @@ from src.data.lane_speed import Lane_Speed
 from src.data.road_mark import Road_Mark
 from src.data.road_mark_type import Road_Mark_Type
 from src.data.road_mark_line import Road_Mark_Line
+from src.data.road_mark_sway import Road_Mark_Sway
+from src.data.road_mark_explicit import Road_Mark_Explicit
+from src.data.road_mark_explicit_line import Road_Mark_Explicit_Line
+
+from src.data.junction import Junction
+from src.data.junction_connection import Junction_Connection
+from src.data.junction_lane_link import Junction_Lane_Link
+from src.data.junction_predecessor_successor import Junction_Predecessor_Successor
+from src.data.junction_group import Junction_Group
+from src.data.junction_controller import Junction_Controller
 
 
 class OpenDriveParser:
@@ -57,8 +70,8 @@ class OpenDriveParser:
         for road in xml_root.findall("road"):
             self.__parse_road(self.data, road)
 
-        #for junc in xml_root.findall("junction"):
-        #    self.__parseJunction(self.data, junc)
+        for junc in xml_root.findall("junction"):
+            self.__parse_junction(self.data, junc)
 
     def __parse_header(self, framework, header):
         if header.attrib:
@@ -109,33 +122,7 @@ class OpenDriveParser:
         if "rule" in att:
             r.attrib["rule"] = att["rule"]
         
-        pred = road.find("link/predecessor")
-        if pred is not None:
-            att = pred.attrib
-            r.predecessor = Road_Predecessor_Successor(
-                att["elementType"], 
-                int(att["elementId"])
-            )
-            if "contactPoint" in att:
-                r.predecessor.attrib["contact_point"] = att["contactPoint"]
-            if "elementS" in att:
-                r.predecessor.attrib["element_s"] = int(att["elementS"])
-            if "elementDir" in att:
-                r.predecessor.attrib["element_dir"] = int(att["elementDir"])
-        
-        succ = road.find("link/successor")
-        if succ is not None:
-            att = succ.attrib
-            r.successor = Road_Predecessor_Successor(
-                att["elementType"], 
-                int(att["elementId"])
-            )
-            if "contactPoint" in att:
-                r.successor.attrib["contact_point"] = att["contactPoint"]
-            if "elementS" in att:
-                r.successor.attrib["element_s"] = int(att["elementS"])
-            if "elementDir" in att:
-                r.successor.attrib["element_dir"] = int(att["elementDir"])
+        self.__parse_road_predecessor_and_successor(r, road.find("link/predecessor"), road.find("link/successor"))
 
         type = road.find("type")
         if type is not None:
@@ -152,8 +139,56 @@ class OpenDriveParser:
                         float(att["max"]),
                         att["unit"]
                     )
+                else:
+                    print("unkown type child tag: ", child.tag)
         
-        geos = road.findall("planView/geometry")
+        self.__parse_road_geometrys(r, road.findall("planView/geometry"))
+
+        elevations = road.findall("elevationProfile/elevation")
+        for ele in elevations:
+            att = ele.attrib
+            e = Elevation(
+                float(att["s"]),
+                float(att["a"]),
+                float(att["b"]),
+                float(att["c"]),
+                float(att["d"])
+            )
+            r.elevation_profile.append(e)
+
+        self.__parse_road_lateral_profile(r, road.findall("lateralProfile"))
+
+        r.lanes = self.__parse_lanes(road.find("lanes"))
+        framework.roads[r.attrib["id"]] = r
+
+    def __parse_road_predecessor_and_successor(self, r, pred, succ):
+        if pred is not None:
+            att = pred.attrib
+            r.predecessor = Road_Predecessor_Successor(
+                att["elementType"], 
+                int(att["elementId"])
+            )
+            if "contactPoint" in att:
+                r.predecessor.attrib["contact_point"] = att["contactPoint"]
+            if "elementS" in att:
+                r.predecessor.attrib["element_s"] = int(att["elementS"])
+            if "elementDir" in att:
+                r.predecessor.attrib["element_dir"] = int(att["elementDir"])
+        
+        if succ is not None:
+            att = succ.attrib
+            r.successor = Road_Predecessor_Successor(
+                att["elementType"], 
+                int(att["elementId"])
+            )
+            if "contactPoint" in att:
+                r.successor.attrib["contact_point"] = att["contactPoint"]
+            if "elementS" in att:
+                r.successor.attrib["element_s"] = int(att["elementS"])
+            if "elementDir" in att:
+                r.successor.attrib["element_dir"] = int(att["elementDir"])
+
+    def __parse_road_geometrys(self, r, geos):
         for g in geos:
             att = g.attrib
             geo = Geometry(
@@ -193,19 +228,7 @@ class OpenDriveParser:
                     print("unkown geometry child tag: ", child.tag)
             r.plan_view.append(geo)
 
-        elevations = road.findall("elevationProfile/elevation")
-        for ele in elevations:
-            att = ele.attrib
-            e = Elevation(
-                float(att["s"]),
-                float(att["a"]),
-                float(att["b"]),
-                float(att["c"]),
-                float(att["d"])
-            )
-            r.elevation_profile.append(e)
-
-        lateral_profile = road.findall("lateralProfile")
+    def __parse_road_lateral_profile(self, r, lateral_profile):
         for child in lateral_profile:
             att = child.attrib
             r.lateral_profile = Lateral_Profile()
@@ -232,11 +255,6 @@ class OpenDriveParser:
                 continue
             else:
                 print("unkown lateral profile child: ", child.tag)
-
-            
-
-        r.lanes = self.__parse_lanes(road.find("lanes"))
-        framework.roads[r.attrib["id"]] = r
 
     def __parse_lanes(self, lanes):
         output = Lanes()
@@ -305,15 +323,6 @@ class OpenDriveParser:
                             float(att["d"])
                         )
 
-                    height = l.find("height")
-                    if height is not None:
-                        att = height.attrib
-                        lane.height= Lane_Height(
-                            float(att["sOffset"]),
-                            float(att["inner"]),
-                            float(att["outer"])
-                        )
-
                     material = l.find("material")
                     if material is not None:
                         att = material.attrib
@@ -352,6 +361,15 @@ class OpenDriveParser:
                             float(att["sOffset"]),
                             att["rule"],
                             att["restriction"]
+                        )
+
+                    height = l.find("height")
+                    if height is not None:
+                        att = height.attrib
+                        lane.height= Lane_Height(
+                            float(att["sOffset"]),
+                            float(att["inner"]),
+                            float(att["outer"])
                         )
 
                     rule = l.find("rule")
@@ -410,32 +428,82 @@ class OpenDriveParser:
                             att["rule"],
                             float(att["width"])
                         )
+                        if "color" in att:
+                            line.attrib["color"] = att["color"]
                         type.lines.append(line)
                     lane.road_mark.type = type
+                elif child.tag == "sway":
+                    att = child.attrib
+                    sway = Road_Mark_Sway(
+                        float(att["ds"]),
+                        float(att["a"]), 
+                        float(att["b"]),
+                        float(att["c"]), 
+                        float(att["d"])
+                    )
+                    lane.road_mark.sway = sway
+                elif child.tag == "explicit":
+                    att = child.attrib
+                    ex = Road_Mark_Explicit(
+                        att["name"],
+                        float(att["width"])
+                    )
+                    for l in child:
+                        att = l.attrib
+                        ex_line = Road_Mark_Explicit_Line(
+                            float(att["length"]),
+                            float(att["tOffset"]),
+                            float(att["sOffset"]),
+                            att["rule"],
+                            float(att["width"])
+                        )
+                        ex.lines.append(ex_line)
+                    lane.road_mark.explicit = ex            
                 else:
-                    print(child.tag)
+                    print("unkown road mark child tag: ", child.tag)
 
-    def __parseJunction(self, roadways, junc):
+    def __parse_objects(self, framework):
+        print()
+
+    def __parse_junction(self, framework, junc):
         att = junc.attrib
-        j = rw.Junction(att["id"], att["name"])
+        j = Junction(
+            att["id"], 
+            att["name"]
+        )
         if "type" in att:
                 j.type = att["type"]
-        for connection in junc:
+        
+        connections = junc.finall("connection")
+        for connection in connections:
             att = connection.attrib
-            c = rw.connection(
-                att["id"])
+            c = Junction_Connection(att["id"])
             if "type" in att:
-                c.type = att["type"]
+                c.attrib["type"] = att["type"]
             if "incomingRoad" in att:
-                c.incomingRoad = att["incomingRoad"]
+                c.attrib["incoming_road"] = att["incomingRoad"]
             if "connectingRoad" in att:
-                c.connectingRoad = att["connectingRoad"]
+                c.attrib["connecting_road"] = att["connectingRoad"]
             if "contactPoint" in att:
-                c.contactPoint = att["contactPoint"]
+                c.attrib["contact_point"] = att["contactPoint"]
+            
             ll = connection.find("laneLink")
             if ll is not None:
-                c.laneLink = rw.LaneLink(ll.attrib["from"], ll.attrib["to"])
-            j.connections.append(c)
-        roadways.junctions[j.id] = j
+                att = ll.attrib
+                c.lane_link = Junction_Lane_Link(
+                    att["from"], 
+                    att["to"]
+                )
+            j.connections.append(connection)
+            
+        controllers = junc.findall("controller")
+        for c in controllers:
+            att = c.attrib
+            c = Junction_Controller(
+                att["id"],
+                att["type"]
+            )      
+            j.controllers.append(c)
+        framework.junctions[j.attrib["id"]] = j
 
     

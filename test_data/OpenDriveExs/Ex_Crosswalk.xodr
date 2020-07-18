@@ -140,5 +140,16 @@
         </signals>
         <surface>
         </surface>
+        <junction name="" id="1" type="default">
+            <connection id="0" incomingRoad="6" connectingRoad="2" contactPoint="start">
+                <laneLink from="1" to="-1"/>
+                <laneLink from="2" to="-2"/>
+                <laneLink from="3" to="-3"/>
+            </connection>   
+            <controller id="2" type="0"/>
+            <controller id="4" type="0"/>
+            <controller id="1" type="0"/>
+            <controller id="3" type="0"/>
+        </junction>
     </road>
 </OpenDRIVE>

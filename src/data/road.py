@@ -4,11 +4,11 @@ class Road:
 
     Parameters
     ----------
-    id : int
+    id : str
         Unique ID given to the road, stored within the database.
     length : int
         Total length of the reference line in the xy-plane.
-    junction : int
+    junction : str
         Unique ID of the junction to which the road belongs.
     rule : str
         Basic rule for using the road. Right Hand Traffic default.
@@ -44,7 +44,7 @@ class Road:
             "length" : float(length),           
             "junction" : str(junction),
             "rule" : str(rule),
-            "name" : str("") 
+            "name" : str(name) 
         }      
         self.predecessor = None
         self.successor = None
