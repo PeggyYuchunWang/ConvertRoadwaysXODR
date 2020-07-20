@@ -25,6 +25,9 @@ class Road:
     successor : Road_Predecessor_Successor
         Object used to represent the linkage between the current road
         and the road that comes after it.
+    neighbors : list
+        List of Road_Neighbor elements describing the road's neighbors.
+        Can only have two neighbors max.
     type : Road_Type
         Object used to define the main purpose of a road.
     plan_view : list
@@ -48,6 +51,7 @@ class Road:
         }      
         self.predecessor = None
         self.successor = None
+        self.neighbors = []
         self.type = None
         self.plan_view = []
         self.elevation_profile = []

@@ -13,23 +13,23 @@ class Road_Mark_Explicit_Line:
         Lateral offset from the lane border.
     s_offset : float
         Initial longitudinal offset of the line definition 
-        from the start of the road mark definition.
+        from the start of the road mark definition.   
+    width : float
+        Width of the line.
     rule : str
         Rule that must be observed when passing the line from inside. 
         Either "no passiong," "caution," or "none."
-    width : float
-        Width of the line.
 
     Attributes
     ----------
     attrib : dict
         Attributes dictionary for the parameters specified above.
     """
-    def __init__(self, length = 0, t_offset = 0, s_offset = 0, rule = "", width = 0) -> None:
+    def __init__(self, length = 0, t_offset = 0, s_offset = 0,  width = 0, rule = "") -> None:
         self.attrib = {
             "length" : float(length),
             "t_offset" : float(t_offset),
             "s_offset" : float(s_offset),
-            "rule" : str(rule),
-            "width" : float(width)
+            "width" : float(width),
+            "rule" : str(rule)
         }
