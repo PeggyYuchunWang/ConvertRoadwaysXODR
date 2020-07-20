@@ -421,9 +421,10 @@ class OpenDriveParser:
             att = road_mark.attrib
             lane.road_mark = Road_Mark(
                 float(att["sOffset"]),
-                att["type"],
-                att["color"]
+                att["type"]
             )
+            if "color" in att:
+                lane.road_mark.attrib["color"] = att["color"]
             if "material" in att:
                 lane.road_mark.attrib["material"] = att["material"]
             if "width" in att:
