@@ -8,14 +8,14 @@ class Junction_Connection:
     ----------
     id : str
         Unique ID within the junction.
-    type : str
-        Type of the connection. Either "default" or "virtual."
     incoming_road : str
         ID of the incoming road.
     connecting_road : str
         ID of the connecting road.
     contact_point : str
         Contact point on the connecting road. Either "start" or "end."
+    type : str
+        Type of the connection. Either "default" or "virtual."
        
     Attributes
     ----------
@@ -32,13 +32,13 @@ class Junction_Connection:
         the lanes that are linked between an incoming road and a 
         connecting road.   
     """
-    def __init__(self, id = "", type = "", incoming_road = "", connecting_road = "", contact_point = "") -> None:
+    def __init__(self, id = "", incoming_road = "", connecting_road = "", contact_point = "", type = "",) -> None:
         self.attrib = {
             "id" : str(id),            
-            "type" : str(type),
             "incoming_road" : str(incoming_road),
             "connecting_road" : str(connecting_road),
-            "contact_point" : str(contact_point)
+            "contact_point" : str(contact_point),
+            "type" : str(type)
         }
         self.predecessor = None
         self.successor = None  

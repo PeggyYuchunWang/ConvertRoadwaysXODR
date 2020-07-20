@@ -5,10 +5,10 @@ class Junction:
 
     Parameters
     ----------
-    name : str
-        Name of road. Can choose a name freely.
     id : str
         Unique ID given to the road, stored within the database.
+    name : str
+        Name of road. Can choose a name freely.
     type : str
         Type of the junction. Either "default" or "virtual."
        
@@ -22,15 +22,20 @@ class Junction:
     controller : list
         List of Junction_Control elements that are used 
         for the management of a junction.  
+    priorities : list
+        List of Junction_Priority elements that are used to determine
+        the priority of connecting roads if priorities cannot
+        be derived from signs or signals in a junction.
     """
-    def __init__(self, name = "", id = "", type = "") -> None:
+    def __init__(self,  id = "", name = "", type = "") -> None:
         self.attrib = {
-            "name" : str(name),
-            "id" : str(id),            
+            "id" : str(id),  
+            "name" : str(name),          
             "type" : str(type)
         }      
         self.connections = []
         self.controllers = []
+        self.priorities = []
  
         #the following attributes are included in OpenCRG
         #will we be including these?
