@@ -13,6 +13,6 @@ if __name__ == "__main__":
     if ".DS_Store" in onlyfiles:
         onlyfiles.remove(".DS_Store")
     odp.parse_file(args.filename)
-    print(odp.data.roads[1].lanes.laneSection[0])
+    #print(odp.data.roads["1"].lanes.lane_sections[0])
     for f in onlyfiles:
         odp.parse_file(args.folder+f)
