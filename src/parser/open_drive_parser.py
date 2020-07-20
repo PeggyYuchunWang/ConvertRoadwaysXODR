@@ -129,9 +129,10 @@ class OpenDriveParser:
             att = type.attrib
             r.type = Road_Type(
                 float(att["s"]),
-                str(att["type"]),
-                str(att["country"])
+                str(att["type"])
             )
+            if "country" in att:
+                r.type.attrib["country"] = att["country"]
             for child in type:
                 if child.tag == "speed":
                     att = child.attrib
