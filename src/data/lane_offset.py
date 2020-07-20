@@ -26,6 +26,6 @@ class Lane_Offset(abcd_base.ABCD_base):
         Attributes dictionary for the parameters specified above.
     """
     def __init__(self, s = 0, a = 0, b = 0, c = 0, d = 0) -> None:
-        super().__init__(self, a, b, c, d)
+        super().__init__(a, b, c, d)
         self.attrib["s"] = float(s)
         
