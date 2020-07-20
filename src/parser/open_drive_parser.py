@@ -184,11 +184,10 @@ class OpenDriveParser:
             att = pred.attrib
             r.predecessor = Road_Predecessor_Successor(
                 att["elementType"], 
-                int(att["elementId"]),
-                att["contactPoint"]
+                int(att["elementId"])
             )
-            # if "contactPoint" in att:
-            #     r.predecessor.attrib["contact_point"] = att["contactPoint"]
+            if "contactPoint" in att:
+                r.predecessor.attrib["contact_point"] = att["contactPoint"]
             if "elementS" in att:
                 r.predecessor.attrib["element_s"] = int(att["elementS"])
             if "elementDir" in att:
@@ -198,11 +197,10 @@ class OpenDriveParser:
             att = succ.attrib
             r.successor = Road_Predecessor_Successor(
                 att["elementType"], 
-                int(att["elementId"]),
-                att["contactPoint"]
+                int(att["elementId"])
             )
-            # if "contactPoint" in att:
-            #     r.successor.attrib["contact_point"] = att["contactPoint"]
+            if "contactPoint" in att:
+                r.successor.attrib["contact_point"] = att["contactPoint"]
             if "elementS" in att:
                 r.successor.attrib["element_s"] = int(att["elementS"])
             if "elementDir" in att:
@@ -561,7 +559,7 @@ class OpenDriveParser:
             if "sequence" in att:
                 c.attrib["sequence"] = att["sequence"]           
             j.controllers.append(c)
-            
+
         framework.junctions[j.attrib["id"]] = j
 
     
