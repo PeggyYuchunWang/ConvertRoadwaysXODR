@@ -501,7 +501,7 @@ class OpenDriveParser:
         if "type" in att:
                 j.type = att["type"]
         
-        connections = junc.finall("connection")
+        connections = junc.findall("connection")
         for connection in connections:
             att = connection.attrib
             c = Junction_Connection(
