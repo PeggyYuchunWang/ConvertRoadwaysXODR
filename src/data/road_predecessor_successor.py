@@ -24,7 +24,7 @@ class Road_Predecessor_Successor:
     attrib : dict
         Attributes dictionary for the parameters specified above.
     """
-    def __init__(self, element_id = "", element_type = "", contact_point = "", element_s = 0, element_dir = "") -> None:
+    def __init__(self,  element_id = "", element_type = "", contact_point = "", element_s = 0, element_dir = "") -> None:
         self.attrib = {
             "element_id" : str(element_id),
             "element_type" : str(element_type), 

@@ -189,22 +189,22 @@ class OpenDriveParser:
             if "contactPoint" in att:
                 r.predecessor.attrib["contact_point"] = att["contactPoint"]
             if "elementS" in att:
-                r.predecessor.attrib["element_s"] = int(att["elementS"])
+                r.predecessor.attrib["element_s"] = float(att["elementS"])
             if "elementDir" in att:
-                r.predecessor.attrib["element_dir"] = int(att["elementDir"])
+                r.predecessor.attrib["element_dir"] = att["elementDir"]
         
         if succ is not None:
             att = succ.attrib
             r.successor = Road_Predecessor_Successor(
-                att["elementType"], 
-                int(att["elementId"])
+                att["elementId"],  
+                att["elementType"]
             )
             if "contactPoint" in att:
                 r.successor.attrib["contact_point"] = att["contactPoint"]
             if "elementS" in att:
-                r.successor.attrib["element_s"] = int(att["elementS"])
+                r.successor.attrib["element_s"] = float(att["elementS"])
             if "elementDir" in att:
-                r.successor.attrib["element_dir"] = int(att["elementDir"])
+                r.successor.attrib["element_dir"] = att["elementDir"]
 
     def __parse_road_geometrys(self, r, geos):
         for g in geos:
