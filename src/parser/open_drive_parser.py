@@ -241,6 +241,7 @@ class OpenDriveParser:
                                 float(att["bU"]), float(att["cU"]),
                                 float(att["dU"]), float(att["aV"]),
                                 float(att["bV"]), float(att["cV"]),
+                                float(att["dV"])
                     )
                 else:
                     print("unkown geometry child tag: ", child.tag)
