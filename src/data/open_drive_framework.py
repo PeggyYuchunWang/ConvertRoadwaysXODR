@@ -6,3 +6,5 @@ class Open_Drive_Framework:
         self.header = None
         self.roads = {}
         self.junctions = {}
+        self.signals = {}
+        self.controllers = {}

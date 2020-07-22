@@ -35,9 +35,42 @@ from src.data.road_mark_line import Road_Mark_Line
 from src.data.junction import Junction
 from src.data.junction_connection import Junction_Connection
 from src.data.junction_lane_link import Junction_Lane_Link
+from src.data.junction_priority import Junction_Priority
 from src.data.junction_predecessor_successor import Junction_Predecessor_Successor
 from src.data.junction_group import Junction_Group
 from src.data.junction_controller import Junction_Controller
+
+from src.data.objects import Objects
+from src.data.object import Object
+from src.data.object_repeat import Object_Repeat
+from src.data.object_outline import Object_Outline
+from src.data.object_outline_corner_road import Object_Outline_Corner_Road
+from src.data.object_outline_corner_local import Object_Outline_Corner_Local
+from src.data.object_material import Object_Material
+from src.data.object_validity import Object_Validity
+from src.data.object_parking_space import Object_Parking_Space
+from src.data.object_marking import Object_Marking
+from src.data.object_border import Object_Border
+from src.data.object_reference import Object_Reference
+from src.data.object_tunnel import Object_Tunnel
+from src.data.object_bridge import Object_Bridge
+
+from src.data.signal import Signal
+from src.data.signals import Signals
+from src.data.signal_validity import Signal_Validity
+from src.data.signal_dependency import Signal_Dependency
+from src.data.signal_reference import Signal_Reference
+from src.data.signal_position_inertial import Signal_Position_Inertial
+from src.data.signal_position_road import Signal_Position_Road
+from src.data.signal_repeat import Signal_Repeat
+
+from src.data.controller import Controller
+from src.data.controller_signal_control import Controller_Signal_Control
+
+from src.data.railroad import Railroad
+from src.data.railroad_switch import Railroad_Switch
+from src.data.railroad_track import Railroad_Track
+from src.data.railroad_switch_partner import Railroad_Switch_Partner
 
 class ParserTests(unittest.TestCase):
     def setUp(self):
@@ -95,7 +128,6 @@ class ParserTests(unittest.TestCase):
 
             self.assertIsNone(road.lateral_profile.super_elevation)
             self.assertEqual(len(road.lateral_profile.shapes), 0)
-
 
     def test_lanes(self):
         for key in self.parser.data.roads:
@@ -175,8 +207,8 @@ class ParserTests(unittest.TestCase):
             self.assertEqual(c.attrib["incoming_road"], "6")
             self.assertEqual(c.attrib["connecting_road"], "2")
             self.assertEqual(c.attrib["contact_point"], "start")
-            self.assertIsNone(c.connections.predecessor)
-            self.assertIsNone(c.connections.successor)
+            self.assertIsNone(c.predecessor)
+            self.assertIsNone(c.successor)
 
             self.assertEqual(len(c.lane_links), 3)
             ll = c.lane_links[0]
@@ -185,8 +217,128 @@ class ParserTests(unittest.TestCase):
 
             self.assertEqual(len(j.controllers), 4)
             c = j.controllers[0]
-            self.assertEqual(ll.attrib["id"], "2")
-            self.assertEqual(ll.attrib["type"], "0")
+            self.assertEqual(c.attrib["id"], "2")
+            self.assertEqual(c.attrib["type"], "0")
+
+    def test_objects(self):
+        objs = self.parser.data.roads["1"].objects
+        o = objs.objects[0]
+        self.assertIsInstance(o, Object)
+        self.assertEqual(o.attrib["type"], "crosswalk")
+        self.assertEqual(o.attrib["id"], "10")
+        self.assertEqual(o.attrib["s"], 10.0)
+        self.assertEqual(o.attrib["t"], 0.0)
+        self.assertEqual(o.attrib["z_offset"], 0.0)
+        self.assertEqual(o.attrib["orientation"], "none")
+        self.assertEqual(o.attrib["length"], 10.0)
+        self.assertEqual(o.attrib["width"], 7.0)
+        self.assertEqual(o.attrib["hdg"], 0.0)
+        self.assertEqual(o.attrib["pitch"], 0.0)
+        self.assertEqual(o.attrib["roll"], 0.0)
+        self.assertEqual(o.attrib["name"], "")
+        self.assertEqual(o.attrib["height"], 0.0)
+        self.assertEqual(o.attrib["radius"], 0.0)
+        self.assertEqual(o.attrib["subtype"], "")
+
+        outline = o.outlines[0]
+        self.assertIsInstance(outline, Object_Outline)
+        self.assertEqual(outline.attrib["id"], "0")
+        cr = outline.corner_roads[0]
+        self.assertIsInstance(cr, Object_Outline_Corner_Road)
+        self.assertEqual(cr.attrib["s"], 5.0)
+        self.assertEqual(cr.attrib["t"], 3.5)
+        self.assertEqual(cr.attrib["dz"], 0.0)
+        self.assertEqual(cr.attrib["height"], 0.0)
+        self.assertEqual(cr.attrib["id"], "0")
+
+        marking = o.markings[0]
+        self.assertIsInstance(marking, Object_Marking)
+        self.assertEqual(marking.attrib["width"], 0.1)
+        self.assertEqual(marking.attrib["color"], "white")
+        self.assertEqual(marking.attrib["z_offset"], 0.005)
+        self.assertEqual(marking.attrib["space_length"], 0.05)
+        self.assertEqual(marking.attrib["line_length"], 0.2)
+        self.assertEqual(marking.attrib["start_offset"], 0.0)
+        self.assertEqual(marking.attrib["stop_offset"], 0.0)
+        cr_id = marking.corner_references[0]
+        self.assertEqual(cr_id, "0")
+
+    def test_signals(self):
+        sgnls = self.parser.data.roads["1"].signals
+        s = sgnls["1"]
+        self.assertIsInstance(s, Signal)
+        self.assertEqual(s.attrib["s"], 1.0000000000000000e+01)
+        self.assertEqual(s.attrib["t"], -0.0000000000000000e+00)
+        self.assertEqual(s.attrib["id"], "1")
+        self.assertEqual(s.attrib["name"], "Crosswalk")
+        self.assertEqual(s.attrib["dynamic"], "no")
+        self.assertEqual(s.attrib["orientation"], "none")
+        self.assertEqual(s.attrib["z_offset"], 0.0000000000000000e+00)
+        self.assertEqual(s.attrib["type"], "1000003")
+        self.assertEqual(s.attrib["country"], "OpenDRIVE")
+        self.assertEqual(s.attrib["country_revision"], "2013")
+        self.assertEqual(s.attrib["subtype"], "-1")
+        self.assertEqual(s.attrib["value"], 4.0000000000000000e+00)
+        self.assertEqual(s.attrib["unit"], "m")
+        self.assertEqual(s.attrib["h_offset"], 0)
+        self.assertEqual(s.attrib["pitch"], 0)
+        self.assertEqual(s.attrib["roll"], 0)
+        self.assertEqual(s.attrib["height"], 0.01)
+        self.assertEqual(s.attrib["width"], 10.40)
+
+    def test_controllers(self):
+        controllers = self.parser.data.controllers
+        c = controllers["1"]
+        self.assertIsInstance(c, Controller)
+        self.assertEqual(c.attrib["id"], "1")
+        self.assertEqual(c.attrib["name"], "ctrl001")
+        sc = c.signal_control_records[0]
+        self.assertIsInstance(sc, Controller_Signal_Control)
+        self.assertEqual(sc.attrib["signal_id"], "8")
+        self.assertEqual(sc.attrib["type"], "0")
+
+    def test_railroad(self):
+        r = self.parser.data.roads["1"].railroad
+        self.assertIsInstance(r, Railroad)
+
+        s = r.switches["32"]
+        self.assertIsInstance(s, Railroad_Switch)
+        self.assertEqual(s.attrib["position"], "dynamic")
+        self.assertEqual(s.attrib["id"], "1")
+        self.assertEqual(s.attrib["name"], "Switch32")
+
+
+        mt = r.main_track
+        self.assertIsInstance(mt, Railroad_Track)
+        self.assertEqual(mt.attrib["id"], "3")
+        self.assertEqual(mt.attrib["s"], 1.0000000000000000e+01)
+        self.assertEqual(mt.attrib["dir"], "+")
+
+        st = r.side_track
+        self.assertIsInstance(st, Railroad_Track)
+        self.assertEqual(mt.attrib["id"], "2")
+        self.assertEqual(mt.attrib["s"], 3.4898261533109149e+01)
+        self.assertEqual(mt.attrib["dir"], "-")
+
+        ps = r.switch_parter
+        self.assertIsInstance(ps, Railroad_Switch_Partner)
+        self.assertEqual(mt.attrib["name"], "Switch12")
+        self.assertEqual(mt.attrib["id"], "12")
+
+
+       
+
+        
+
+        
+
+
+
+            
+
+
+
+
 
 
 

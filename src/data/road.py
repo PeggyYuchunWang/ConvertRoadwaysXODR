@@ -40,6 +40,10 @@ class Road:
         banking along the reference line.
     lanes : Lanes
         Object used to represent all lane sections.
+    objects : Objects
+        Object used to represent all objects on the road.
+    signals : list
+        List of Signal elements.
     """
     def __init__(self, id = "", length = 0,  junction = "-1", rule = "RHT", name = "") -> None:
         self.attrib = {
@@ -57,4 +61,5 @@ class Road:
         self.elevation_profile = []
         self.lateral_profile = None
         self.lanes = None
-        #self.objects = None
+        self.objects = None
+        self.signals = []

@@ -52,6 +52,37 @@ from src.data.junction_predecessor_successor import Junction_Predecessor_Success
 from src.data.junction_group import Junction_Group
 from src.data.junction_controller import Junction_Controller
 
+from src.data.objects import Objects
+from src.data.object import Object
+from src.data.object_repeat import Object_Repeat
+from src.data.object_outline import Object_Outline
+from src.data.object_outline_corner_road import Object_Outline_Corner_Road
+from src.data.object_outline_corner_local import Object_Outline_Corner_Local
+from src.data.object_material import Object_Material
+from src.data.object_validity import Object_Validity
+from src.data.object_parking_space import Object_Parking_Space
+from src.data.object_marking import Object_Marking
+from src.data.object_border import Object_Border
+from src.data.object_reference import Object_Reference
+from src.data.object_tunnel import Object_Tunnel
+from src.data.object_bridge import Object_Bridge
+
+from src.data.signal import Signal
+from src.data.signals import Signals
+from src.data.signal_validity import Signal_Validity
+from src.data.signal_dependency import Signal_Dependency
+from src.data.signal_reference import Signal_Reference
+from src.data.signal_position_inertial import Signal_Position_Inertial
+from src.data.signal_position_road import Signal_Position_Road
+from src.data.signal_repeat import Signal_Repeat
+
+from src.data.controller import Controller
+from src.data.controller_signal_control import Controller_Signal_Control
+
+from src.data.railroad import Railroad
+from src.data.railroad_switch import Railroad_Switch
+from src.data.railroad_track import Railroad_Track
+from src.data.railroad_switch_partner import Railroad_Switch_Partner
 
 class OpenDriveParser:
     def __init__(self):
@@ -64,8 +95,6 @@ class OpenDriveParser:
         print("done parsing: ", filename)    
 
     def __parse(self, xml_root):
-        
-        #fills in the header node information
         for header in xml_root.findall("header"):
             self.__parse_header(self.data, header)
 
@@ -74,6 +103,10 @@ class OpenDriveParser:
 
         for junc in xml_root.findall("junction"):
             self.__parse_junction(self.data, junc)
+
+        for cont in xml_root.findall("controller"):
+            self.__parse_controller(self.data, cont)
+
 
     def __parse_header(self, framework, header):
         if header.attrib:
@@ -177,6 +210,16 @@ class OpenDriveParser:
         self.__parse_road_lateral_profile(r, road.findall("lateralProfile"))
 
         r.lanes = self.__parse_lanes(road.find("lanes"))
+
+        if road.find("objects") is not None:
+            r.objects = self.__parse_objects(road.find("objects"))
+
+        if road.find("signals") is not None:
+            r.signals = self.__parse_signals(road.find("signals"))
+
+        if road.find("railroad") is not None:
+            r.railroad = self.__parse_railroad(road.find("railroad"))
+
         framework.roads[r.attrib["id"]] = r
 
     def __parse_road_predecessor_and_successor(self, r, pred, succ):
@@ -489,8 +532,423 @@ class OpenDriveParser:
                 else:
                     print("unkown road mark child tag: ", child.tag)
 
-    def __parse_objects(self, framework):
-        print()
+    def __parse_objects(self, objects):
+        objs = Objects()
+        for obj in objects.findall("object"):
+            att = obj.attrib
+            o = Object(
+                att["type"],
+                att["id"],
+                float(att["s"]),
+                float(att["t"])
+            )
+            if "zOffset" in att:
+                o.attrib["z_offset"] = float(att["zOffset"])
+            if "validLength" in att:
+                o.attrib["valid_length"] = float(att["validLength"])
+            if "orientation" in att:
+                o.attrib["orientation"] = att["orientation"]
+            if "subtype" in att:
+                o.attrib["subtype"] = att["subtype"]
+            if "dynamic" in att:
+                o.attrib["dynamic"] = att["dynamic"]
+            if "hdg" in att:
+                o.attrib["hdg"] = float(att["hdg"])
+            if "name" in att:
+                o.attrib["name"] = att["name"]
+            if "pitch" in att:
+                o.attrib["pitch"] = float(att["pitch"])
+            if "roll" in att:
+                o.attrib["roll"] = float(att["roll"])
+            if "height" in att:
+                o.attrib["height"] = float(att["height"])
+            if "length" in att:
+                o.attrib["length"] = float(att["length"])
+            if "width" in att:
+                o.attrib["width"] = float(att["width"])
+            if "radius" in att:
+                o.attrib["radius"] = float(att["radius"])
+
+            if obj.findall("repeat") is not None:
+                self.__parse_object_repeats(o, obj.findall("repeat"))
+
+            if obj.find("outlines") is not None:
+                self.__parse_object_outlines(o, obj.find("outlines"))
+
+            material = obj.find("material")
+            if material is not None:
+                att = material.attrib
+                o.material = Object_Material(
+                    att["surface"]
+                )
+                if "friction" in att:
+                    obj.material.attrib["friction"] = float(att["friction"])
+                if "roughness" in att:
+                    obj.material.attrib["roughness"] = float(att["roughness"])
+            
+            for validity in obj.findall("validity"):
+                att = validity.attrib
+                o.validity = Object_Validity(
+                    att["fromLane"],
+                    att["toLane"]
+                )
+
+            parking_space = obj.find("parkingSpace")
+            if parking_space is not None:
+                att = parking_space.attrib
+                o.parking_space = Object_Parking_Space(
+                    att["access"]
+                )
+                if "restrictions" in att:
+                    o.parking_space.attrib["restrictions"] = att["restrictions"]
+            
+            if obj.find("markings") is not None:
+                self.__parse_object_markings(o, obj.find("markings"))
+
+            for borders in obj.findall("borders"):
+                for border in borders:
+                    att = border.attrib
+                    b = Object_Border(
+                        float(att["width"]),
+                        att["type"],
+                        str(att["outlineId"])
+                    )
+                    if "useCompleteOutline" in att:
+                        b.attrib["useCompleteOutline"] = bool(att["useCompleteOutline"])
+                    o.borders.append(b)
+            
+            objs.objects.append(o)
+
+            if objects.findall("objectReference") is not None:
+                self.__parse_object_references(objs, objects.findall("objectReference"))
+
+            if objects.findall("tunnel") is not None:
+                self.__parse_object_tunnels(objs, objects.findall("tunnel"))
+
+            if objects.findall("bridge") is not None:
+                self.__parse_object_bridges(objs, objects.findall("bridge"))
+
+        return objs
+          
+    def __parse_object_repeats(self, o, repeats):
+        for repeat in repeats:
+            att = repeat.attrib
+            r = Object_Repeat(
+                float(att["s"]),
+                float(att["length"]),
+                float(att["distance"])
+            )
+            if "tStart" in att:
+                r.attrib["t_start"] = float(att["tStart"])
+            if "tEnd" in att:
+                r.attrib["t_end"] = float(att["tEnd"])
+            if "heightStart" in att:
+                r.attrib["height_start"] = float(att["heightStart"])
+            if "heightEnd" in att:
+                r.attrib["height_end"] = float(att["heightEnd"])
+            if "zOffsetStart" in att:
+                r.attrib["z_offset_start"] = float(att["zOffsetStart"])
+            if "zOffsetEnd" in att:
+                r.attrib["z_offset_end"] = float(att["zOffsetEnd"])
+            if "widthStart" in att:
+                r.attrib["width_start"] = float(att["widthStart"])
+            if "widthEnd" in att:
+                r.attrib["width_end"] = float(att["widthEnd"])
+            if "lengthStart" in att:
+                r.attrib["length_start"] = float(att["lengthStart"])
+            if "lengthEnd" in att:
+                r.attrib["length_end"] = float(att["lengthEnd"])
+            if "radiusStart" in att:
+                r.attrib["radius_start"] = float(att["radiusStart"])
+            if "radiusEnd" in att:
+                r.attrib["radius_end"] = float(att["radiusEnd"])
+            o.repeats.append(r)
+
+    def __parse_object_outlines(self, o, outlines):
+        for outline in outlines:
+            att = outline.attrib
+            ol = Object_Outline(att["id"])
+            if "fillType" in att:
+                ol.attrib["fill_type"] = att["fillType"]
+            if "outer" in att:
+                ol.attrib["outer"] = att["outer"]
+            if "closed" in att:
+                ol.attrib["closed"] = att["closed"]
+            if "laneType" in att:
+                ol.attrib["lane_type"] = att["laneType"]
+            
+            for corner_road in outline.findall("cornerRoad"):
+                att = corner_road.attrib
+                cr = Object_Outline_Corner_Road()
+                if "id" in att:
+                    cr.attrib["id"] = att["id"]
+                if "s" in att:
+                    cr.attrib["s"] = float(att["s"])
+                if "t" in att:
+                    cr.attrib["t"] = float(att["t"])
+                if "dz" in att:
+                    cr.attrib["dz"] = float(att["dz"])
+                if "height" in att:
+                    cr.attrib["height"] = float(att["height"])
+                ol.corner_roads.append(cr)
+            
+            for corner_local in outline.findall("cornerLocal"):
+                att = corner_local.attrib
+                cl = Object_Outline_Corner_Local()
+                if "id" in att:
+                    cl.attrib["id"] = att["id"]
+                if "u" in att:
+                    cl.attrib["height"] = float(att["u"])
+                if "v" in att:
+                    cl.attrib["v"] = float(att["v"])
+                if "z" in att:
+                    cl.attrib["z"] = float(att["z"])
+                if "height" in att:
+                    cl.attrib["height"] = float(att["height"])
+                ol.corner_locals.append(cl)
+            
+            o.outlines.append(ol)
+
+    def __parse_object_markings(self, o, markings):
+        for mark in markings:
+            att = mark.attrib
+            m = Object_Marking()
+            if "side" in att:
+                m.attrib["side"] = att["side"]
+            if "weight" in att:
+                m.attrib["weight"] = att["weight"]
+            if "width" in att:
+                m.attrib["width"] = float(att["width"])
+            if "color" in att:
+                m.attrib["color"] = att["color"]
+            if "zOffset" in att:
+                m.attrib["z_offset"] = float(att["zOffset"])
+            if "spaceLength" in att:
+                m.attrib["space_length"] = float(att["spaceLength"])
+            if "lineLength" in att:
+                m.attrib["line_length"] = float(att["lineLength"])
+            if "startOffset" in att:
+                m.attrib["start_offset"] = float(att["startOffset"])
+            if "stopOffset" in att:
+                m.attrib["stop_offset"] = float(att["stopOffset"])
+            
+            for corner_reference in mark:
+                att = corner_reference.attrib
+                m.corner_references.append(att["id"])
+
+            o.markings.append(m) 
+
+    def __parse_object_references(self, objs, obj_references):
+        for ref in obj_references:
+            att = ref.attrib
+            r = Object_Reference(
+                float(att["s"]),
+                float(att["t"]),
+                att["id"]
+            )
+            if "zOffset" in att:
+                r.attrib["z_offset"] = float(att["zOffset"])
+            if "validLength" in att:
+                r.attrib["valid_length"] = float(att["validLength"])
+            if "orientation" in att:
+                r.attrib["orientation"] = att["orientation"]
+
+            objs.references.append(r)
+
+    def __parse_object_tunnels(self, objs, tunnels):
+        for tunnel in tunnels:
+            att = tunnel.attrib
+            t = Object_Tunnel(
+                float(att["s"]),
+                float(att["length"]),
+                att["id"]
+            )
+            if "type" in att:
+                t.attrib["type"] = att["type"]
+            if "name" in att:
+                t.attrib["name"] = att["name"]
+            if "lighting" in att:
+                t.attrib["lighting"] = int(att["lighting"])
+            if "daylight" in att:
+                t.attrib["daylight"] = int(att["daylight"])
+
+            objs.tunnels.append(t)
+
+    def __parse_object_bridges(self, objs, bridges):
+        for bridge in bridges:
+            att = bridge.attrib
+            b = Object_Bridge(
+                float(att["s"]),
+                float(att["length"]),
+                att["id"]
+            )
+            if "type" in att:
+                b.attrib["type"] = att["type"]
+            if "name" in att:
+                b.attrib["name"] = att["name"]
+
+            objs.bridges.append(b)
+
+    def __parse_signals(self, signals):
+        sgnls = {}
+        for signal in signals:
+            att = signal.attrib
+            s = Signal(
+                att["id"],
+                float(att["s"]),
+                float(att["t"])
+            )
+            if "name" in att:
+                s.attrib["name"] = att["name"]
+            if "zOffset" in att:
+                s.attrib["z_offset"] = float(att["zOffset"])
+            if "dynamic" in att:
+                s.attrib["dynamic"] = att["dynamic"]
+            if "orientation" in att:
+                s.attrib["orientation"] = att["orientation"]
+            if "country" in att:
+                s.attrib["country"] = att["country"]
+            if "countryRevision" in att:
+                s.attrib["country_revision"] = att["countryRevision"]
+            if "validLength" in att:
+                s.attrib["valid_length"] = float(att["validLength"])
+            if "type" in att:
+                s.attrib["type"] = att["type"]
+            if "subtype" in att:
+                s.attrib["subtype"] = att["subtype"]
+            if "value" in att:
+                s.attrib["value"] = float(att["value"])
+            if "unit" in att:
+                s.attrib["unit"] = att["unit"]
+            if "height" in att:
+                s.attrib["height"] = float(att["height"])
+            if "width" in att:
+                s.attrib["width"] = float(att["width"])
+            if "text" in att:
+                s.attrib["text"] = att["text"]
+            if "hOffset" in att:
+                s.attrib["h_offset"] = float(att["hOffset"])
+            if "pitch" in att:
+                s.attrib["pitch"] = float(att["pitch"])
+            if "roll" in att:
+                s.attrib["roll"] = float(att["roll"])
+            
+
+            for validity in signal.findall("validity"):
+                att = validity.attrib
+                v = Signal_Validity(
+                    att["fromLane"],
+                    att["toLane"]
+                )
+                s.validity_records.append(v)
+
+            for dependency in signal.findall("dependency"):
+                att = dependency.attrib
+                d = Signal_Dependency(att["id"])
+                if "type" in att:
+                    d.attrib["type"] = att["type"]
+                s.dependency_records.append(d)
+
+            for reference in signal.findall("reference"):
+                att = reference.attrib
+                r = Signal_Reference(
+                    att["elementType"]
+                )
+                if "elementID" in att:
+                    r.attrib["element_id"] = att["elementID"]
+                if "type" in att:
+                    r.attrib["type"] = float(att["type"])
+                s.references.append(r)
+
+            position = signal.find("positionInertial")
+            if position is not None:
+                att = position.attrib
+                s.position_inertial = Signal_Position_Inertial(
+                    float(att["x"]),
+                    float(att["y"]),
+                    float(att["z"])
+                )
+                if "hdg" in att:
+                    s.position_inertial.attrib["hdg"] = float(att["hdg"])
+                if "pitch" in att:
+                    s.position_inertial.attrib["pitch"] = float(att["pitch"])
+                if "roll" in att:
+                    s.position_inertial.attrib["roll"] = float(att["roll"])
+            else:
+                position = signal.find("positionRoad")
+                if position is not None:
+                    att = position.attrib
+                    s.position_road = Signal_Position_Road(
+                        att["road_id"],
+                        float(att["s"]),
+                        float(att["t"])
+                    )
+                    if "z_offset" in att:
+                        s.position_road.attrib["z_offset"] = float(att["z_offset"])
+                    if "h_offset" in att:
+                        s.position_road.attrib["h_offset"] = float(att["h_offset"])
+                    if "pitch" in att:
+                        s.position_road.attrib["pitch"] = float(att["pitch"])
+                    if "roll" in att:
+                        s.position_road.attrib["roll"] = float(att["roll"])
+
+
+            for repeat in signal.findall("signalReference"):
+                att = repeat.attrib
+                r = Signal_Repeat(
+                    float(att["s"]),
+                    float(att["t"]),
+                    att["id"]
+                )
+                if "orientation" in att:
+                    r.attrib["orientation"] = float(att["orientation"])
+                s.repeats.append(r)
+
+            sgnls[s.attrib["id"]] = s
+        
+        return sgnls
+
+    def __parse_railroad(self, railroad):
+        att = railroad.attrib
+        r = Railroad()
+        for switch in railroad.findall("switch"):
+            att = switch.attrib
+            s = Railroad_Switch(
+                att["name"],
+                att["id"]
+            )
+            if "position" in att:
+                s.attrib["position"] = att["position"]
+            
+
+            mainTrack = switch.find("mainTrack")
+            att = mainTrack.attrib
+            s.main_track = Railroad_Track(
+                att["id"],
+                float(att["s"]),
+                att["dir"]
+            )
+
+            sideTrack = switch.find("sideTrack")
+            att = sideTrack.attrib
+            s.side_track = Railroad_Track(
+                att["id"],
+                float(att["s"]),
+                att["dir"]
+            )
+
+            partnerSwitch = switch.find("partner")
+            if partnerSwitch is not None:
+                att = partnerSwitch.attrib
+                s.switch_partner = Railroad_Switch_Partner(
+                    att["name"],
+                    att["id"]
+                )
+
+            r.switches[s.attrib["id"]] = s
+
+        return r
+
 
     def __parse_junction(self, framework, junc):
         att = junc.attrib
@@ -498,9 +956,9 @@ class OpenDriveParser:
             att["id"]
         )
         if "name" in att:
-                j.type = att["name"]
+                j.attrib["name"] = att["name"]
         if "type" in att:
-                j.type = att["type"]
+                j.attrib["type"] = att["type"]
         
         connections = junc.findall("connection")
         for connection in connections:
@@ -564,4 +1022,19 @@ class OpenDriveParser:
 
         framework.junctions[j.attrib["id"]] = j
 
-    
+    def __parse_controller(self, framework, cont):
+        att = cont.attrib
+        controller = Controller(att["id"])
+        if "name" in att:
+            controller.attrib["name"] = att["name"]
+        if "sequence" in att:
+            controller.attrib["sequence"] = att["sequence"]
+
+        for c in cont.findall("control"):
+            att = c.attrib
+            sc = Controller_Signal_Control(att["signalId"])
+            if "type" in att:
+                sc.attrib["type"] = att["type"]
+            controller.signal_control_records.append(sc)
+
+        framework.controllers[controller.attrib["id"]] = controller

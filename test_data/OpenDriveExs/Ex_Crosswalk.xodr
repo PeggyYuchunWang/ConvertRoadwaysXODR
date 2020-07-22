@@ -114,7 +114,7 @@
         <objects>
             <object type="crosswalk" id="10" s="10.0" t="0.0" zOffset="0.0" orientation="none" length="10.0" width="7.0" hdg="0.0" pitch="0.0" roll="0.0">
             <outlines>
-                  <outline id="0">
+                <outline id="0">
                   <cornerRoad s="5.0" t="3.5" dz="0.0" height="0.0" id="0"/>
                   <cornerRoad s="8.0" t="-3.5" dz="0.0" height="0.0" id="1"/>
                   <cornerRoad s="12.0" t="-3.5" dz="0.0" height="0.0" id="2"/>
@@ -140,16 +140,26 @@
         </signals>
         <surface>
         </surface>
-        <junction name="" id="1" type="default">
-            <connection id="0" incomingRoad="6" connectingRoad="2" contactPoint="start">
-                <laneLink from="1" to="-1"/>
-                <laneLink from="2" to="-2"/>
-                <laneLink from="3" to="-3"/>
-            </connection>   
-            <controller id="2" type="0"/>
-            <controller id="4" type="0"/>
-            <controller id="1" type="0"/>
-            <controller id="3" type="0"/>
-        </junction>
+        <railroad>
+            <switch name="Switch32" id="32" position="dynamic">
+                <mainTrack id="3" s="1.0000000000000000e+01" dir="+"/>
+                <sideTrack id="2" s="3.4898261533109149e+01" dir="-"/>
+                <partner name="Switch12" id="12"/>
+            </switch>
+        </railroad>
     </road>
+    <controller name="ctrl001" id="1">
+        <control signalId="8" type="0" />
+    </controller>
+    <junction name="" id="1" type="default">
+        <connection id="0" incomingRoad="6" connectingRoad="2" contactPoint="start">
+            <laneLink from="1" to="-1"/>
+            <laneLink from="2" to="-2"/>
+            <laneLink from="3" to="-3"/>
+        </connection>   
+        <controller id="2" type="0"/>
+        <controller id="4" type="0"/>
+        <controller id="1" type="0"/>
+        <controller id="3" type="0"/>
+    </junction>
 </OpenDRIVE>
