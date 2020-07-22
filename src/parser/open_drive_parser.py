@@ -68,7 +68,6 @@ from src.data.object_tunnel import Object_Tunnel
 from src.data.object_bridge import Object_Bridge
 
 from src.data.signal import Signal
-from src.data.signals import Signals
 from src.data.signal_validity import Signal_Validity
 from src.data.signal_dependency import Signal_Dependency
 from src.data.signal_reference import Signal_Reference
