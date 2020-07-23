@@ -1,6 +1,3 @@
-from src.data.geo_reference import Geo_Reference
-from src.data.offset import Offset
-
 class Header:
     """
         First element within any OpenDRIVE file.

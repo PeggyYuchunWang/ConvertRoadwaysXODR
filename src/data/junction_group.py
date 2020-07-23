@@ -5,10 +5,10 @@ class Junction_Group:
 
     Parameters
     ----------
-    name : str
-        Name of the junction group. Can choose a name freely.
     id : str
         Unique ID given to the group, stored within the database.
+    name : str
+        Name of the junction group. Can choose a name freely.
     type : str
         Type of the junction group. Either "roundabout" or "unknown."
        
@@ -20,10 +20,10 @@ class Junction_Group:
         List of string IDs of the junctions in the group. 
 
     """
-    def __init__(self, name = "", id = "", type = "") -> None:
+    def __init__(self,  id = "", name = "", type = "") -> None:
         self.attrib = {
-            "name" : str(name),
-            "id" : str(id),            
+            "id" : str(id),  
+            "name" : str(name),          
             "type" : str(type)
         }      
         self.junction_references = []
