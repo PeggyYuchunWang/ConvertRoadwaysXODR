@@ -37,8 +37,9 @@ from src.data.junction_connection import Junction_Connection
 from src.data.junction_lane_link import Junction_Lane_Link
 from src.data.junction_priority import Junction_Priority
 from src.data.junction_predecessor_successor import Junction_Predecessor_Successor
-from src.data.junction_group import Junction_Group
 from src.data.junction_controller import Junction_Controller
+
+from src.data.junction_group import Junction_Group
 
 from src.data.objects import Objects
 from src.data.object import Object
@@ -71,10 +72,14 @@ from src.data.railroad_switch import Railroad_Switch
 from src.data.railroad_track import Railroad_Track
 from src.data.railroad_switch_partner import Railroad_Switch_Partner
 
+from src.data.station import Station
+from src.data.station_platform import Station_Platform
+from src.data.station_platform_segment import Station_Platform_Segment
+
 class ParserTests(unittest.TestCase):
     def setUp(self):
         self.parser = OpenDriveParser()
-        self.parser.parse_file("test_data/OpenDriveExs/Ex_Crosswalk.xodr")
+        self.parser.parse_file("test_data/OpenDriveExs/Ex_Compilation.xodr")
 
     def tearDown(self):
         self.parser = None
@@ -323,6 +328,37 @@ class ParserTests(unittest.TestCase):
         self.assertIsInstance(ps, Railroad_Switch_Partner)
         self.assertEqual(mt.attrib["name"], "Switch12")
         self.assertEqual(mt.attrib["id"], "12")
+
+    def test_station(self):
+        s = self.parser.data.stations["12"]
+        self.assertIsInstance(s, Station)
+        self.assertEqual(s.attrib["id"], "12")
+        self.assertEqual(s.attrib["name"], "H12")
+        self.assertEqual(s.attrib["type"], "small")
+
+        p = s.platforms[0]
+        self.assertIsInstance(p, Station_Platform)
+        self.assertEqual(p.attrib["id"], "12-1")
+        self.assertEqual(p.attrib["name"], "platform1")
+
+        seg = p.segments[0]
+        self.assertIsInstance(seg, Station_Platform_Segment)
+        self.assertEqual(seg.attrib["road_id"], "2")
+        self.assertEqual(seg.attrib["s_start"], 1.6500000000000000e+01)
+        self.assertEqual(seg.attrib["s_end"], 5.1000000000000000e+01)
+        self.assertEqual(seg.attrib["side"], "right")
+
+    def test_junction_group(self):
+        jg = self.parser.data.junction_groups["1"]
+        self.assertIsInstance(jg, Junction_Group)
+        self.assertEqual(jg.attrib["id"], "1")
+        self.assertEqual(jg.attrib["name"], "ExampleRoundabout")
+        self.assertEqual(jg.attrib["type"], "roundabout")
+
+        r = jg.junction_references[0]
+        self.assertIsInstance(r, str)
+        self.assertEqual(r, "42")
+
 
 
        

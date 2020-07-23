@@ -83,6 +83,10 @@ from src.data.railroad_switch import Railroad_Switch
 from src.data.railroad_track import Railroad_Track
 from src.data.railroad_switch_partner import Railroad_Switch_Partner
 
+from src.data.station import Station
+from src.data.station_platform import Station_Platform
+from src.data.station_platform_segment import Station_Platform_Segment
+
 class OpenDriveParser:
     def __init__(self):
         self.data = odf.Open_Drive_Framework()
@@ -103,9 +107,14 @@ class OpenDriveParser:
         for junc in xml_root.findall("junction"):
             self.__parse_junction(self.data, junc)
 
+        for junc_group in xml_root.findall("junctionGroup"):
+            self.__parse_junction_group(self.data, junc_group)
+
         for cont in xml_root.findall("controller"):
             self.__parse_controller(self.data, cont)
 
+        for stat in xml_root.findall("station"):
+            self.__parse_station(self.data, stat)
 
     def __parse_header(self, framework, header):
         if header.attrib:
@@ -130,6 +139,7 @@ class OpenDriveParser:
                 framework.header.attrib["west"] = float(att["west"])
             if "vendor" in att:
                 framework.header.attrib["vendor"] = att["vendor"]
+
         for child in header:
             if child.tag == "userData":
                 #I think that in ver1.6 User Data is not found in this way
@@ -947,8 +957,7 @@ class OpenDriveParser:
             r.switches[s.attrib["id"]] = s
 
         return r
-
-
+   
     def __parse_junction(self, framework, junc):
         att = junc.attrib
         j = Junction(
@@ -1021,6 +1030,20 @@ class OpenDriveParser:
 
         framework.junctions[j.attrib["id"]] = j
 
+    def __parse_junction_group(self, framework, junc_group):
+        att = junc_group.attrib
+        junction_group = Junction_Group(att["id"])
+        if "name" in att:
+            junction_group.attrib["name"] = att["name"]
+        if "type" in att:
+            junction_group.attrib["type"] = att["type"]
+
+        for ref in junc_group.findall("junctionReference"):
+            att = ref.attrib
+            junction_group.junction_references.append(att["junction"])
+
+        framework.junction_groups[junction_group.attrib["id"]] = junction_group
+
     def __parse_controller(self, framework, cont):
         att = cont.attrib
         controller = Controller(att["id"])
@@ -1037,3 +1060,34 @@ class OpenDriveParser:
             controller.signal_control_records.append(sc)
 
         framework.controllers[controller.attrib["id"]] = controller
+
+    def __parse_station(self, framework, stat):
+        att = stat.attrib
+        station = Station(att["id"])
+        if "name" in att:
+            station.attrib["name"] = att["name"]
+        if "type" in att:
+            station.attrib["type"] = att["type"]
+
+        for plat in stat.findall("platform"):
+            att = plat.attrib
+            p = Station_Platform(att["id"])
+            if "name" in att:
+                p.attrib["name"] = att["name"]
+
+            for seg in plat.findall("segment"):
+                att = seg.attrib
+                s = Station_Platform_Segment(
+                    att["roadId"],
+                    float(att["sStart"]),
+                    float(att["sEnd"]),
+                    att["side"]
+                )
+                p.segments.append(s)
+
+            station.platforms.append(p)
+        
+        framework.stations[station.attrib["id"]] = station
+            
+            
+
