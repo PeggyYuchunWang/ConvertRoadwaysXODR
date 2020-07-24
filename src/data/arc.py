@@ -14,8 +14,7 @@ class Arc:
     attrib : dict
         Attributes dictionary for the parameters specified above.
     """
-    def __init__(self, curvature = 0) -> None:
+    def __init__(self, curvature=0) -> None:
         self.attrib = {
-            "curvature" : float(curvature)     
+            "curvature": float(curvature)
         }
-        
