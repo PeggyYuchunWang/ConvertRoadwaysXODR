@@ -12,18 +12,17 @@ class Junction_Controller:
     type : str
         Type of control. Depends on application.
     sequence : int
-        Sequence number of this controller with respect to the 
-        other controllers in the same junction.
-       
+        Sequence number of this controller with respect to the other
+        controllers in the same junction.
+
     Attributes
     ----------
     attrib : dict
-        Attributes dictionary for the parameters specified above.    
+        Attributes dictionary for the parameters specified above.
     """
-    def __init__(self, id = "", type = "", sequence = 0) -> None:
+    def __init__(self, id="", type="", sequence=0) -> None:
         self.attrib = {
-            "id" : str(id),            
-            "type" : str(type),
-            "sequence" : int(sequence)
-        }      
-
+            "id": str(id),            
+            "type": str(type),
+            "sequence": int(sequence)
+        }

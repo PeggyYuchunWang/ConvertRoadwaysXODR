@@ -1,6 +1,6 @@
 class Junction_Connection:
     """
-    Provides information about a signle connection within a junction.
+    Provides information about a single connection within a junction.
 
     Found within a Junction element.
 
@@ -16,11 +16,11 @@ class Junction_Connection:
         Contact point on the connecting road. Either "start" or "end."
     type : str
         Type of the connection. Either "default" or "virtual."
-       
+
     Attributes
     ----------
     attrib : dict
-        Attributes dictionary for the parameters specified above.    
+        Attributes dictionary for the parameters specified above.
     predecessor : Junction_Predecessor_Successor
         Object used to represent the linkage between the current junction
         and the road that comes before it.
@@ -28,19 +28,25 @@ class Junction_Connection:
         Object used to represent the linkage between the current junction
         and the road that comes after it.
     lane_links : list
-        List of Junction_Lane_Link elements to provide information about 
-        the lanes that are linked between an incoming road and a 
-        connecting road.   
+        List of Junction_Lane_Link elements to provide information about
+        the lanes that are linked between an incoming road and a
+        connecting road.
     """
-    def __init__(self, id = "", incoming_road = "", connecting_road = "", contact_point = "", type = "",) -> None:
+    def __init__(
+        self,
+        id="",
+        incoming_road="",
+        connecting_road="",
+        contact_point="",
+        type=""
+    ) -> None:
         self.attrib = {
-            "id" : str(id),            
-            "incoming_road" : str(incoming_road),
-            "connecting_road" : str(connecting_road),
-            "contact_point" : str(contact_point),
-            "type" : str(type)
+            "id": str(id),
+            "incoming_road": str(incoming_road),
+            "connecting_road": str(connecting_road),
+            "contact_point": str(contact_point),
+            "type": str(type)
         }
         self.predecessor = None
-        self.successor = None  
-        self.lane_links = []  
-
+        self.successor = None
+        self.lane_links = []

@@ -6,12 +6,12 @@ class Lanes:
     negative t-direction and ascending in the positive t-direction.
 
     Found within a Road element.
-    
+
     Attributes
     ----------
     lane_offsets : list
-        List of Lane_Offset elements to describe the shift of the 
-        center lane away from the road reference line.
+        List of Lane_Offset elements to describe the shift of the center lane
+        away from the road reference line.
     lane_sections : list
         List of Lane_Section elements that make up the lanes.
     """
