@@ -1,4 +1,4 @@
-class Road_Surface(Road):
+class Road_Surface():
     def __init__(
         self,
         file="",
