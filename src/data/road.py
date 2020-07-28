@@ -14,14 +14,14 @@ class Road:
         Basic rule for using the road. Right Hand Traffic default.
     name : str
         Name of road. Can choose a name freely.
-    
+
     Attributes
     ----------
     attrib : dict
-        Attributes dictionary for the parameters specified above.        
+        Attributes dictionary for the parameters specified above.
     predecessor : Road_Predecessor_Successor
-        Object used to represent the linkage between the current road 
-        and the road that comes before it.
+        Object used to represent the linkage between the current road and the
+        road that comes before it.
     successor : Road_Predecessor_Successor
         Object used to represent the linkage between the current road
         and the road that comes after it.
@@ -33,11 +33,11 @@ class Road:
     plan_view : list
         List of Geometry elements describing the road's reference line.
     elevation_profile : list
-        List of Elevation elements describing the elevation of a road 
-        along its reference line. 
+        List of Elevation elements describing the elevation of a road along its
+        reference line.
     lateral_profile : Lateral_Profile
-        Object to define the characteristics of the road surface's 
-        banking along the reference line.
+        Object to define the characteristics of the road surface's banking
+        along the reference line.
     lanes : Lanes
         Object used to represent all lane sections.
     objects : Objects
@@ -45,14 +45,21 @@ class Road:
     signals : list
         List of Signal elements.
     """
-    def __init__(self, id = "", length = 0,  junction = "-1", rule = "RHT", name = "") -> None:
+    def __init__(
+        self,
+        id="",
+        length=0,
+        junction="-1",
+        rule="RHT",
+        name=""
+    ) -> None:
         self.attrib = {
-            "id" : str(id),            
-            "length" : float(length),           
-            "junction" : str(junction),
-            "rule" : str(rule),
-            "name" : str(name) 
-        }      
+            "id": str(id),
+            "length": float(length),
+            "junction": str(junction),
+            "rule": str(rule),
+            "name": str(name)
+        }
         self.predecessor = None
         self.successor = None
         self.neighbors = []

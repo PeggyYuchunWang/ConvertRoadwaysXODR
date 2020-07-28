@@ -1,7 +1,7 @@
 class Road_Mark_Explicit:
     """
-    Detailed information about irregular road markings that
-    cannot be described by repetitive line patterns.
+    Detailed information about irregular road markings that cannot be described
+    by repetitive line patterns.
 
     Found within a Road_Mark element.
 
@@ -20,9 +20,9 @@ class Road_Mark_Explicit:
     lines : list
         List of line elements that describe the road marking type.
     """
-    def __init__(self, name = "", width = 0) -> None:
+    def __init__(self, name="", width=0) -> None:
         self.attrib = {
-            "name" : str(name),
-            "width" : float(width)
+            "name": str(name),
+            "width": float(width)
         }
         self.lines = []
