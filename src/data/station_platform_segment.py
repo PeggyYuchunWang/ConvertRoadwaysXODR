@@ -13,24 +13,24 @@ class Station_Platform_Segment:
     s_end : float
         Maximum s-value on road where platform is adjacent to it.
     side : str
-        Side of the track where platform is situated when going from 
-        @s_start to @s_end.
+        Side of the track where platform is situated when going from @s_start
+        to @s_end.
 
     Attributes
     ----------
     attrib : dict
-        Attributes dictionary for the parameters specified above.   
+        Attributes dictionary for the parameters specified above.
     """
-    def __init__(self,
-                road_id = "",
-                s_start = 0,
-                s_end = 0,
-                side = "") -> None:        
+    def __init__(
+        self,
+        road_id="",
+        s_start=0,
+        s_end=0,
+        side=""
+    ) -> None:
         self.attrib = {
-            "road_id" : str(road_id),
-            "s_start" : float(s_start),
-            "s_end" : float(s_end),
-            "side" : str(side)
+            "road_id": str(road_id),
+            "s_start": float(s_start),
+            "s_end": float(s_end),
+            "side": str(side)
         }
-
-
