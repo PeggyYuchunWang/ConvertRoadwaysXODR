@@ -88,14 +88,17 @@ from src.data.station_platform_segment import Station_Platform_Segment
 
 
 class OpenDriveParser:
+    """
+    Parser for OpenDrive that will store all content in the PyXODR data object.
+    """
     def __init__(self):
         self.data = odf.Open_Drive_Framework()
 
     def parse_file(self, filename="test_data/carlaExs/Town02.xodr"):
         print("parsing: ", filename)
         root = ET.parse(filename).getroot()
-        self.__parse(xml_root=root)  
-        print("done parsing: ", filename)    
+        self.__parse(xml_root=root)
+        print("done parsing: ", filename)
 
     def __parse(self, xml_root):
         for header in xml_root.findall("header"):
@@ -293,11 +296,16 @@ class OpenDriveParser:
                     )
                 elif child.tag == "paramPoly3":
                     att = child.attrib
-                    geo.type = Param_Poly3(att["pRange"], float(att["aU"]),
-                                float(att["bU"]), float(att["cU"]),
-                                float(att["dU"]), float(att["aV"]),
-                                float(att["bV"]), float(att["cV"]),
-                                float(att["dV"])
+                    geo.type = Param_Poly3(
+                        att["pRange"],
+                        float(att["aU"]),
+                        float(att["bU"]),
+                        float(att["cU"]),
+                        float(att["dU"]),
+                        float(att["aV"]),
+                        float(att["bV"]),
+                        float(att["cV"]),
+                        float(att["dV"])
                     )
                 else:
                     print("unkown geometry child tag: ", child.tag)
@@ -377,11 +385,11 @@ class OpenDriveParser:
                     pred = l.find("link/predecessor")
                     if pred is not None:
                         lane.predecessor_id = int(pred.attrib["id"])
-                    
+
                     succ = l.find("link/successor")
                     if succ is not None:
                         lane.successor_id = int(succ.attrib["id"])
-                    
+
                     width = l.find("width")
                     if width is not None:
                         att = width.attrib
@@ -396,7 +404,7 @@ class OpenDriveParser:
                     border = l.find("border")
                     if border is not None:
                         att = border.attrib
-                        lane.border= Lane_Border(
+                        lane.border = Lane_Border(
                             float(att["sOffset"]),
                             float(att["a"]),
                             float(att["b"]),
@@ -619,7 +627,9 @@ class OpenDriveParser:
                     att["access"]
                 )
                 if "restrictions" in att:
-                    o.parking_space.attrib["restrictions"] = att["restrictions"]
+                    o.parking_space.attrib["restrictions"] = att[
+                        "restrictions"
+                    ]
 
             if obj.find("markings") is not None:
                 self.__parse_object_markings(o, obj.find("markings"))
@@ -760,7 +770,7 @@ class OpenDriveParser:
                 att = corner_reference.attrib
                 m.corner_references.append(att["id"])
 
-            o.markings.append(m) 
+            o.markings.append(m)
 
     def __parse_object_references(self, objs, obj_references):
         for ref in obj_references:
@@ -1041,7 +1051,7 @@ class OpenDriveParser:
             if "type" in att:
                 c.attrib["type"] = att["type"]
             if "sequence" in att:
-                c.attrib["sequence"] = att["sequence"]    
+                c.attrib["sequence"] = att["sequence"]
             j.controllers.append(c)
 
         framework.junctions[j.attrib["id"]] = j

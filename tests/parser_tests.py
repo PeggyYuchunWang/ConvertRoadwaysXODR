@@ -112,7 +112,7 @@ class ParserTests(unittest.TestCase):
             self.assertIsNone(road.type)
             self.assertIsNone(road.predecessor)
             self.assertIsNone(road.successor)
-            
+
             g = road.plan_view[0]
             self.assertIsInstance(g, Geometry)
             self.assertEqual(g.attrib["s"], 0)
@@ -204,7 +204,7 @@ class ParserTests(unittest.TestCase):
             self.assertEqual(j.attrib["name"], "")
             self.assertEqual(j.attrib["id"], "1")
             self.assertEqual(j.attrib["type"], "default")
-            
+
             self.assertEqual(len(j.connections),1)
             c = j.connections[0]
             self.assertEqual(c.attrib["id"], "0")
@@ -358,40 +358,3 @@ class ParserTests(unittest.TestCase):
         r = jg.junction_references[0]
         self.assertIsInstance(r, str)
         self.assertEqual(r, "42")
-
-
-
-       
-
-        
-
-        
-
-
-
-            
-
-
-
-
-
-
-
-            
-
-
-
-
-
-
-            
-
-
-
-
-
-
-
-
-
-        
