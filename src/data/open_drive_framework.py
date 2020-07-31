@@ -1,6 +1,7 @@
 class Open_Drive_Framework:
     """
-        Compilation of all Open Drive elements information in an object oriented framework.
+        Compilation of all Open Drive elements information in an
+        object oriented framework.
 
         **NEED TO DO THIS***
     """

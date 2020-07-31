@@ -1,8 +1,8 @@
 class Geometry:
-    """ 
+    """
     Allows for the generation of arbitrary road courses through the combination
-    of different geometry elements (Line, Spiral, Arc, Poly3 and Param_Poly3). 
-    To avoid leaps in the curvature, it is recommended to use spirals to combine lines with arcs. 
+    of different geometry elements (Line, Spiral, Arc, Poly3 and Param_Poly3).
+    To avoid leaps in the curvature, it is recommended to use spirals to combine lines with arcs.
 
     Found within the plan_view of a Road element.
 

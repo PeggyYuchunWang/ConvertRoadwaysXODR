@@ -19,7 +19,7 @@ class Road_Mark_Line:
         Width of the line.
     rule : str
         Rule that must be observed when passing the line from inside. 
-        Either "no passiong," "caution," or "none."
+        Either "no passing," "caution," or "none."
     color : str
         Color of the line.
 

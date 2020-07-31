@@ -1,5 +1,4 @@
 import xml.etree.ElementTree as ET
-import src.parser.open_drive_roadways as rw
 import src.utils as utils
 import src.data.open_drive_framework as odf
 
@@ -87,6 +86,7 @@ from src.data.station import Station
 from src.data.station_platform import Station_Platform
 from src.data.station_platform_segment import Station_Platform_Segment
 
+
 class OpenDriveParser:
     def __init__(self):
         self.data = odf.Open_Drive_Framework()
@@ -142,9 +142,9 @@ class OpenDriveParser:
 
         for child in header:
             if child.tag == "userData":
-                #I think that in ver1.6 User Data is not found in this way
+                # I think that in ver1.6 User Data is not found in this way
                 continue
-                #for v in child:
+                # for v in child:
                 #    if v.tag == "vectorScene":
                 #        att = v.attrib
                 #        framework.Geo_Reference.vectorScene = rw.VectorScene(
@@ -388,7 +388,7 @@ class OpenDriveParser:
                     border = l.find("border")
                     if border is not None:
                         att = border.attrib
-                        lane.border= Lane_Border(
+                        lane.border = Lane_Border(
                             float(att["sOffset"]),
                             float(att["a"]),
                             float(att["b"]),
@@ -441,7 +441,7 @@ class OpenDriveParser:
                     height = l.find("height")
                     if height is not None:
                         att = height.attrib
-                        lane.height= Lane_Height(
+                        lane.height = Lane_Height(
                             float(att["sOffset"]),
                             float(att["inner"]),
                             float(att["outer"])
@@ -625,7 +625,7 @@ class OpenDriveParser:
                     if "useCompleteOutline" in att:
                         b.attrib["useCompleteOutline"] = bool(att["useCompleteOutline"])
                     o.borders.append(b)
-            
+
             objs.objects.append(o)
 
             if objects.findall("objectReference") is not None:
@@ -638,7 +638,7 @@ class OpenDriveParser:
                 self.__parse_object_bridges(objs, objects.findall("bridge"))
 
         return objs
-          
+
     def __parse_object_repeats(self, o, repeats):
         for repeat in repeats:
             att = repeat.attrib
@@ -685,7 +685,7 @@ class OpenDriveParser:
                 ol.attrib["closed"] = att["closed"]
             if "laneType" in att:
                 ol.attrib["lane_type"] = att["laneType"]
-            
+
             for corner_road in outline.findall("cornerRoad"):
                 att = corner_road.attrib
                 cr = Object_Outline_Corner_Road()
@@ -700,7 +700,7 @@ class OpenDriveParser:
                 if "height" in att:
                     cr.attrib["height"] = float(att["height"])
                 ol.corner_roads.append(cr)
-            
+
             for corner_local in outline.findall("cornerLocal"):
                 att = corner_local.attrib
                 cl = Object_Outline_Corner_Local()
@@ -715,7 +715,7 @@ class OpenDriveParser:
                 if "height" in att:
                     cl.attrib["height"] = float(att["height"])
                 ol.corner_locals.append(cl)
-            
+
             o.outlines.append(ol)
 
     def __parse_object_markings(self, o, markings):
@@ -928,7 +928,6 @@ class OpenDriveParser:
             )
             if "position" in att:
                 s.attrib["position"] = att["position"]
-            
 
             mainTrack = switch.find("mainTrack")
             att = mainTrack.attrib
@@ -957,17 +956,17 @@ class OpenDriveParser:
             r.switches[s.attrib["id"]] = s
 
         return r
-   
+
     def __parse_junction(self, framework, junc):
         att = junc.attrib
         j = Junction(
             att["id"]
         )
         if "name" in att:
-                j.attrib["name"] = att["name"]
+            j.attrib["name"] = att["name"]
         if "type" in att:
-                j.attrib["type"] = att["type"]
-        
+            j.attrib["type"] = att["type"]
+
         connections = junc.findall("connection")
         for connection in connections:
             att = connection.attrib
@@ -988,7 +987,7 @@ class OpenDriveParser:
                     att["elementS"],
                     att["elementDir"],
                 )
-                    
+      
             succ = connection.find("successor")
             if succ is not None:
                 c.successor = Junction_Predecessor_Successor(
@@ -997,7 +996,7 @@ class OpenDriveParser:
                     att["elementS"],
                     att["elementDir"],
                 )
-            
+
             links = connection.findall("laneLink")
             for ll in links:
                 att = ll.attrib
@@ -1088,6 +1087,3 @@ class OpenDriveParser:
             station.platforms.append(p)
         
         framework.stations[station.attrib["id"]] = station
-            
-            
-
