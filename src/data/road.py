@@ -45,8 +45,14 @@ class Road:
     signals : list
         List of Signal elements.
     """
-    def __init__(self, id="", length=0, junction="-1",
-                 rule="RHT", name="") -> None:
+    def __init__(
+        self,
+        id="",
+        length=0,
+        junction="-1",
+        rule="RHT",
+        name=""
+    ) -> None:
         self.attrib = {
             "id": str(id),
             "length": float(length),

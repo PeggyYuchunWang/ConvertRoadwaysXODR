@@ -27,7 +27,7 @@ class Lane:
     attrib : dict
         Attributes dictionary for the parameters specified above.
     predecessor_id : int
-        ID of preceeding lane.
+        ID of preceding lane.
     successor_id : int
         ID of succeeding lane.
     width : Lane_Width
@@ -70,7 +70,4 @@ class Lane:
         self.visibility = None
         self.speed = None
         self.access = None
-        self.rule = None  
-
-
-
+        self.rule = None

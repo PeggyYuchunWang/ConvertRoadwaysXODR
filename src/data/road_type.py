@@ -3,9 +3,9 @@ class Road_Type():
     Defines the main purpose of a road and the associated traffic rules.
 
     Valid for the entire cross section of a road, until a new road type element
-    is provided or until the road ends. Country code and state identifier may 
-    be added to specify national traffic rules. This will not
-    be specified by OpenDRIVE. Only use ALPHA-r country codes.
+    is provided or until the road ends. Country code and state identifier may
+    be added to specify national traffic rules. This will not be specified by
+    OpenDRIVE. Only use ALPHA-r country codes.
 
     Found within a Road element.
 
@@ -25,11 +25,10 @@ class Road_Type():
     speed : Road_Speed
         Object to define the maximum speed allowed.
     """
-    def __init__(self, s = 0, type = "", country = "") -> None:
+    def __init__(self, s=0, type="", country="") -> None:
         self.attrib = {
-            "s" : float(s),
-            "type" : str(type),
-            "country" : str(country)
+            "s": float(s),
+            "type": str(type),
+            "country": str(country)
         }
         self.speed = None
-        

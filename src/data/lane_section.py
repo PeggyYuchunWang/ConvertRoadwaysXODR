@@ -1,7 +1,7 @@
 class Lane_Section:
     """
-    Contains a fixed number of lanes. A new Lane_Section is
-    required when the number of lanes changes. 
+    Contains a fixed number of lanes. A new Lane_Section is required when the
+    number of lanes changes.
 
     Found within a Lanes element.
 
@@ -10,8 +10,8 @@ class Lane_Section:
     s : float
         Start position (s-coordinate).
     single_side : bool
-        Specifies if the lane section is valid for only one
-        side (left, center or right), depending on the child elements.
+        Specifies if the lane section is valid for only one side (left, center
+        or right), depending on the child elements.
 
     Attributes
     ----------
@@ -34,4 +34,3 @@ class Lane_Section:
         self.center_lane = None
         self.left_lanes = []
         self.right_lanes = []
-        

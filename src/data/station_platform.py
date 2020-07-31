@@ -14,20 +14,18 @@ class Station_Platform:
     Attributes
     ----------
     attrib : dict
-        Attributes dictionary for the parameters specified above.  
+        Attributes dictionary for the parameters specified above.
     segments : list
-        List of Station_Segment elements that describe the track 
-        segments for which a platform is valid.
-    
-    
+        List of Station_Segment elements that describe the track segments for
+        which a platform is valid.
     """
-    def __init__(self,
-                id = "",
-                name = "") -> None:        
+    def __init__(
+        self,
+        id="",
+        name=""
+    ) -> None:
         self.attrib = {
-            "id" : str(id),
-            "name" : str(name)
+            "id": str(id),
+            "name": str(name)
         }
         self.segments = []
-
-

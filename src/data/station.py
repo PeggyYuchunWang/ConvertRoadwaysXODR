@@ -1,7 +1,7 @@
 class Station:
     """
-    Defines a station for tram and railroad applications 
-    and for automotive environments.
+    Defines a station for tram and railroad applications and for automotive
+    environments.
 
     Parameters
     ----------
@@ -16,22 +16,20 @@ class Station:
     Attributes
     ----------
     attrib : dict
-        Attributes dictionary for the parameters specified above.  
+        Attributes dictionary for the parameters specified above.
     platforms : list
-        List of Station_Platform elements that describe the 
-        platforms that make up the specified station.
-    
-    
+        List of Station_Platform elements that describe the platforms that make
+        up the specified station.
     """
-    def __init__(self,
-                id = "",
-                name = "",
-                type = "") -> None:        
+    def __init__(
+        self,
+        id="",
+        name="",
+        type=""
+    ) -> None:
         self.attrib = {
-            "id" : str(id),
-            "name" : str(name),
-            "type" : str(type)
+            "id": str(id),
+            "name": str(name),
+            "type": str(type)
         }
         self.platforms = []
-
-

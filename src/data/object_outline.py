@@ -1,13 +1,13 @@
 class Object_Outline:
     """
     Defines an outline of objects that describe a series of corner points,
-    mainly used to describe traffic islands, irregularly shaped parking 
-    spaces and special road markings.
+    mainly used to describe traffic islands, irregularly shaped parking spaces
+    and special road markings.
 
     Found within an Object element.
-    
+
     Parameters
-    ----------   
+    ----------
     id : str
         ID of the outline. Unique within on object.
     fill_type : str
@@ -24,7 +24,7 @@ class Object_Outline:
     Attributes
     ----------
     attrib : dict
-         Attributes dictionary for the parameters specified above.  
+         Attributes dictionary for the parameters specified above.
     corner_roads : list
         List of Object_Outline_Corner_Road elements that describe non-linear
         forms of objects. Mutually exclusive with corner_locals.
@@ -33,13 +33,20 @@ class Object_Outline:
         forms of objects. Mutually exclusive with corner_roads.
 
     """
-    def __init__(self, id = "", fill_type = "", outer = True, closed = False, lane_type = "") -> None:        
-        self.attrib = { 
-            "id" : str(id),
-            "fill_type" : str(fill_type),
-            "outer" : bool(outer),
-            "closed" : bool(closed),
-            "lane_type" : str(lane_type), 
+    def __init__(
+        self,
+        id="",
+        fill_type="",
+        outer=True,
+        closed=False,
+        lane_type=""
+    ) -> None:
+        self.attrib = {
+            "id": str(id),
+            "fill_type": str(fill_type),
+            "outer": bool(outer),
+            "closed": bool(closed),
+            "lane_type": str(lane_type),
         }
         self.corner_roads = []
         self.corner_locals = []

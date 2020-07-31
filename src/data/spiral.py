@@ -16,9 +16,8 @@ class Spiral():
     attrib : dict
         Attributes dictionary for the parameters specified above.
     """
-    def __init__(self, curv_start = 0, curv_end = 0) -> None:
+    def __init__(self, curv_start=0, curv_end=0) -> None:
         self.attrib = {
-            "curv_start" : float(curv_start),
-            "curv_end" : float(curv_end)
-        } 
-        
+            "curv_start": float(curv_start),
+            "curv_end": float(curv_end)
+        }

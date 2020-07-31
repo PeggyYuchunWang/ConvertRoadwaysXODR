@@ -1,15 +1,14 @@
 class Lane_Visibility:
     """
-    Defines the visibility in four directions relative to the 
-    lane's direction.
-    
+    Defines the visibility in four directions relative to the lane's direction.
+
     Found within a Lane element.
 
     Parameters
     ----------
     s_offset: float
-        Start position (s-coordinate) relative to the position of the 
-        preceding Lane_Section element.
+        Start position (s-coordinate) relative to the position of the preceding
+        Lane_Section element.
     forward : float
         Visibility in the forward direction.
     back : float
@@ -23,13 +22,19 @@ class Lane_Visibility:
     ----------
     attrib : dict
         Attributes dictionary for the parameters specified above.
-"""
-    def __init__(self, s_offset = 0, forward = 0, back = 0, left = 0, right = 0) -> None:
+    """
+    def __init__(
+        self,
+        s_offset=0,
+        forward=0,
+        back=0,
+        left=0,
+        right=0
+    ) -> None:
         self.attrib = {
-            "s_offset" : float(s_offset),
-            "forward" : float(forward),
-            "back" : float(back),
-            "left" : float(left),
-            "right" : float(right)
+            "s_offset": float(s_offset),
+            "forward": float(forward),
+            "back": float(back),
+            "left": float(left),
+            "right": float(right)
         }
-        

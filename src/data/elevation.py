@@ -1,5 +1,6 @@
 import src.data.abcd_base as abcd_base
 
+
 class Elevation(abcd_base.ABCD_base):
     """
     Describes the elevation of a road along its reference line. 
@@ -26,7 +27,7 @@ class Elevation(abcd_base.ABCD_base):
     attrib : dict
         Attributes dictionary for the parameters specified above.
     """
-    
-    def __init__(self, s = 0, a = 0, b = 0, c = 0, d = 0) -> None:
+
+    def __init__(self, s=0, a=0, b=0, c=0, d=0) -> None:
         super().__init__(a, b, c, d)
         self.attrib["s"] = float(s)

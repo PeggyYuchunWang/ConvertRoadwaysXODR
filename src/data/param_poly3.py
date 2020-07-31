@@ -25,22 +25,31 @@ class Param_Poly3:
     dV : float
         Polynom parameter for v.
 
-
     Attributes
     ----------
     attrib : dict
         Attributes dictionary for the parameters specified above.
-
     """
-    def __init__(self, p_range="", aU=0, bU=0, cU=0, dU=0, aV=0, bV=0, cV=0, dV=0) -> None:
+    def __init__(
+        self,
+        p_range="",
+        aU=0,
+        bU=0,
+        cU=0,
+        dU=0,
+        aV=0,
+        bV=0,
+        cV=0,
+        dV=0
+    ) -> None:
         self.attrib = {
-            "p_range" : str(p_range),
-            "aU" : float(aU),
-            "bU" : float(bU),
-            "cU" : float(cU),
-            "dU" : float(dU),
-            "aV" : float(aV),
-            "bV" : float(bV),
-            "cV" : float(cV),
-            "dV" : float(dV)
+            "p_range": str(p_range),
+            "aU": float(aU),
+            "bU": float(bU),
+            "cU": float(cU),
+            "dU": float(dU),
+            "aV": float(aV),
+            "bV": float(bV),
+            "cV": float(cV),
+            "dV": float(dV)
         }
