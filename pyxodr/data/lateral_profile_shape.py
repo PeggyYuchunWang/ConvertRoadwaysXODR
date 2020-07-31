@@ -1,4 +1,4 @@
-import src.data.abcd_base as abcd_base
+import pyxodr.data.abcd_base as abcd_base
 
 
 class Lateral_Profile_Shape(abcd_base.ABCD_base):

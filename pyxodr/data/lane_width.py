@@ -1,11 +1,9 @@
-import src.data.abcd_base as abcd_base
+import pyxodr.data.abcd_base as abcd_base
 
 
-class Lane_Border(abcd_base.ABCD_base):
+class Lane_Width(abcd_base.ABCD_base):
     """
-    Another method to describe the width of lanes.
-    Describes the outer limits of a lane, independent of the parameters of
-    their inner borders.
+    Specifies the width of a lane. Center lanes do not have a width.
 
     Lane_Width and Lane_Border are mutually exclusive.
 

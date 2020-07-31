@@ -76,6 +76,7 @@ from src.data.station import Station
 from src.data.station_platform import Station_Platform
 from src.data.station_platform_segment import Station_Platform_Segment
 
+
 class ParserTests(unittest.TestCase):
     def setUp(self):
         self.parser = OpenDriveParser()
