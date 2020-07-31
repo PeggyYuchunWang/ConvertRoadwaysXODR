@@ -90,11 +90,26 @@ from src.data.station_platform_segment import Station_Platform_Segment
 class OpenDriveParser:
     """
     Parser for OpenDrive that will store all content in the PyXODR data object.
+
+    Attributes
+    ----------
+    data : Open_Drive_Framework
+        The data container for the contents from an OpenDrive XML.
     """
     def __init__(self):
         self.data = odf.Open_Drive_Framework()
 
     def parse_file(self, filename="test_data/carlaExs/Town02.xodr"):
+        """
+        Parses an xml file, written using the OpenDrive standard, and stores
+        its contents in the parser's data object.
+
+        Parameters
+        ----------
+        filename : str, optional
+            The filename to parse. Accepts absolute path or relative path where
+            code was called.
+        """
         print("parsing: ", filename)
         root = ET.parse(filename).getroot()
         self.__parse(xml_root=root)
