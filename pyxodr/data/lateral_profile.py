@@ -1,7 +1,3 @@
-from src.data.lateral_profile_superelevation import Lateral_Profile_Superelevation
-from src.data.lateral_profile_shape import Lateral_Profile_Shape
-
-
 class Lateral_Profile:
     """
     Using superelevation and shape definition, specifies the elevation

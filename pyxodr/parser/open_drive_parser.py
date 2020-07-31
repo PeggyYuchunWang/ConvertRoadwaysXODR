@@ -1,90 +1,90 @@
 import xml.etree.ElementTree as ET
-import src.utils as utils
-import src.data.open_drive_framework as odf
+import pyxodr.utils as utils
+import pyxodr.data.open_drive_framework as odf
 
-from src.data.header import Header
-from src.data.geo_reference import Geo_Reference
-from src.data.offset import Offset
+from pyxodr.data.header import Header
+from pyxodr.data.geo_reference import Geo_Reference
+from pyxodr.data.offset import Offset
 
-from src.data.road import Road
-from src.data.road_predecessor_successor import Road_Predecessor_Successor
-from src.data.road_neighbor import Road_Neighbor
-from src.data.road_type import Road_Type
-from src.data.road_speed import Road_Speed
+from pyxodr.data.road import Road
+from pyxodr.data.road_predecessor_successor import Road_Predecessor_Successor
+from pyxodr.data.road_neighbor import Road_Neighbor
+from pyxodr.data.road_type import Road_Type
+from pyxodr.data.road_speed import Road_Speed
 
-from src.data.geometry import Geometry
-from src.data.spiral import Spiral
-from src.data.arc import Arc
-from src.data.poly3 import Poly3
-from src.data.param_poly3 import Param_Poly3
-from src.data.elevation import Elevation
+from pyxodr.data.geometry import Geometry
+from pyxodr.data.spiral import Spiral
+from pyxodr.data.arc import Arc
+from pyxodr.data.poly3 import Poly3
+from pyxodr.data.param_poly3 import Param_Poly3
+from pyxodr.data.elevation import Elevation
 
-from src.data.lateral_profile import Lateral_Profile
-from src.data.lateral_profile_superelevation import Lateral_Profile_Superelevation
-from src.data.lateral_profile_shape import Lateral_Profile_Shape
+from pyxodr.data.lateral_profile import Lateral_Profile
+from pyxodr.data.lateral_profile_superelevation import Lateral_Profile_Superelevation
+from pyxodr.data.lateral_profile_shape import Lateral_Profile_Shape
 
-from src.data.lanes import Lanes
-from src.data.lane_offset import Lane_Offset
-from src.data.lane_section import Lane_Section
-from src.data.lane import Lane
-from src.data.lane_width import Lane_Width
-from src.data.lane_height import Lane_Height
-from src.data.lane_border import Lane_Border
-from src.data.lane_material import Lane_Material
-from src.data.lane_visibility import Lane_Visibility
-from src.data.lane_access import Lane_Access
-from src.data.lane_rule import Lane_Rule
-from src.data.lane_speed import Lane_Speed
+from pyxodr.data.lanes import Lanes
+from pyxodr.data.lane_offset import Lane_Offset
+from pyxodr.data.lane_section import Lane_Section
+from pyxodr.data.lane import Lane
+from pyxodr.data.lane_width import Lane_Width
+from pyxodr.data.lane_height import Lane_Height
+from pyxodr.data.lane_border import Lane_Border
+from pyxodr.data.lane_material import Lane_Material
+from pyxodr.data.lane_visibility import Lane_Visibility
+from pyxodr.data.lane_access import Lane_Access
+from pyxodr.data.lane_rule import Lane_Rule
+from pyxodr.data.lane_speed import Lane_Speed
 
-from src.data.road_mark import Road_Mark
-from src.data.road_mark_type import Road_Mark_Type
-from src.data.road_mark_line import Road_Mark_Line
-from src.data.road_mark_sway import Road_Mark_Sway
-from src.data.road_mark_explicit import Road_Mark_Explicit
-from src.data.road_mark_explicit_line import Road_Mark_Explicit_Line
+from pyxodr.data.road_mark import Road_Mark
+from pyxodr.data.road_mark_type import Road_Mark_Type
+from pyxodr.data.road_mark_line import Road_Mark_Line
+from pyxodr.data.road_mark_sway import Road_Mark_Sway
+from pyxodr.data.road_mark_explicit import Road_Mark_Explicit
+from pyxodr.data.road_mark_explicit_line import Road_Mark_Explicit_Line
 
-from src.data.junction import Junction
-from src.data.junction_connection import Junction_Connection
-from src.data.junction_lane_link import Junction_Lane_Link
-from src.data.junction_priority import Junction_Priority
-from src.data.junction_predecessor_successor import Junction_Predecessor_Successor
-from src.data.junction_group import Junction_Group
-from src.data.junction_controller import Junction_Controller
+from pyxodr.data.junction import Junction
+from pyxodr.data.junction_connection import Junction_Connection
+from pyxodr.data.junction_lane_link import Junction_Lane_Link
+from pyxodr.data.junction_priority import Junction_Priority
+from pyxodr.data.junction_predecessor_successor import Junction_Predecessor_Successor
+from pyxodr.data.junction_group import Junction_Group
+from pyxodr.data.junction_controller import Junction_Controller
 
-from src.data.objects import Objects
-from src.data.object import Object
-from src.data.object_repeat import Object_Repeat
-from src.data.object_outline import Object_Outline
-from src.data.object_outline_corner_road import Object_Outline_Corner_Road
-from src.data.object_outline_corner_local import Object_Outline_Corner_Local
-from src.data.object_material import Object_Material
-from src.data.object_validity import Object_Validity
-from src.data.object_parking_space import Object_Parking_Space
-from src.data.object_marking import Object_Marking
-from src.data.object_border import Object_Border
-from src.data.object_reference import Object_Reference
-from src.data.object_tunnel import Object_Tunnel
-from src.data.object_bridge import Object_Bridge
+from pyxodr.data.objects import Objects
+from pyxodr.data.object import Object
+from pyxodr.data.object_repeat import Object_Repeat
+from pyxodr.data.object_outline import Object_Outline
+from pyxodr.data.object_outline_corner_road import Object_Outline_Corner_Road
+from pyxodr.data.object_outline_corner_local import Object_Outline_Corner_Local
+from pyxodr.data.object_material import Object_Material
+from pyxodr.data.object_validity import Object_Validity
+from pyxodr.data.object_parking_space import Object_Parking_Space
+from pyxodr.data.object_marking import Object_Marking
+from pyxodr.data.object_border import Object_Border
+from pyxodr.data.object_reference import Object_Reference
+from pyxodr.data.object_tunnel import Object_Tunnel
+from pyxodr.data.object_bridge import Object_Bridge
 
-from src.data.signal import Signal
-from src.data.signal_validity import Signal_Validity
-from src.data.signal_dependency import Signal_Dependency
-from src.data.signal_reference import Signal_Reference
-from src.data.signal_position_inertial import Signal_Position_Inertial
-from src.data.signal_position_road import Signal_Position_Road
-from src.data.signal_repeat import Signal_Repeat
+from pyxodr.data.signal import Signal
+from pyxodr.data.signal_validity import Signal_Validity
+from pyxodr.data.signal_dependency import Signal_Dependency
+from pyxodr.data.signal_reference import Signal_Reference
+from pyxodr.data.signal_position_inertial import Signal_Position_Inertial
+from pyxodr.data.signal_position_road import Signal_Position_Road
+from pyxodr.data.signal_repeat import Signal_Repeat
 
-from src.data.controller import Controller
-from src.data.controller_signal_control import Controller_Signal_Control
+from pyxodr.data.controller import Controller
+from pyxodr.data.controller_signal_control import Controller_Signal_Control
 
-from src.data.railroad import Railroad
-from src.data.railroad_switch import Railroad_Switch
-from src.data.railroad_track import Railroad_Track
-from src.data.railroad_switch_partner import Railroad_Switch_Partner
+from pyxodr.data.railroad import Railroad
+from pyxodr.data.railroad_switch import Railroad_Switch
+from pyxodr.data.railroad_track import Railroad_Track
+from pyxodr.data.railroad_switch_partner import Railroad_Switch_Partner
 
-from src.data.station import Station
-from src.data.station_platform import Station_Platform
-from src.data.station_platform_segment import Station_Platform_Segment
+from pyxodr.data.station import Station
+from pyxodr.data.station_platform import Station_Platform
+from pyxodr.data.station_platform_segment import Station_Platform_Segment
 
 
 class OpenDriveParser:
@@ -94,8 +94,8 @@ class OpenDriveParser:
     def parse_file(self, filename="test_data/carlaExs/Town02.xodr"):
         print("parsing: ", filename)
         root = ET.parse(filename).getroot()
-        self.__parse(xml_root=root)  
-        print("done parsing: ", filename)    
+        self.__parse(xml_root=root)
+        print("done parsing: ", filename)
 
     def __parse(self, xml_root):
         for header in xml_root.findall("header"):
@@ -377,11 +377,11 @@ class OpenDriveParser:
                     pred = l.find("link/predecessor")
                     if pred is not None:
                         lane.predecessor_id = int(pred.attrib["id"])
-                    
+
                     succ = l.find("link/successor")
                     if succ is not None:
                         lane.successor_id = int(succ.attrib["id"])
-                    
+
                     width = l.find("width")
                     if width is not None:
                         att = width.attrib
@@ -760,7 +760,7 @@ class OpenDriveParser:
                 att = corner_reference.attrib
                 m.corner_references.append(att["id"])
 
-            o.markings.append(m) 
+            o.markings.append(m)
 
     def __parse_object_references(self, objs, obj_references):
         for ref in obj_references:
@@ -1101,5 +1101,5 @@ class OpenDriveParser:
                 p.segments.append(s)
 
             station.platforms.append(p)
-        
+
         framework.stations[station.attrib["id"]] = station

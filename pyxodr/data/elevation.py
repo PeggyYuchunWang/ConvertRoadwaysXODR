@@ -1,24 +1,25 @@
-import src.data.abcd_base as abcd_base
+import pyxodr.data.abcd_base as abcd_base
 
 
-class Lateral_Profile_Superelevation(abcd_base.ABCD_base):
+class Elevation(abcd_base.ABCD_base):
     """
-    Defines a road section's roll angle around the s-axis.
-    Default superelevation of a road is zero.
+    Describes the elevation of a road along its reference line. 
+    Road elevation is defined per road cross section, specified in meters.
+    Default elevation is zero.
 
-    Found within a Lateral_Profile element.
+    Found within the elevation_profile of a Road element.
 
     Parameters
     ----------
-    s : float
+    s : int
         Start position (s-coordinate).
-    a : float
+    a : int
         Generic parameter a.
-    b : float
+    b : int
         Generic parameter b.
-    c : float
+    c : int
         Generic parameter c.
-    d : float
+    d : int
         Generic parameter d.
 
     Attributes
@@ -26,6 +27,7 @@ class Lateral_Profile_Superelevation(abcd_base.ABCD_base):
     attrib : dict
         Attributes dictionary for the parameters specified above.
     """
+
     def __init__(self, s=0, a=0, b=0, c=0, d=0) -> None:
         super().__init__(a, b, c, d)
         self.attrib["s"] = float(s)

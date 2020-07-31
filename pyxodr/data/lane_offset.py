@@ -1,25 +1,24 @@
-import src.data.abcd_base as abcd_base
+import pyxodr.data.abcd_base as abcd_base
 
 
-class Elevation(abcd_base.ABCD_base):
+class Lane_Offset(abcd_base.ABCD_base):
     """
-    Describes the elevation of a road along its reference line. 
-    Road elevation is defined per road cross section, specified in meters.
-    Default elevation is zero.
+    Describes the shift of the center lane away from the
+    road reference line.
 
-    Found within the elevation_profile of a Road element.
+    Found within a Lanes element.
 
     Parameters
     ----------
-    s : int
+    s : float
         Start position (s-coordinate).
-    a : int
+    a : float
         Generic parameter a.
-    b : int
+    b : float
         Generic parameter b.
-    c : int
+    c : float
         Generic parameter c.
-    d : int
+    d : float
         Generic parameter d.
 
     Attributes
@@ -27,7 +26,6 @@ class Elevation(abcd_base.ABCD_base):
     attrib : dict
         Attributes dictionary for the parameters specified above.
     """
-
     def __init__(self, s=0, a=0, b=0, c=0, d=0) -> None:
         super().__init__(a, b, c, d)
         self.attrib["s"] = float(s)

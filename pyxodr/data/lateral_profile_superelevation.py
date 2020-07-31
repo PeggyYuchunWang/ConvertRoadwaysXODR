@@ -1,12 +1,12 @@
-import src.data.abcd_base as abcd_base
+import pyxodr.data.abcd_base as abcd_base
 
 
-class Lane_Offset(abcd_base.ABCD_base):
+class Lateral_Profile_Superelevation(abcd_base.ABCD_base):
     """
-    Describes the shift of the center lane away from the
-    road reference line.
+    Defines a road section's roll angle around the s-axis.
+    Default superelevation of a road is zero.
 
-    Found within a Lanes element.
+    Found within a Lateral_Profile element.
 
     Parameters
     ----------
