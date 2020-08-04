@@ -12,7 +12,7 @@ class Geometry:
     s : float
         Start posiiton (s-coordinate).
     x : float
-        Start position (x inertial).
+        Start position (x-inertial).
     y : float
         Start position (y-inertial).
     hdg : float

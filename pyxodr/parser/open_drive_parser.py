@@ -90,10 +90,14 @@ from pyxodr.data.station_platform_segment import Station_Platform_Segment
 class OpenDriveParser:
     def __init__(self):
         self.data = odf.Open_Drive_Framework()
+        self.parse_curves = False
+        self.curves = {}  # dict with keys (road_id, lane_section_id, lane_id)
 
-    def parse_file(self, filename="test_data/carlaExs/Town02.xodr"):
+    def parse_file(self, filename="test_data/carlaExs/Town02.xodr",
+                   parse_curves=False):
         print("parsing: ", filename)
         root = ET.parse(filename).getroot()
+        self.parse_curves = parse_curves
         self.__parse(xml_root=root)
         print("done parsing: ", filename)
 
@@ -233,7 +237,28 @@ class OpenDriveParser:
         if road.find("railroad") is not None:
             r.railroad = self.__parse_railroad(road.find("railroad"))
 
+        if self.parse_curves:
+            self.__parse_curves(r)
+
         framework.roads[r.attrib["id"]] = r
+
+    def __parse_curves(self, road):
+        for geo in road.plan_view:
+            lane_sections = road.lanes.lane_sections
+            for ls in lane_sections:
+                if ls.attrib["s"] < geo.attrib["s"] + geo.attrib["length"]:
+                    # found a lane_section for which current Geometry element
+                    # is applicable
+                    for i, side in enumerate([ls.left_lanes, ls.right_lanes]):  # [ls.center_lane]]):
+                        # step through each lane
+                        for lane in side:
+                            key, curve = utils.createCurve(
+                                road,
+                                lane_sections.index(ls),
+                                lane,
+                                geo)
+                            if key is not None:
+                                self.curves[key] = curve
 
     def __parse_road_predecessor_and_successor(self, r, pred, succ):
         if pred is not None:
@@ -281,6 +306,8 @@ class OpenDriveParser:
                         float(att["curvStart"]),
                         float(att["curvEnd"])
                     )
+                    # if parse_curves:
+                    #     curve = utils.createCurveSpiral(r, geo)
                 elif child.tag == "arc":
                     geo.type = Arc(float(child.attrib["curvature"]))
                 elif child.tag == "poly3":
@@ -301,6 +328,7 @@ class OpenDriveParser:
                     )
                 else:
                     print("unkown geometry child tag: ", child.tag)
+                
             r.plan_view.append(geo)
 
     def __parse_road_lateral_profile(self, r, lateral_profile):
