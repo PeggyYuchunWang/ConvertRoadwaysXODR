@@ -17,13 +17,13 @@ class Junction:
     attrib : dict
         Attributes dictionary for the parameters specified above.
     connections : list
-        List of Junction_Connection elements to provide
+        List of JunctionConnection elements to provide
         information about a single conenction within a junction.
     controller : list
         List of Junction_Control elements that are used
         for the management of a junction.
     priorities : list
-        List of Junction_Priority elements that are used to determine
+        List of JunctionPriority elements that are used to determine
         the priority of connecting roads if priorities cannot
         be derived from signs or signals in a junction.
     """

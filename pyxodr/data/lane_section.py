@@ -1,6 +1,6 @@
-class Lane_Section:
+class LaneSection:
     """
-    Contains a fixed number of lanes. A new Lane_Section is required when the
+    Contains a fixed number of lanes. A new LaneSection is required when the
     number of lanes changes.
 
     Found within a Lanes element.

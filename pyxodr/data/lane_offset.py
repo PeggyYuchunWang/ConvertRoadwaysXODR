@@ -1,7 +1,7 @@
 import pyxodr.data.abcd_base as abcd_base
 
 
-class Lane_Offset(abcd_base.ABCD_base):
+class LaneOffset(abcd_base.ABCDBase):
     """
     Describes the shift of the center lane away from the
     road reference line.

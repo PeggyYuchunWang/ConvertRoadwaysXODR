@@ -1,4 +1,4 @@
-class ABCD_base:
+class ABCDBase:
     """
     Lower level base class with generic a, b, c, d elements.
 

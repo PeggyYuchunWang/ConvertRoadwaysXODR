@@ -1,4 +1,4 @@
-class Junction_Controller:
+class JunctionController:
     """
     Lists the controllers that are used for the management
     of a junction.

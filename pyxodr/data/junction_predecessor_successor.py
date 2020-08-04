@@ -1,4 +1,4 @@
-class Junction_Predecessor_Successor:
+class JunctionPredecessorSuccessor:
     """
     Provides information the predecessor / successor road of a virtual
     connection.

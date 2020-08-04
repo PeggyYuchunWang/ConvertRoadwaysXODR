@@ -3,7 +3,7 @@ import unittest
 from pyxodr.parser.open_drive_parser import OpenDriveParser
 
 from pyxodr.data.header import Header
-from pyxodr.data.geo_reference import Geo_Reference
+from pyxodr.data.geo_reference import GeoReference
 from pyxodr.data.offset import Offset
 from pyxodr.data.road import Road
 from pyxodr.data.road_predecessor_successor import Road_Predecessor_Successor
@@ -21,25 +21,25 @@ from pyxodr.data.lateral_profile_superelevation import Lateral_Profile_Superelev
 from pyxodr.data.lateral_profile_shape import Lateral_Profile_Shape
 
 from pyxodr.data.lanes import Lanes
-from pyxodr.data.lane_offset import Lane_Offset
-from pyxodr.data.lane_section import Lane_Section
+from pyxodr.data.lane_offset import LaneOffset
+from pyxodr.data.lane_section import LaneSection
 from pyxodr.data.lane import Lane
-from pyxodr.data.lane_width import Lane_Width
-from pyxodr.data.lane_height import Lane_Height
-from pyxodr.data.lane_border import Lane_Border
+from pyxodr.data.lane_width import LaneWidth
+from pyxodr.data.lane_height import LaneHeight
+from pyxodr.data.lane_border import LaneBorder
 
 from pyxodr.data.road_mark import Road_Mark
 from pyxodr.data.road_mark_type import Road_Mark_Type
 from pyxodr.data.road_mark_line import Road_Mark_Line
 
 from pyxodr.data.junction import Junction
-from pyxodr.data.junction_connection import Junction_Connection
-from pyxodr.data.junction_lane_link import Junction_Lane_Link
-from pyxodr.data.junction_priority import Junction_Priority
-from pyxodr.data.junction_predecessor_successor import Junction_Predecessor_Successor
-from pyxodr.data.junction_controller import Junction_Controller
+from pyxodr.data.junction_connection import JunctionConnection
+from pyxodr.data.junction_lane_link import JunctionLaneLink
+from pyxodr.data.junction_priority import JunctionPriority
+from pyxodr.data.junction_predecessor_successor import JunctionPredecessorSuccessor
+from pyxodr.data.junction_controller import JunctionController
 
-from pyxodr.data.junction_group import Junction_Group
+from pyxodr.data.junction_group import JunctionGroup
 
 from pyxodr.data.objects import Objects
 from pyxodr.data.object import Object
@@ -65,7 +65,7 @@ from pyxodr.data.signal_position_road import Signal_Position_Road
 from pyxodr.data.signal_repeat import Signal_Repeat
 
 from pyxodr.data.controller import Controller
-from pyxodr.data.controller_signal_control import Controller_Signal_Control
+from pyxodr.data.controller_signal_control import ControllerSignalControl
 
 from pyxodr.data.railroad import Railroad
 from pyxodr.data.railroad_switch import Railroad_Switch
@@ -153,14 +153,14 @@ class ParserTests(unittest.TestCase):
             self.assertEqual(ll.attrib["type"],"sidewalk")
             self.assertEqual(ll.attrib["level"],False)
 
-            self.assertIsInstance(ll.width, Lane_Width)
+            self.assertIsInstance(ll.width, LaneWidth)
             self.assertEqual(ll.width.attrib["s_offset"],0)
             self.assertEqual(ll.width.attrib["a"],3.0000000000000000e+00)
             self.assertEqual(ll.width.attrib["b"],0)
             self.assertEqual(ll.width.attrib["c"],0)
             self.assertEqual(ll.width.attrib["d"],0)
 
-            self.assertIsInstance(ll.height, Lane_Height)
+            self.assertIsInstance(ll.height, LaneHeight)
             self.assertEqual(ll.height.attrib["s_offset"],0)
             self.assertEqual(ll.height.attrib["inner"],1.2000000000000000e-01)
             self.assertEqual(ll.height.attrib["outer"],1.2000000000000000e-01)
@@ -180,7 +180,7 @@ class ParserTests(unittest.TestCase):
             self.assertEqual(ll.attrib["type"],"driving")
             self.assertEqual(ll.attrib["level"],False)
 
-            self.assertIsInstance(ll.width, Lane_Width)
+            self.assertIsInstance(ll.width, LaneWidth)
             self.assertEqual(ll.width.attrib["s_offset"],0)
             self.assertEqual(ll.width.attrib["a"],3.2500000000000000e+00)
             self.assertEqual(ll.width.attrib["b"],0)
@@ -298,7 +298,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(c.attrib["id"], "1")
         self.assertEqual(c.attrib["name"], "ctrl001")
         sc = c.signal_control_records[0]
-        self.assertIsInstance(sc, Controller_Signal_Control)
+        self.assertIsInstance(sc, ControllerSignalControl)
         self.assertEqual(sc.attrib["signal_id"], "8")
         self.assertEqual(sc.attrib["type"], "0")
 
@@ -351,7 +351,7 @@ class ParserTests(unittest.TestCase):
 
     def test_junction_group(self):
         jg = self.parser.data.junction_groups["1"]
-        self.assertIsInstance(jg, Junction_Group)
+        self.assertIsInstance(jg, JunctionGroup)
         self.assertEqual(jg.attrib["id"], "1")
         self.assertEqual(jg.attrib["name"], "ExampleRoundabout")
         self.assertEqual(jg.attrib["type"], "roundabout")

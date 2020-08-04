@@ -1,4 +1,4 @@
-class Junction_Group:
+class JunctionGroup:
     """
     Provides a grouping for two or more junctions to indicate
     that these junctions belong to the same roundabout.

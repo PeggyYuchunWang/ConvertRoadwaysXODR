@@ -1,4 +1,4 @@
-class Lane_Access:
+class LaneAccess:
     """
     Defines access restrictions for certain types of road users for a lane.
 
@@ -8,7 +8,7 @@ class Lane_Access:
     ----------
     s_offset: float
         Start position (s-coordinate) relative to the position of the preceding
-        Lane_Section element.
+        LaneSection element.
     rule : str
         Specifies whether the participant given in the attribute restriction is
         allowed or denied access to the given lane.

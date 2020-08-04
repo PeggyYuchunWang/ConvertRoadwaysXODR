@@ -1,7 +1,7 @@
 import pyxodr.data.abcd_base as abcd_base
 
 
-class Road_Mark_Sway(abcd_base.ABCD_base):
+class Road_Mark_Sway(abcd_base.ABCDBase):
     """
     Describes lane markings that are not straight, but have sideway curves.
     Relocates the lateral reference position for a Road_Mark_Explicit element.

@@ -1,4 +1,4 @@
-class Lane_Height:
+class LaneHeight:
     """
     Implements small-scale elevation, such as raising a pedestrian walkway.
 
@@ -8,7 +8,7 @@ class Lane_Height:
     ----------
     s_offset: float
         Start position (s-coordinate) relative to the position of the preceding
-        Lane_Section element.
+        LaneSection element.
     inner : float
         Inner offset from the road level.
     outer : float

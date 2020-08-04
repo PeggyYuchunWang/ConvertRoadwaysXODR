@@ -12,7 +12,7 @@ class Road_Mark:
     ----------
     s_offset: float
         Start position (s-coordinate) relative to the position of the preceding
-        Lane_Section element.
+        LaneSection element.
     type : str
         Type of the road.
     weight : str

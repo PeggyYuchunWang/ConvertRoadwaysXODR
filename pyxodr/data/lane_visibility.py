@@ -1,4 +1,4 @@
-class Lane_Visibility:
+class LaneVisibility:
     """
     Defines the visibility in four directions relative to the lane's direction.
 
@@ -8,7 +8,7 @@ class Lane_Visibility:
     ----------
     s_offset: float
         Start position (s-coordinate) relative to the position of the preceding
-        Lane_Section element.
+        LaneSection element.
     forward : float
         Visibility in the forward direction.
     back : float

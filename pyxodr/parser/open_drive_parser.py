@@ -3,7 +3,7 @@ import pyxodr.utils as utils
 import pyxodr.data.open_drive_framework as odf
 
 from pyxodr.data.header import Header
-from pyxodr.data.geo_reference import Geo_Reference
+from pyxodr.data.geo_reference import GeoReference
 from pyxodr.data.offset import Offset
 
 from pyxodr.data.road import Road
@@ -24,17 +24,17 @@ from pyxodr.data.lateral_profile_superelevation import Lateral_Profile_Superelev
 from pyxodr.data.lateral_profile_shape import Lateral_Profile_Shape
 
 from pyxodr.data.lanes import Lanes
-from pyxodr.data.lane_offset import Lane_Offset
-from pyxodr.data.lane_section import Lane_Section
+from pyxodr.data.lane_offset import LaneOffset
+from pyxodr.data.lane_section import LaneSection
 from pyxodr.data.lane import Lane
-from pyxodr.data.lane_width import Lane_Width
-from pyxodr.data.lane_height import Lane_Height
-from pyxodr.data.lane_border import Lane_Border
-from pyxodr.data.lane_material import Lane_Material
-from pyxodr.data.lane_visibility import Lane_Visibility
-from pyxodr.data.lane_access import Lane_Access
-from pyxodr.data.lane_rule import Lane_Rule
-from pyxodr.data.lane_speed import Lane_Speed
+from pyxodr.data.lane_width import LaneWidth
+from pyxodr.data.lane_height import LaneHeight
+from pyxodr.data.lane_border import LaneBorder
+from pyxodr.data.lane_material import LaneMaterial
+from pyxodr.data.lane_visibility import LaneVisibility
+from pyxodr.data.lane_access import LaneAccess
+from pyxodr.data.lane_rule import LaneRule
+from pyxodr.data.lane_speed import LaneSpeed
 
 from pyxodr.data.road_mark import Road_Mark
 from pyxodr.data.road_mark_type import Road_Mark_Type
@@ -44,12 +44,12 @@ from pyxodr.data.road_mark_explicit import Road_Mark_Explicit
 from pyxodr.data.road_mark_explicit_line import Road_Mark_Explicit_Line
 
 from pyxodr.data.junction import Junction
-from pyxodr.data.junction_connection import Junction_Connection
-from pyxodr.data.junction_lane_link import Junction_Lane_Link
-from pyxodr.data.junction_priority import Junction_Priority
-from pyxodr.data.junction_predecessor_successor import Junction_Predecessor_Successor
-from pyxodr.data.junction_group import Junction_Group
-from pyxodr.data.junction_controller import Junction_Controller
+from pyxodr.data.junction_connection import JunctionConnection
+from pyxodr.data.junction_lane_link import JunctionLaneLink
+from pyxodr.data.junction_priority import JunctionPriority
+from pyxodr.data.junction_predecessor_successor import JunctionPredecessorSuccessor
+from pyxodr.data.junction_group import JunctionGroup
+from pyxodr.data.junction_controller import JunctionController
 
 from pyxodr.data.objects import Objects
 from pyxodr.data.object import Object
@@ -75,7 +75,7 @@ from pyxodr.data.signal_position_road import Signal_Position_Road
 from pyxodr.data.signal_repeat import Signal_Repeat
 
 from pyxodr.data.controller import Controller
-from pyxodr.data.controller_signal_control import Controller_Signal_Control
+from pyxodr.data.controller_signal_control import ControllerSignalControl
 
 from pyxodr.data.railroad import Railroad
 from pyxodr.data.railroad_switch import Railroad_Switch
@@ -165,10 +165,10 @@ class OpenDriveParser:
                 # for v in child:
                 #    if v.tag == "vectorScene":
                 #        att = v.attrib
-                #        framework.Geo_Reference.vectorScene = rw.VectorScene(
+                #        framework.GeoReference.vectorScene = rw.VectorScene(
                 #            att["program"], att["version"])
             elif child.tag == "geoReference":
-                framework.header.geo_reference = Geo_Reference(child.text)
+                framework.header.geo_reference = GeoReference(child.text)
             elif child.tag == "offset":
                 if child.attrib:
                     att = child.attrib
@@ -360,7 +360,7 @@ class OpenDriveParser:
         for lo in laneOffset:
             att = lo.attrib
             # Standard has "t_grEqZero" as element of [0, inf)
-            offset = Lane_Offset(
+            offset = LaneOffset(
                 float(att["s"]),
                 float(att["a"]),
                 float(att["b"]),
@@ -376,7 +376,7 @@ class OpenDriveParser:
     def __parse_lane_sections(self, output, lanes, laneSection):
         for ls in laneSection:
             att = ls.attrib
-            section = Lane_Section(float(att["s"]))
+            section = LaneSection(float(att["s"]))
             if "singleSide" in att:
                 section.attrib["single_side"] = utils.convertStringToBool(
                     att["singleSide"]
@@ -408,7 +408,7 @@ class OpenDriveParser:
                     width = l.find("width")
                     if width is not None:
                         att = width.attrib
-                        lane.width = Lane_Width(
+                        lane.width = LaneWidth(
                             float(att["sOffset"]),
                             float(att["a"]),
                             float(att["b"]),
@@ -419,7 +419,7 @@ class OpenDriveParser:
                     border = l.find("border")
                     if border is not None:
                         att = border.attrib
-                        lane.border = Lane_Border(
+                        lane.border = LaneBorder(
                             float(att["sOffset"]),
                             float(att["a"]),
                             float(att["b"]),
@@ -430,7 +430,7 @@ class OpenDriveParser:
                     material = l.find("material")
                     if material is not None:
                         att = material.attrib
-                        lane.material = Lane_Material(
+                        lane.material = LaneMaterial(
                             float(att["sOffset"]),
                             float(att["friction"])
                         )
@@ -444,7 +444,7 @@ class OpenDriveParser:
                     visibility = l.find("visibility")
                     if visibility is not None:
                         att = visibility.attrib
-                        lane.visibility = Lane_Visibility(
+                        lane.visibility = LaneVisibility(
                             float(att["sOffset"]),
                             float(att["forward"]),
                             float(att["back"]),
@@ -455,7 +455,7 @@ class OpenDriveParser:
                     speed = l.find("speed")
                     if speed is not None:
                         att = speed.attrib
-                        lane.speed = Lane_Speed(
+                        lane.speed = LaneSpeed(
                             float(att["sOffset"]),
                             float(att["max"])
                         )
@@ -465,7 +465,7 @@ class OpenDriveParser:
                     access = l.find("access")
                     if access is not None:
                         att = access.attrib
-                        lane.access = Lane_Access(
+                        lane.access = LaneAccess(
                             float(att["sOffset"]),
                             att["rule"],
                             att["restriction"]
@@ -474,7 +474,7 @@ class OpenDriveParser:
                     height = l.find("height")
                     if height is not None:
                         att = height.attrib
-                        lane.height = Lane_Height(
+                        lane.height = LaneHeight(
                             float(att["sOffset"]),
                             float(att["inner"]),
                             float(att["outer"])
@@ -483,7 +483,7 @@ class OpenDriveParser:
                     rule = l.find("rule")
                     if rule is not None:
                         att = rule.attrib
-                        lane.rule = Lane_Rule(
+                        lane.rule = LaneRule(
                             float(att["sOffset"]),
                             att["value"]
                         )
@@ -1012,7 +1012,7 @@ class OpenDriveParser:
         connections = junc.findall("connection")
         for connection in connections:
             att = connection.attrib
-            c = Junction_Connection(
+            c = JunctionConnection(
                 att["id"],
                 att["incomingRoad"],
                 att["connectingRoad"],
@@ -1023,7 +1023,7 @@ class OpenDriveParser:
 
             pred = connection.find("predecessor")
             if pred is not None:
-                c.predecessor = Junction_Predecessor_Successor(
+                c.predecessor = JunctionPredecessorSuccessor(
                     att["elementType"],
                     att["elementId"],
                     att["elementS"],
@@ -1031,7 +1031,7 @@ class OpenDriveParser:
                 )
             succ = connection.find("successor")
             if succ is not None:
-                c.successor = Junction_Predecessor_Successor(
+                c.successor = JunctionPredecessorSuccessor(
                     att["elementType"],
                     att["elementId"],
                     att["elementS"],
@@ -1041,7 +1041,7 @@ class OpenDriveParser:
             links = connection.findall("laneLink")
             for ll in links:
                 att = ll.attrib
-                link = Junction_Lane_Link(
+                link = JunctionLaneLink(
                     att["from"],
                     att["to"]
                 )
@@ -1051,7 +1051,7 @@ class OpenDriveParser:
         priorities = junc.findall("priority")
         for p in priorities:
             att = p.attrib
-            priority = Junction_Priority()
+            priority = JunctionPriority()
             if "high" in att:
                 priority.attrib["high"] = att["high"]
             if "low" in att:
@@ -1061,7 +1061,7 @@ class OpenDriveParser:
         controllers = junc.findall("controller")
         for control in controllers:
             att = control.attrib
-            c = Junction_Controller(att["id"])
+            c = JunctionController(att["id"])
             if "type" in att:
                 c.attrib["type"] = att["type"]
             if "sequence" in att:
@@ -1072,7 +1072,7 @@ class OpenDriveParser:
 
     def __parse_junction_group(self, framework, junc_group):
         att = junc_group.attrib
-        junction_group = Junction_Group(att["id"])
+        junction_group = JunctionGroup(att["id"])
         if "name" in att:
             junction_group.attrib["name"] = att["name"]
         if "type" in att:
@@ -1094,7 +1094,7 @@ class OpenDriveParser:
 
         for c in cont.findall("control"):
             att = c.attrib
-            sc = Controller_Signal_Control(att["signalId"])
+            sc = ControllerSignalControl(att["signalId"])
             if "type" in att:
                 sc.attrib["type"] = att["type"]
             controller.signal_control_records.append(sc)

@@ -1,7 +1,7 @@
 import pyxodr.data.abcd_base as abcd_base
 
 
-class Lateral_Profile_Superelevation(abcd_base.ABCD_base):
+class Lateral_Profile_Superelevation(abcd_base.ABCDBase):
     """
     Defines a road section's roll angle around the s-axis.
     Default superelevation of a road is zero.
