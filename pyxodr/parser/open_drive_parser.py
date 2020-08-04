@@ -83,8 +83,8 @@ from pyxodr.data.railroad_track import RailroadTrack
 from pyxodr.data.railroad_switch_partner import RailroadSwitchPartner
 
 from pyxodr.data.station import Station
-from pyxodr.data.station_platform import Station_Platform
-from pyxodr.data.station_platform_segment import Station_Platform_Segment
+from pyxodr.data.station_platform import StationPlatform
+from pyxodr.data.station_platform_segment import StationPlatformSegment
 
 
 class OpenDriveParser:
@@ -1111,13 +1111,13 @@ class OpenDriveParser:
 
         for plat in stat.findall("platform"):
             att = plat.attrib
-            p = Station_Platform(att["id"])
+            p = StationPlatform(att["id"])
             if "name" in att:
                 p.attrib["name"] = att["name"]
 
             for seg in plat.findall("segment"):
                 att = seg.attrib
-                s = Station_Platform_Segment(
+                s = StationPlatformSegment(
                     att["roadId"],
                     float(att["sStart"]),
                     float(att["sEnd"]),

@@ -1,4 +1,4 @@
-class Station_Platform:
+class StationPlatform:
     """
     Defines a platform for a station.
 

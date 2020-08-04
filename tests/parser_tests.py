@@ -73,8 +73,8 @@ from pyxodr.data.railroad_track import RailroadTrack
 from pyxodr.data.railroad_switch_partner import RailroadSwitchPartner
 
 from pyxodr.data.station import Station
-from pyxodr.data.station_platform import Station_Platform
-from pyxodr.data.station_platform_segment import Station_Platform_Segment
+from pyxodr.data.station_platform import StationPlatform
+from pyxodr.data.station_platform_segment import StationPlatformSegment
 
 
 class ParserTests(unittest.TestCase):
@@ -338,12 +338,12 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(s.attrib["type"], "small")
 
         p = s.platforms[0]
-        self.assertIsInstance(p, Station_Platform)
+        self.assertIsInstance(p, StationPlatform)
         self.assertEqual(p.attrib["id"], "12-1")
         self.assertEqual(p.attrib["name"], "platform1")
 
         seg = p.segments[0]
-        self.assertIsInstance(seg, Station_Platform_Segment)
+        self.assertIsInstance(seg, StationPlatformSegment)
         self.assertEqual(seg.attrib["road_id"], "2")
         self.assertEqual(seg.attrib["s_start"], 1.6500000000000000e+01)
         self.assertEqual(seg.attrib["s_end"], 5.1000000000000000e+01)
