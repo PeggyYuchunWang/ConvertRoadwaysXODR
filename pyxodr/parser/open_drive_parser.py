@@ -78,9 +78,9 @@ from pyxodr.data.controller import Controller
 from pyxodr.data.controller_signal_control import ControllerSignalControl
 
 from pyxodr.data.railroad import Railroad
-from pyxodr.data.railroad_switch import Railroad_Switch
-from pyxodr.data.railroad_track import Railroad_Track
-from pyxodr.data.railroad_switch_partner import Railroad_Switch_Partner
+from pyxodr.data.railroad_switch import RailroadSwitch
+from pyxodr.data.railroad_track import RailroadTrack
+from pyxodr.data.railroad_switch_partner import RailroadSwitchPartner
 
 from pyxodr.data.station import Station
 from pyxodr.data.station_platform import Station_Platform
@@ -964,7 +964,7 @@ class OpenDriveParser:
         r = Railroad()
         for switch in railroad.findall("switch"):
             att = switch.attrib
-            s = Railroad_Switch(
+            s = RailroadSwitch(
                 att["name"],
                 att["id"]
             )
@@ -973,7 +973,7 @@ class OpenDriveParser:
 
             mainTrack = switch.find("mainTrack")
             att = mainTrack.attrib
-            s.main_track = Railroad_Track(
+            s.main_track = RailroadTrack(
                 att["id"],
                 float(att["s"]),
                 att["dir"]
@@ -981,7 +981,7 @@ class OpenDriveParser:
 
             sideTrack = switch.find("sideTrack")
             att = sideTrack.attrib
-            s.side_track = Railroad_Track(
+            s.side_track = RailroadTrack(
                 att["id"],
                 float(att["s"]),
                 att["dir"]
@@ -990,7 +990,7 @@ class OpenDriveParser:
             partnerSwitch = switch.find("partner")
             if partnerSwitch is not None:
                 att = partnerSwitch.attrib
-                s.switch_partner = Railroad_Switch_Partner(
+                s.switch_partner = RailroadSwitchPartner(
                     att["name"],
                     att["id"]
                 )

@@ -68,9 +68,9 @@ from pyxodr.data.controller import Controller
 from pyxodr.data.controller_signal_control import ControllerSignalControl
 
 from pyxodr.data.railroad import Railroad
-from pyxodr.data.railroad_switch import Railroad_Switch
-from pyxodr.data.railroad_track import Railroad_Track
-from pyxodr.data.railroad_switch_partner import Railroad_Switch_Partner
+from pyxodr.data.railroad_switch import RailroadSwitch
+from pyxodr.data.railroad_track import RailroadTrack
+from pyxodr.data.railroad_switch_partner import RailroadSwitchPartner
 
 from pyxodr.data.station import Station
 from pyxodr.data.station_platform import Station_Platform
@@ -307,26 +307,26 @@ class ParserTests(unittest.TestCase):
         self.assertIsInstance(r, Railroad)
 
         s = r.switches["32"]
-        self.assertIsInstance(s, Railroad_Switch)
+        self.assertIsInstance(s, RailroadSwitch)
         self.assertEqual(s.attrib["position"], "dynamic")
         self.assertEqual(s.attrib["id"], "1")
         self.assertEqual(s.attrib["name"], "Switch32")
 
 
         mt = r.main_track
-        self.assertIsInstance(mt, Railroad_Track)
+        self.assertIsInstance(mt, RailroadTrack)
         self.assertEqual(mt.attrib["id"], "3")
         self.assertEqual(mt.attrib["s"], 1.0000000000000000e+01)
         self.assertEqual(mt.attrib["dir"], "+")
 
         st = r.side_track
-        self.assertIsInstance(st, Railroad_Track)
+        self.assertIsInstance(st, RailroadTrack)
         self.assertEqual(mt.attrib["id"], "2")
         self.assertEqual(mt.attrib["s"], 3.4898261533109149e+01)
         self.assertEqual(mt.attrib["dir"], "-")
 
         ps = r.switch_parter
-        self.assertIsInstance(ps, Railroad_Switch_Partner)
+        self.assertIsInstance(ps, RailroadSwitchPartner)
         self.assertEqual(mt.attrib["name"], "Switch12")
         self.assertEqual(mt.attrib["id"], "12")
 
