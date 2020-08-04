@@ -13,7 +13,7 @@ from pyxodr.data.geometry import Geometry
 from pyxodr.data.spiral import Spiral
 from pyxodr.data.arc import Arc
 from pyxodr.data.poly3 import Poly3
-from pyxodr.data.param_poly3 import Param_Poly3
+from pyxodr.data.param_poly3 import ParamPoly3
 from pyxodr.data.elevation import Elevation
 
 from pyxodr.data.lateral_profile import LateralProfile

@@ -4,7 +4,7 @@ import pyxodr.data.abcd_base as abcd_base
 class Poly3(abcd_base.ABCDBase):
     """
     Describes a part of the road's reference line as a cubic polynomial.
-    The polynomial is decribed in the local u/v coordinate system of the
+    The polynomial is described in the local u/v coordinate system of the
     starting point. The starting point is determined by the x, y and hdg
     variables of the parent Geometry element.
 

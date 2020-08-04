@@ -16,7 +16,7 @@ from pyxodr.data.geometry import Geometry
 from pyxodr.data.spiral import Spiral
 from pyxodr.data.arc import Arc
 from pyxodr.data.poly3 import Poly3
-from pyxodr.data.param_poly3 import Param_Poly3
+from pyxodr.data.param_poly3 import ParamPoly3
 from pyxodr.data.elevation import Elevation
 
 from pyxodr.data.lateral_profile import LateralProfile
@@ -93,11 +93,11 @@ class OpenDriveParser:
 
     Attributes
     ----------
-    data : Open_Drive_Framework
+    data : OpenDriveFramework
         The data container for the contents from an OpenDrive XML.
     """
     def __init__(self):
-        self.data = odf.Open_Drive_Framework()
+        self.data = odf.OpenDriveFramework()
 
     def parse_file(self, filename="test_data/carlaExs/Town02.xodr"):
         """
@@ -311,7 +311,7 @@ class OpenDriveParser:
                     )
                 elif child.tag == "paramPoly3":
                     att = child.attrib
-                    geo.type = Param_Poly3(
+                    geo.type = ParamPoly3(
                         att["pRange"],
                         float(att["aU"]),
                         float(att["bU"]),
