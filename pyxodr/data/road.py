@@ -19,16 +19,16 @@ class Road:
     ----------
     attrib : dict
         Attributes dictionary for the parameters specified above.
-    predecessor : Road_Predecessor_Successor
+    predecessor : RoadPredecessorSuccessor
         Object used to represent the linkage between the current road
         and the road that comes before it.
-    successor : Road_Predecessor_Successor
+    successor : RoadPredecessorSuccessor
         Object used to represent the linkage between the current road
         and the road that comes after it.
     neighbors : list
-        List of Road_Neighbor elements describing the road's neighbors.
+        List of RoadNeighbor elements describing the road's neighbors.
         Can only have two neighbors max.
-    type : Road_Type
+    type : RoadType
         Object used to define the main purpose of a road.
     plan_view : list
         List of Geometry elements describing the road's reference line.

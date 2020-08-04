@@ -1,4 +1,4 @@
-class Road_Neighbor:
+class RoadNeighbor:
     """
     Provides detailed information about the neighbor of a road. Neighbor must
     be of type Road.

@@ -7,10 +7,10 @@ from pyxodr.data.geo_reference import GeoReference
 from pyxodr.data.offset import Offset
 
 from pyxodr.data.road import Road
-from pyxodr.data.road_predecessor_successor import Road_Predecessor_Successor
-from pyxodr.data.road_neighbor import Road_Neighbor
-from pyxodr.data.road_type import Road_Type
-from pyxodr.data.road_speed import Road_Speed
+from pyxodr.data.road_predecessor_successor import RoadPredecessorSuccessor
+from pyxodr.data.road_neighbor import RoadNeighbor
+from pyxodr.data.road_type import RoadType
+from pyxodr.data.road_speed import RoadSpeed
 
 from pyxodr.data.geometry import Geometry
 from pyxodr.data.spiral import Spiral
@@ -199,7 +199,7 @@ class OpenDriveParser:
 
         for neighbor in road.findall("neighbor"):
             att = neighbor.attrib
-            n = Road_Neighbor(
+            n = RoadNeighbor(
                 att["side"],
                 att["elementId"],
                 att["direction"]
@@ -209,7 +209,7 @@ class OpenDriveParser:
         type = road.find("type")
         if type is not None:
             att = type.attrib
-            r.type = Road_Type(
+            r.type = RoadType(
                 float(att["s"]),
                 str(att["type"])
             )
@@ -218,7 +218,7 @@ class OpenDriveParser:
             for child in type:
                 if child.tag == "speed":
                     att = child.attrib
-                    r.type.speed = Road_Speed(float(att["max"]))
+                    r.type.speed = RoadSpeed(float(att["max"]))
                 if "unit" in att:
                     r.type.speed.attrib["unit"] = att["unit"]
                 else:
@@ -256,7 +256,7 @@ class OpenDriveParser:
     def __parse_road_predecessor_and_successor(self, r, pred, succ):
         if pred is not None:
             att = pred.attrib
-            r.predecessor = Road_Predecessor_Successor(
+            r.predecessor = RoadPredecessorSuccessor(
                 att["elementType"],
                 int(att["elementId"])
             )
@@ -269,7 +269,7 @@ class OpenDriveParser:
 
         if succ is not None:
             att = succ.attrib
-            r.successor = Road_Predecessor_Successor(
+            r.successor = RoadPredecessorSuccessor(
                 att["elementId"],
                 att["elementType"]
             )

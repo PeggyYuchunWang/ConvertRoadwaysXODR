@@ -6,9 +6,9 @@ from pyxodr.data.header import Header
 from pyxodr.data.geo_reference import GeoReference
 from pyxodr.data.offset import Offset
 from pyxodr.data.road import Road
-from pyxodr.data.road_predecessor_successor import Road_Predecessor_Successor
-from pyxodr.data.road_type import Road_Type
-from pyxodr.data.road_speed import Road_Speed
+from pyxodr.data.road_predecessor_successor import RoadPredecessorSuccessor
+from pyxodr.data.road_type import RoadType
+from pyxodr.data.road_speed import RoadSpeed
 from pyxodr.data.geometry import Geometry
 from pyxodr.data.spiral import Spiral
 from pyxodr.data.arc import Arc

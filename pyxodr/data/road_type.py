@@ -1,4 +1,4 @@
-class Road_Type():
+class RoadType():
     """
     Defines the main purpose of a road and the associated traffic rules.
 
@@ -22,7 +22,7 @@ class Road_Type():
     ----------
     attrib : dict
         Attributes dictionary for the parameters specified above.
-    speed : Road_Speed
+    speed : RoadSpeed
         Object to define the maximum speed allowed.
     """
     def __init__(self, s=0, type="", country="") -> None:
