@@ -36,7 +36,7 @@ class Lane:
     border : LaneBorder
         Object to describe the outer limits of a lane, independent
         of the parameters of their inner borders.
-    road_mark : Road_Mark
+    road_mark : RoadMark
         Object to provide detailed information about road marking
         types and lines.
     material : LaneMaterial

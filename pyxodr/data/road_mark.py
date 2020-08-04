@@ -1,10 +1,10 @@
-class Road_Mark:
+class RoadMark:
     """
     Detailed information about the lane markings.
     Defines the style of the line at the lane's outer border.
     For left lanes, this is the left border, for right lanes the right one.
     The style of the center lane that separates left and right lanes is
-    determined by the Road_Mark element for the center lane.
+    determined by the RoadMark element for the center lane.
 
     Found within a Lane element.
 
@@ -34,12 +34,12 @@ class Road_Mark:
     ----------
     attrib : dict
         Attributes dictionary for the parameters specified above.
-    sway : Road_Mark_Sway
+    sway : RoadMarkSway
         Object to describe lane markings that are not straight.
-    type : Road_Mark_Type
+    type : RoadMarkType
         Object to provide detailed information about road marking types and
         lines.
-    explicit : Road_Mark_Explicit
+    explicit : RoadMarkExplicit
         Object to provide detailed information about irregular road markings
         that cannot be described by repetitive line patterns.
     """

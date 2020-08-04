@@ -36,12 +36,12 @@ from pyxodr.data.lane_access import LaneAccess
 from pyxodr.data.lane_rule import LaneRule
 from pyxodr.data.lane_speed import LaneSpeed
 
-from pyxodr.data.road_mark import Road_Mark
-from pyxodr.data.road_mark_type import Road_Mark_Type
-from pyxodr.data.road_mark_line import Road_Mark_Line
-from pyxodr.data.road_mark_sway import Road_Mark_Sway
-from pyxodr.data.road_mark_explicit import Road_Mark_Explicit
-from pyxodr.data.road_mark_explicit_line import Road_Mark_Explicit_Line
+from pyxodr.data.road_mark import RoadMark
+from pyxodr.data.road_mark_type import RoadMarkType
+from pyxodr.data.road_mark_line import RoadMarkLine
+from pyxodr.data.road_mark_sway import RoadMarkSway
+from pyxodr.data.road_mark_explicit import RoadMarkExplicit
+from pyxodr.data.road_mark_explicit_line import RoadMarkExplicitLine
 
 from pyxodr.data.junction import Junction
 from pyxodr.data.junction_connection import JunctionConnection
@@ -505,7 +505,7 @@ class OpenDriveParser:
     def __parse_road_mark(self, lane, road_mark):
         if road_mark is not None:
             att = road_mark.attrib
-            lane.road_mark = Road_Mark(
+            lane.road_mark = RoadMark(
                 float(att["sOffset"]),
                 att["type"]
             )
@@ -523,13 +523,13 @@ class OpenDriveParser:
             for child in road_mark:
                 if child.tag == "type":
                     att = child.attrib
-                    type = Road_Mark_Type(
+                    type = RoadMarkType(
                         att["name"],
                         float(att["width"])
                     )
                     for l in child:
                         att = l.attrib
-                        line = Road_Mark_Line(
+                        line = RoadMarkLine(
                             float(att["length"]),
                             float(att["space"]),
                             float(att["tOffset"]),
@@ -544,7 +544,7 @@ class OpenDriveParser:
                     lane.road_mark.type = type
                 elif child.tag == "sway":
                     att = child.attrib
-                    sway = Road_Mark_Sway(
+                    sway = RoadMarkSway(
                         float(att["ds"]),
                         float(att["a"]),
                         float(att["b"]),
@@ -554,13 +554,13 @@ class OpenDriveParser:
                     lane.road_mark.sway = sway
                 elif child.tag == "explicit":
                     att = child.attrib
-                    ex = Road_Mark_Explicit(
+                    ex = RoadMarkExplicit(
                         att["name"],
                         float(att["width"])
                     )
                     for l in child:
                         att = l.attrib
-                        ex_line = Road_Mark_Explicit_Line(
+                        ex_line = RoadMarkExplicitLine(
                             float(att["length"]),
                             float(att["tOffset"]),
                             float(att["sOffset"]),

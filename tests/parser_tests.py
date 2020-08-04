@@ -28,9 +28,9 @@ from pyxodr.data.lane_width import LaneWidth
 from pyxodr.data.lane_height import LaneHeight
 from pyxodr.data.lane_border import LaneBorder
 
-from pyxodr.data.road_mark import Road_Mark
-from pyxodr.data.road_mark_type import Road_Mark_Type
-from pyxodr.data.road_mark_line import Road_Mark_Line
+from pyxodr.data.road_mark import RoadMark
+from pyxodr.data.road_mark_type import RoadMarkType
+from pyxodr.data.road_mark_line import RoadMarkLine
 
 from pyxodr.data.junction import Junction
 from pyxodr.data.junction_connection import JunctionConnection
