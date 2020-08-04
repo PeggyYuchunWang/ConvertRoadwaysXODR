@@ -16,9 +16,9 @@ from pyxodr.data.poly3 import Poly3
 from pyxodr.data.param_poly3 import Param_Poly3
 from pyxodr.data.elevation import Elevation
 
-from pyxodr.data.lateral_profile import Lateral_Profile
-from pyxodr.data.lateral_profile_superelevation import Lateral_Profile_Superelevation
-from pyxodr.data.lateral_profile_shape import Lateral_Profile_Shape
+from pyxodr.data.lateral_profile import LateralProfile
+from pyxodr.data.lateral_profile_superelevation import LateralProfileSuperelevation
+from pyxodr.data.lateral_profile_shape import LateralProfileShape
 
 from pyxodr.data.lanes import Lanes
 from pyxodr.data.lane_offset import LaneOffset

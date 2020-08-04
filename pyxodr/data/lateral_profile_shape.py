@@ -1,13 +1,13 @@
 import pyxodr.data.abcd_base as abcd_base
 
 
-class Lateral_Profile_Shape(abcd_base.ABCDBase):
+class LateralProfileShape(abcd_base.ABCDBase):
     """
-    Decribes the elevation of a road's cross section at a given point on the
+    Describes the elevation of a road's cross section at a given point on the
     reference line. There may be several shape definitions at one s-coordinate
     that have different t-coordinates.
 
-    Found within a the Lateral_Profile element.
+    Found within a the LateralProfile element.
 
     Parameters
     ----------

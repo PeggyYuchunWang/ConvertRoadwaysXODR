@@ -19,9 +19,9 @@ from pyxodr.data.poly3 import Poly3
 from pyxodr.data.param_poly3 import Param_Poly3
 from pyxodr.data.elevation import Elevation
 
-from pyxodr.data.lateral_profile import Lateral_Profile
-from pyxodr.data.lateral_profile_superelevation import Lateral_Profile_Superelevation
-from pyxodr.data.lateral_profile_shape import Lateral_Profile_Shape
+from pyxodr.data.lateral_profile import LateralProfile
+from pyxodr.data.lateral_profile_superelevation import LateralProfileSuperelevation
+from pyxodr.data.lateral_profile_shape import LateralProfileShape
 
 from pyxodr.data.lanes import Lanes
 from pyxodr.data.lane_offset import LaneOffset
@@ -329,9 +329,9 @@ class OpenDriveParser:
     def __parse_road_lateral_profile(self, r, lateral_profile):
         for child in lateral_profile:
             att = child.attrib
-            r.lateral_profile = Lateral_Profile()
+            r.lateral_profile = LateralProfile()
             if child.tag == "superelevation":
-                se = Lateral_Profile_Superelevation(
+                se = LateralProfileSuperelevation(
                     float(att["s"]),
                     float(att["a"]),
                     float(att["b"]),
@@ -340,7 +340,7 @@ class OpenDriveParser:
                 )
                 r.lateral_profile.super_elevation = se
             elif child.tag == "shape":
-                s = Lateral_Profile_Shape(
+                s = LateralProfileShape(
                     float(att["s"]),
                     float(att["t"]),
                     float(att["a"]),

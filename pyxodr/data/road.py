@@ -35,7 +35,7 @@ class Road:
     elevation_profile : list
         List of Elevation elements describing the elevation of a road
         along its reference line.
-    lateral_profile : Lateral_Profile
+    lateral_profile : LateralProfile
         Object to define the characteristics of the road surface's
         banking along the reference line.
     lanes : Lanes
