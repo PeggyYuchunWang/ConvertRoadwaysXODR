@@ -1,4 +1,4 @@
-class Object_Tunnel:
+class ObjectTunnel:
     """
     Details about a tunnel element. Valid for the complete cross section of a
     road.

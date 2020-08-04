@@ -1,4 +1,4 @@
-class Object_Reference:
+class ObjectReference:
     """
     Allows an object to be linked with one or more roads, signals or other
     objects.

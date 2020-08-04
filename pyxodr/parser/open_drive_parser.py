@@ -53,18 +53,18 @@ from pyxodr.data.junction_controller import JunctionController
 
 from pyxodr.data.objects import Objects
 from pyxodr.data.object import Object
-from pyxodr.data.object_repeat import Object_Repeat
-from pyxodr.data.object_outline import Object_Outline
-from pyxodr.data.object_outline_corner_road import Object_Outline_Corner_Road
-from pyxodr.data.object_outline_corner_local import Object_Outline_Corner_Local
-from pyxodr.data.object_material import Object_Material
-from pyxodr.data.object_validity import Object_Validity
-from pyxodr.data.object_parking_space import Object_Parking_Space
-from pyxodr.data.object_marking import Object_Marking
-from pyxodr.data.object_border import Object_Border
-from pyxodr.data.object_reference import Object_Reference
-from pyxodr.data.object_tunnel import Object_Tunnel
-from pyxodr.data.object_bridge import Object_Bridge
+from pyxodr.data.object_repeat import ObjectRepeat
+from pyxodr.data.object_outline import ObjectOutline
+from pyxodr.data.object_outline_corner_road import ObjectOutlineCornerRoad
+from pyxodr.data.object_outline_corner_local import ObjectOutlineCornerLocal
+from pyxodr.data.object_material import ObjectMaterial
+from pyxodr.data.object_validity import ObjectValidity
+from pyxodr.data.object_parking_space import ObjectParkingSpace
+from pyxodr.data.object_marking import ObjectMarking
+from pyxodr.data.object_border import ObjectBorder
+from pyxodr.data.object_reference import ObjectReference
+from pyxodr.data.object_tunnel import ObjectTunnel
+from pyxodr.data.object_bridge import ObjectBridge
 
 from pyxodr.data.signal import Signal
 from pyxodr.data.signal_validity import Signal_Validity
@@ -620,7 +620,7 @@ class OpenDriveParser:
             material = obj.find("material")
             if material is not None:
                 att = material.attrib
-                o.material = Object_Material(
+                o.material = ObjectMaterial(
                     att["surface"]
                 )
                 if "friction" in att:
@@ -630,7 +630,7 @@ class OpenDriveParser:
 
             for validity in obj.findall("validity"):
                 att = validity.attrib
-                o.validity = Object_Validity(
+                o.validity = ObjectValidity(
                     att["fromLane"],
                     att["toLane"]
                 )
@@ -638,7 +638,7 @@ class OpenDriveParser:
             parking_space = obj.find("parkingSpace")
             if parking_space is not None:
                 att = parking_space.attrib
-                o.parking_space = Object_Parking_Space(
+                o.parking_space = ObjectParkingSpace(
                     att["access"]
                 )
                 if "restrictions" in att:
@@ -652,7 +652,7 @@ class OpenDriveParser:
             for borders in obj.findall("borders"):
                 for border in borders:
                     att = border.attrib
-                    b = Object_Border(
+                    b = ObjectBorder(
                         float(att["width"]),
                         att["type"],
                         str(att["outlineId"])
@@ -682,7 +682,7 @@ class OpenDriveParser:
     def __parse_object_repeats(self, o, repeats):
         for repeat in repeats:
             att = repeat.attrib
-            r = Object_Repeat(
+            r = ObjectRepeat(
                 float(att["s"]),
                 float(att["length"]),
                 float(att["distance"])
@@ -716,7 +716,7 @@ class OpenDriveParser:
     def __parse_object_outlines(self, o, outlines):
         for outline in outlines:
             att = outline.attrib
-            ol = Object_Outline(att["id"])
+            ol = ObjectOutline(att["id"])
             if "fillType" in att:
                 ol.attrib["fill_type"] = att["fillType"]
             if "outer" in att:
@@ -728,7 +728,7 @@ class OpenDriveParser:
 
             for corner_road in outline.findall("cornerRoad"):
                 att = corner_road.attrib
-                cr = Object_Outline_Corner_Road()
+                cr = ObjectOutlineCornerRoad()
                 if "id" in att:
                     cr.attrib["id"] = att["id"]
                 if "s" in att:
@@ -743,7 +743,7 @@ class OpenDriveParser:
 
             for corner_local in outline.findall("cornerLocal"):
                 att = corner_local.attrib
-                cl = Object_Outline_Corner_Local()
+                cl = ObjectOutlineCornerLocal()
                 if "id" in att:
                     cl.attrib["id"] = att["id"]
                 if "u" in att:
@@ -761,7 +761,7 @@ class OpenDriveParser:
     def __parse_object_markings(self, o, markings):
         for mark in markings:
             att = mark.attrib
-            m = Object_Marking()
+            m = ObjectMarking()
             if "side" in att:
                 m.attrib["side"] = att["side"]
             if "weight" in att:
@@ -790,7 +790,7 @@ class OpenDriveParser:
     def __parse_object_references(self, objs, obj_references):
         for ref in obj_references:
             att = ref.attrib
-            r = Object_Reference(
+            r = ObjectReference(
                 float(att["s"]),
                 float(att["t"]),
                 att["id"]
@@ -807,7 +807,7 @@ class OpenDriveParser:
     def __parse_object_tunnels(self, objs, tunnels):
         for tunnel in tunnels:
             att = tunnel.attrib
-            t = Object_Tunnel(
+            t = ObjectTunnel(
                 float(att["s"]),
                 float(att["length"]),
                 att["id"]
@@ -826,7 +826,7 @@ class OpenDriveParser:
     def __parse_object_bridges(self, objs, bridges):
         for bridge in bridges:
             att = bridge.attrib
-            b = Object_Bridge(
+            b = ObjectBridge(
                 float(att["s"]),
                 float(att["length"]),
                 att["id"]

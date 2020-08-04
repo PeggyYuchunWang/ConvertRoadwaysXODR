@@ -43,18 +43,18 @@ from pyxodr.data.junction_group import JunctionGroup
 
 from pyxodr.data.objects import Objects
 from pyxodr.data.object import Object
-from pyxodr.data.object_repeat import Object_Repeat
-from pyxodr.data.object_outline import Object_Outline
-from pyxodr.data.object_outline_corner_road import Object_Outline_Corner_Road
-from pyxodr.data.object_outline_corner_local import Object_Outline_Corner_Local
-from pyxodr.data.object_material import Object_Material
-from pyxodr.data.object_validity import Object_Validity
-from pyxodr.data.object_parking_space import Object_Parking_Space
-from pyxodr.data.object_marking import Object_Marking
-from pyxodr.data.object_border import Object_Border
-from pyxodr.data.object_reference import Object_Reference
-from pyxodr.data.object_tunnel import Object_Tunnel
-from pyxodr.data.object_bridge import Object_Bridge
+from pyxodr.data.object_repeat import ObjectRepeat
+from pyxodr.data.object_outline import ObjectOutline
+from pyxodr.data.object_outline_corner_road import ObjectOutlineCornerRoad
+from pyxodr.data.object_outline_corner_local import ObjectOutlineCornerLocal
+from pyxodr.data.object_material import ObjectMaterial
+from pyxodr.data.object_validity import ObjectValidity
+from pyxodr.data.object_parking_space import ObjectParkingSpace
+from pyxodr.data.object_marking import ObjectMarking
+from pyxodr.data.object_border import ObjectBorder
+from pyxodr.data.object_reference import ObjectReference
+from pyxodr.data.object_tunnel import ObjectTunnel
+from pyxodr.data.object_bridge import ObjectBridge
 
 from pyxodr.data.signal import Signal
 from pyxodr.data.signal_validity import Signal_Validity
@@ -246,10 +246,10 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(o.attrib["subtype"], "")
 
         outline = o.outlines[0]
-        self.assertIsInstance(outline, Object_Outline)
+        self.assertIsInstance(outline, ObjectOutline)
         self.assertEqual(outline.attrib["id"], "0")
         cr = outline.corner_roads[0]
-        self.assertIsInstance(cr, Object_Outline_Corner_Road)
+        self.assertIsInstance(cr, ObjectOutlineCornerRoad)
         self.assertEqual(cr.attrib["s"], 5.0)
         self.assertEqual(cr.attrib["t"], 3.5)
         self.assertEqual(cr.attrib["dz"], 0.0)
@@ -257,7 +257,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(cr.attrib["id"], "0")
 
         marking = o.markings[0]
-        self.assertIsInstance(marking, Object_Marking)
+        self.assertIsInstance(marking, ObjectMarking)
         self.assertEqual(marking.attrib["width"], 0.1)
         self.assertEqual(marking.attrib["color"], "white")
         self.assertEqual(marking.attrib["z_offset"], 0.005)

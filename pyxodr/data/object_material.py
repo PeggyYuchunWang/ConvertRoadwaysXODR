@@ -1,4 +1,4 @@
-class Object_Material:
+class ObjectMaterial:
     """
     Defines the material of an object.
 

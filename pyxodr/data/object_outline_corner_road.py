@@ -1,14 +1,14 @@
-class Object_Outline_Corner_Road:
+class ObjectOutlineCornerRoad:
     """
     Decribes non-linear forms of an objects. Mutually exclusive with
-    Object_Outline_Corner_Local elements.
+    ObjectOutlineCornerLocal elements.
 
-    Found within an Object_Outline element.
+    Found within an ObjectOutline element.
 
     Parameters
     ----------
     id : str
-        ID of the corner. Unique within on Object_Outline element.
+        ID of the corner. Unique within on ObjectOutline element.
     s : float
         s-coordinate of the corner.
     t : float
