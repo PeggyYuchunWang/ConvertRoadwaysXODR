@@ -88,6 +88,14 @@ from pyxodr.data.station_platform_segment import Station_Platform_Segment
 
 
 class OpenDriveParser:
+    """
+    Parser for OpenDrive that will store all content in the PyXODR data object.
+
+    Attributes
+    ----------
+    data : Open_Drive_Framework
+        The data container for the contents from an OpenDrive XML.
+    """
     def __init__(self):
         self.data = odf.Open_Drive_Framework()
         self.parse_curves = False
@@ -95,6 +103,16 @@ class OpenDriveParser:
 
     def parse_file(self, filename="test_data/carlaExs/Town02.xodr",
                    parse_curves=False):
+        """
+        Parses an xml file, written using the OpenDrive standard, and stores
+        its contents in the parser's data object.
+
+        Parameters
+        ----------
+        filename : str, optional
+            The filename to parse. Accepts absolute path or relative path where
+            code was called.
+        """
         print("parsing: ", filename)
         root = ET.parse(filename).getroot()
         self.parse_curves = parse_curves
@@ -320,11 +338,16 @@ class OpenDriveParser:
                     )
                 elif child.tag == "paramPoly3":
                     att = child.attrib
-                    geo.type = Param_Poly3(att["pRange"], float(att["aU"]),
-                                float(att["bU"]), float(att["cU"]),
-                                float(att["dU"]), float(att["aV"]),
-                                float(att["bV"]), float(att["cV"]),
-                                float(att["dV"])
+                    geo.type = Param_Poly3(
+                        att["pRange"],
+                        float(att["aU"]),
+                        float(att["bU"]),
+                        float(att["cU"]),
+                        float(att["dU"]),
+                        float(att["aV"]),
+                        float(att["bV"]),
+                        float(att["cV"]),
+                        float(att["dV"])
                     )
                 else:
                     print("unkown geometry child tag: ", child.tag)
@@ -647,7 +670,9 @@ class OpenDriveParser:
                     att["access"]
                 )
                 if "restrictions" in att:
-                    o.parking_space.attrib["restrictions"] = att["restrictions"]
+                    o.parking_space.attrib["restrictions"] = att[
+                        "restrictions"
+                    ]
 
             if obj.find("markings") is not None:
                 self.__parse_object_markings(o, obj.find("markings"))
@@ -1068,7 +1093,7 @@ class OpenDriveParser:
             if "type" in att:
                 c.attrib["type"] = att["type"]
             if "sequence" in att:
-                c.attrib["sequence"] = att["sequence"]    
+                c.attrib["sequence"] = att["sequence"]
             j.controllers.append(c)
 
         framework.junctions[j.attrib["id"]] = j

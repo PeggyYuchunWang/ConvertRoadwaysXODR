@@ -11,9 +11,9 @@
 
 `test_data/` - Test Data Folder
 
-`src/open_drive_roadways.py` - OpenDrive Classes
+`pyxodr/data/*` - OpenDrive Data Classes
 
-`src/open_drive_parser.py` - Main Parser Class
+`pyxodr/parser/open_drive_parser.py` - Main Parser Class
 
 `tests/` - Unit Tests Folder
 
