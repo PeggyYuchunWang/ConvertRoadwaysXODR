@@ -57,12 +57,12 @@ from pyxodr.data.object_tunnel import ObjectTunnel
 from pyxodr.data.object_bridge import ObjectBridge
 
 from pyxodr.data.signal import Signal
-from pyxodr.data.signal_validity import Signal_Validity
-from pyxodr.data.signal_dependency import Signal_Dependency
-from pyxodr.data.signal_reference import Signal_Reference
-from pyxodr.data.signal_position_inertial import Signal_Position_Inertial
-from pyxodr.data.signal_position_road import Signal_Position_Road
-from pyxodr.data.signal_repeat import Signal_Repeat
+from pyxodr.data.signal_validity import SignalValidity
+from pyxodr.data.signal_dependency import SignalDependency
+from pyxodr.data.signal_reference import SignalReference
+from pyxodr.data.signal_position_inertial import SignalPositionInertial
+from pyxodr.data.signal_position_road import SignalPositionRoad
+from pyxodr.data.signal_repeat import SignalRepeat
 
 from pyxodr.data.controller import Controller
 from pyxodr.data.controller_signal_control import ControllerSignalControl

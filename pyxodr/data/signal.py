@@ -56,22 +56,22 @@ class Signal:
     attrib : dict
          Attributes dictionary for the parameters specified above.
     validity_records : list
-        List of Signal_Validity elements that allow for default validity of a
+        List of SignalValidity elements that allow for default validity of a
         signal to be replaced with explicit validity information.
     dependency_records : list
-        List of Signal_Dependency elements that allows a signal to control one
+        List of SignalDependency elements that allows a signal to control one
         or more other signals.
     references : list
-        List of Signal_Reference elements that link a signal to a series of
+        List of SignalReference elements that link a signal to a series of
         other elements.
-    position_inertial : Signal_Position_Inertial
+    position_inertial : SignalPositionInertial
         Object to describe the physical position in inertial coordinates.
         Mutually exclusive with position_road.
-    position_road: Signal_Position_Road
+    position_road: SignalPositionRoad
         Object to describe the physical position in road coordinates. Mutually
         exclusive with position_inertial.
     repeats : list
-        List of Signal_Repeat elements which allows the same type of signal to
+        List of SignalRepeat elements which allows the same type of signal to
         be reference by multiple roads.
     """
     def __init__(

@@ -1,4 +1,4 @@
-class Signal_Reference:
+class SignalReference:
     """
     Provides a mean to link a signal to a series of other elements.
 

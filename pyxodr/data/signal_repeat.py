@@ -1,9 +1,9 @@
-class Signal_Repeat:
+class SignalRepeat:
     """
     Offers the ability to copy signal information between signals by
     referencing the content. Represented in OpenDRIVE by a <signalReference>
-    element. However, it was chosen to change the name to Signal_Repeat to
-    reduce confusion between this data type and a Signal_Reference element,
+    element. However, it was chosen to change the name to SignalRepeat to
+    reduce confusion between this data type and a SignalReference element,
     which is also found in a Signal element.
 
     Found within a Signal element.

@@ -1,4 +1,4 @@
-class Signal_Dependency:
+class SignalDependency:
     """
     Allows a signal to control one or more other signals.
 

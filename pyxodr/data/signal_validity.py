@@ -1,4 +1,4 @@
-class Signal_Validity:
+class SignalValidity:
     """
     Allows for default validity of a signal to be replaced with explicit
     validity information.
