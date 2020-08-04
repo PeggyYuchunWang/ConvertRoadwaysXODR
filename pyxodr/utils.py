@@ -1,3 +1,7 @@
+import math
+from pyxodr.data.curve import Curve
+
+
 def convertStringToBool(boolean_str):
     """
     Converts a string from OpenDrive's string representation of a Boolean to a

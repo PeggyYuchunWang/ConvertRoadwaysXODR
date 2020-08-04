@@ -112,6 +112,9 @@ class OpenDriveParser:
         filename : str, optional
             The filename to parse. Accepts absolute path or relative path where
             code was called.
+        parse_curves : bool
+            Flag used to specify whether the parser should populate the curves
+            attribute. Default is False.
         """
         print("parsing: ", filename)
         root = ET.parse(filename).getroot()
