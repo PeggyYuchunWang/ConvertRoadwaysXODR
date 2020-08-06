@@ -52,12 +52,19 @@ class Curve:
 
     Attributes
     ----------
-    
+    curve_points : list
+        A list of CurvePt elements that make up the curve of a lane.
     """
     def __init__(self, start=[0.0, 0.0], end=[0.0, 0.0], nsamples=2) -> None:
         self.curve_points = self.populate_curve_points(start, end, nsamples)
 
     def populate_curve_points(self, start, end, nsamples):
+        """
+        Populates a list with @nsamples CurvePt elements that
+        describe the curve of a lane.
+        If @start and @end are the same, returns an empty list.
+        Otherwise, returns a list of CurvePt elements.
+        """
         if start == end:
             # invalid start/end points. Return empty list
             return []
@@ -68,12 +75,11 @@ class Curve:
 
         s = 0.0
         curve = [CurvePt] * nsamples
-        for i in range(nsamples):
+        for i in range(1, nsamples+1):
             t = (i-1)/(nsamples-1)
             P_x = start[0] + (end[0]-start[0])*t
             P_y = start[1] + (end[1]-start[1])*t
-            curve[i] = CurvePt([P_x, P_y], theta, s, 0.0)
+            curve[i-1] = CurvePt([P_x, P_y], theta, s, 0.0)
             s += delta
 
         return curve
-    

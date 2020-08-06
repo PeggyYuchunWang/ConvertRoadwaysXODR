@@ -267,10 +267,11 @@ class OpenDriveParser:
         for geo in road.plan_view:
             lane_sections = road.lanes.lane_sections
             for ls in lane_sections:
-                if ls.attrib["s"] < geo.attrib["s"] + geo.attrib["length"]:
+                if ls.attrib["s"] <= geo.attrib["s"] + geo.attrib["length"]:
                     # found a lane_section for which current Geometry element
                     # is applicable
-                    for i, side in enumerate([ls.left_lanes, ls.right_lanes]):  # [ls.center_lane]]):
+                    for i, side in enumerate([ls.left_lanes, ls.right_lanes]):  
+                        # [ls.center_lane]]):
                         # step through each lane
                         for lane in side:
                             key, curve = utils.createCurve(

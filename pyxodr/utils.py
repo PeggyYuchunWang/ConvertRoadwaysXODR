@@ -38,23 +38,23 @@ def createCurveLine(road, lane_section_id, lane, geometry):
     tag = (road.attrib["id"], lane_section_id, lane.attrib["id"])
     curve = None
 
+    width = 4.0  # default width
     if lane.width is not None:
-        width = lane.width.attrib["a"]/2.0
-    else:
-        # default width
-        width = 4.0
-
+        width = lane.width.attrib["a"]
+    
     length = road.attrib["length"]
     heading = geometry.attrib["hdg"]
     x1 = geometry.attrib["x"]
-    x2 = geometry.attrib["x"] + length*math.cos(heading)
+    x2 = geometry.attrib["x"] + length * math.cos(heading)
+
+    # y_offset = (lane.attrib["id"] * width) + (width / 2.0)
     y1 = geometry.attrib["y"]
-    y2 = geometry.attrib["y"] + length*math.sin(heading)
-    dx = width*math.sin(heading)
-    dy = width*math.cos(heading)
+    y2 = geometry.attrib["y"] + length * math.sin(heading)
+    dx = ((width * float(lane.attrib["id"])) * math.sin(heading))
+    dy = ((width * float(lane.attrib["id"])) * math.cos(heading)) + (width / 2.0)
     curve = Curve(
         [x1 + dx, -(y1 + dy)],
         [x2 + dx, -(y2 + dy)],
-        10
+        2
     )
     return tag, curve

@@ -80,7 +80,7 @@ from pyxodr.data.station_platform_segment import Station_Platform_Segment
 class ParserTests(unittest.TestCase):
     def setUp(self):
         self.parser = OpenDriveParser()
-        self.parser.parse_file(filename="test_data/OpenDriveExs/Ex_Compilation.xodr", parse_curves=True)
+        self.parser.parse_file(filename="test_data/OpenDriveExs/straight_road.xodr", parse_curves=True)
 
     def tearDown(self):
         self.parser = None
@@ -125,14 +125,23 @@ class ParserTests(unittest.TestCase):
 
             e = road.elevation_profile[0]
             self.assertIsInstance(e, Elevation)
-            self.assertEqual(e.attrib["s"],0)
-            self.assertEqual(e.attrib["a"],0)
-            self.assertEqual(e.attrib["b"],0)
-            self.assertEqual(e.attrib["c"],0)
-            self.assertEqual(e.attrib["d"],0)
+            self.assertEqual(e.attrib["s"], 0)
+            self.assertEqual(e.attrib["a"], 0)
+            self.assertEqual(e.attrib["b"], 0)
+            self.assertEqual(e.attrib["c"], 0)
+            self.assertEqual(e.attrib["d"], 0)
 
             self.assertIsNone(road.lateral_profile.super_elevation)
             self.assertEqual(len(road.lateral_profile.shapes), 0)
+
+    def test_curves(self):
+        print()
+        # for key in self.parser.curves:
+        #     print()
+        #     curve = self.parser.curves[key]
+        #     print(key)
+        #     for cp in curve.curve_points:
+        #         print(cp.pos)
 
     def test_lanes(self):
         for key in self.parser.data.roads:
