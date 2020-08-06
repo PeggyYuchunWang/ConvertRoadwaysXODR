@@ -134,13 +134,28 @@ class ParserTests(unittest.TestCase):
             self.assertIsNone(road.lateral_profile.super_elevation)
             self.assertEqual(len(road.lateral_profile.shapes), 0)
 
-    def test_curves(self):
-        for key in self.parser.curves:
+    def test_curves(self, do_print=True):
+        if do_print:
             print()
+            print("(road_id, lane_section_id, lane_id)")
+            print(" CurvePt 1")
+            print(" ...")
+            print(" CurvePt nsamples")
+        for key in self.parser.curves:
             curve = self.parser.curves[key]
-            print(key)
-            for cp in curve.curve_points:
-                print(cp.pos)
+            if do_print:
+                print()
+                print(key)
+                for cp in curve.curve_points:
+                    print(cp.pos)
+        
+        key = ("1", 0, -1)
+        self.assertEqual(self.parser.curves[key].curve_points[0].pos, [0.0, 3.0])
+        self.assertEqual(self.parser.curves[key].curve_points[1].pos, [2000.0, 3.0])
+
+        key = ("1", 0, -2)
+        self.assertEqual(self.parser.curves[key].curve_points[0].pos, [0.0, 9.0])
+        self.assertEqual(self.parser.curves[key].curve_points[1].pos, [2000.0, 9.0])
 
     def test_lanes(self):
         for key in self.parser.data.roads:

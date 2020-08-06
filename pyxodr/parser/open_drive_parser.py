@@ -266,11 +266,9 @@ class OpenDriveParser:
     def __parse_curves(self, road):
         nsamples = 2
         for geo in road.plan_view:
-            lane_sections = road.lanes.lane_sections
-            for lane_section in lane_sections:
-                if ((lane_section.attrib["s"] >= geo.attrib["s"]) and
-                    (lane_section.attrib["s"] <= geo.attrib["s"]
-                     + geo.attrib["length"])):
+            for lane_section in road.lanes.lane_sections:
+                if (geo.attrib["s"] <= lane_section.attrib["s"]
+                   < geo.attrib["s"] + geo.attrib["length"]):
                     # found a lane_section for which current Geometry element
                     # is applicable
                     ls_curves = utils.createCurves(road,
@@ -398,11 +396,11 @@ class OpenDriveParser:
             )
             output.lane_offset = offset
 
-        self.__parse_lane_sections(output, lanes, lanes.findall("laneSection"))
+        self.__parse_lane_sections(output, lanes.findall("laneSection"))
 
         return output
 
-    def __parse_lane_sections(self, output, lanes, laneSection):
+    def __parse_lane_sections(self, output, laneSection):
         for ls in laneSection:
             att = ls.attrib
             section = Lane_Section(float(att["s"]))
@@ -411,9 +409,9 @@ class OpenDriveParser:
                     att["singleSide"]
                 )
 
-            left = lanes.findall("laneSection/left/lane")
-            right = lanes.findall("laneSection/right/lane")
-            center = lanes.findall("laneSection/center/lane")
+            left = ls.findall("left/lane")
+            right = ls.findall("right/lane")
+            center = ls.findall("center/lane")
             for i, side in enumerate([left, right, center]):
                 for l in side:
                     att = l.attrib
