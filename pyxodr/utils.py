@@ -25,36 +25,68 @@ def convertStringToBool(boolean_str):
         return True
 
 
-def createCurve(road, lane_section_id, lane, geometry):
+def createCurves(road, lane_section, geometry, nsamples):
+    """
+    Given a road, lane_section and a geometry, steps through all of
+    the corresponding lanes and populates a dict with
+    (road_id, lane_section_id, lane_id) keys and Curve element values.
+    Returns None type if geometry is of an unimplemented type.
+    """
     if geometry.type is None:
         # a line
-        return createCurveLine(road, lane_section_id, lane, geometry)
+        curves = {}
+        lane_section_id = road.lanes.lane_sections.index(lane_section)
+
+        for i, side in enumerate([lane_section.left_lanes,
+                                  lane_section.right_lanes]):
+            previous_y = 0
+            # step through each lane
+            for lane in side:
+                tag = (road.attrib["id"], lane_section_id, lane.attrib["id"])
+                previous_y, c = createCurveLine(road,
+                                                lane,
+                                                geometry,
+                                                previous_y, nsamples)
+                if c is not None:
+                    curves[tag] = c
+
+        return curves
 
     # invalid geometry type
-    return None, None
+    return None
 
 
-def createCurveLine(road, lane_section_id, lane, geometry):
-    tag = (road.attrib["id"], lane_section_id, lane.attrib["id"])
+def createCurveLine(road, lane, geometry, previous_y, nsamples):
+    """
+    Creates a Curve element with the properties of @geometry and @lane.
+    Uses @previous_y to recognize the y position of the lane with the
+    preceeding id value (allows for lanes with different widths within
+    the same lane_section_id). Returns a Curve element.
+    """
     curve = None
 
     width = 4.0  # default width
     if lane.width is not None:
         width = lane.width.attrib["a"]
-    
+
     length = road.attrib["length"]
     heading = geometry.attrib["hdg"]
     x1 = geometry.attrib["x"]
     x2 = geometry.attrib["x"] + length * math.cos(heading)
 
-    # y_offset = (lane.attrib["id"] * width) + (width / 2.0)
-    y1 = geometry.attrib["y"]
-    y2 = geometry.attrib["y"] + length * math.sin(heading)
-    dx = ((width * float(lane.attrib["id"])) * math.sin(heading))
-    dy = ((width * float(lane.attrib["id"])) * math.cos(heading)) + (width / 2.0)
+    y1 = geometry.attrib["y"] + previous_y
+    y2 = y1 + length * math.sin(heading)
+
+    dx = ((width * lane.attrib["id"]) * math.sin(heading))
+    dy = (((width/2.0) * math.cos(heading)) *
+          math.copysign(1.0, lane.attrib["id"]))
+
     curve = Curve(
         [x1 + dx, -(y1 + dy)],
         [x2 + dx, -(y2 + dy)],
-        2
+        nsamples
     )
-    return tag, curve
+
+    previous_y = y1 + math.copysign(width, float(lane.attrib["id"]))
+
+    return previous_y, curve

@@ -264,23 +264,20 @@ class OpenDriveParser:
         framework.roads[r.attrib["id"]] = r
 
     def __parse_curves(self, road):
+        nsamples = 2
         for geo in road.plan_view:
             lane_sections = road.lanes.lane_sections
-            for ls in lane_sections:
-                if ls.attrib["s"] <= geo.attrib["s"] + geo.attrib["length"]:
+            for lane_section in lane_sections:
+                if ((lane_section.attrib["s"] >= geo.attrib["s"]) and
+                    (lane_section.attrib["s"] <= geo.attrib["s"]
+                     + geo.attrib["length"])):
                     # found a lane_section for which current Geometry element
                     # is applicable
-                    for i, side in enumerate([ls.left_lanes, ls.right_lanes]):  
-                        # [ls.center_lane]]):
-                        # step through each lane
-                        for lane in side:
-                            key, curve = utils.createCurve(
-                                road,
-                                lane_sections.index(ls),
-                                lane,
-                                geo)
-                            if key is not None:
-                                self.curves[key] = curve
+                    ls_curves = utils.createCurves(road,
+                                                   lane_section,
+                                                   geo, nsamples)
+                    if ls_curves is not None:
+                        self.curves.update(ls_curves)
 
     def __parse_road_predecessor_and_successor(self, r, pred, succ):
         if pred is not None:

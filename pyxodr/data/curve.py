@@ -47,7 +47,7 @@ class Curve:
     end : list
         Global (x,y) ending position of the lane within a two element list.
     nsamples : int
-        Number of CurvePt elements to describe the curve. Default is 2: the 
+        Number of CurvePt elements to describe the curve. Default is 2: the
         start and end CurvePt elements.
 
     Attributes

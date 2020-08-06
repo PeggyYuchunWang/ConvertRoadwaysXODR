@@ -135,13 +135,12 @@ class ParserTests(unittest.TestCase):
             self.assertEqual(len(road.lateral_profile.shapes), 0)
 
     def test_curves(self):
-        print()
-        # for key in self.parser.curves:
-        #     print()
-        #     curve = self.parser.curves[key]
-        #     print(key)
-        #     for cp in curve.curve_points:
-        #         print(cp.pos)
+        for key in self.parser.curves:
+            print()
+            curve = self.parser.curves[key]
+            print(key)
+            for cp in curve.curve_points:
+                print(cp.pos)
 
     def test_lanes(self):
         for key in self.parser.data.roads:
