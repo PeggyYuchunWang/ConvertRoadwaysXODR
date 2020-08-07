@@ -1,4 +1,4 @@
-class Object_Repeat:
+class ObjectRepeat:
     """
     Describes a repeated instance of an object. The attributes of the repeated
     object may be changed.

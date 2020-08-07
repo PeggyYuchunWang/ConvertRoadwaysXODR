@@ -1,8 +1,8 @@
-class Station_Platform_Segment:
+class StationPlatformSegment:
     """
     Defines which track segments a station platform is valid.
 
-    Found within a Station_Platform element.
+    Found within a StationPlatform element.
 
     Parameters
     ----------

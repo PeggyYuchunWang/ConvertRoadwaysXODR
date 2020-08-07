@@ -49,23 +49,23 @@ class Object:
     attrib : dict
          Attributes dictionary for the parameters specified above.
     repeats : list
-        List of Object_Repeat elements that describe repeated instances
+        List of ObjectRepeat elements that describe repeated instances
         of this object. The attributes of these repeated objects may be
         different from this original object.
     outlines : list
-        List of Object_Outline elements that describe the outline of objects
+        List of ObjectOutline elements that describe the outline of objects
         that describe a series of corner points.
-    material : Object_Material
+    material : ObjectMaterial
         Object to describe the material of the object.
-    validity : Object_Validity
+    validity : ObjectValidity
         Object to define the validity of the object for certain lanes.
-    parking_space : Object_Parking_Space
+    parking_space : ObjectParkingSpace
         Object initialized if the object is of a special type: parking space.
     markings : list
-        List of Object_Markings elements to allow for the description of the
+        List of ObjectMarkings elements to allow for the description of the
         appearance of an object via multiple marking elements.
     borders : list
-        list of Object_Border elements to specify a border along certain
+        list of ObjectBorder elements to specify a border along certain
         outline points.
     """
     def __init__(

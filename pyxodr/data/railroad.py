@@ -7,7 +7,7 @@ class Railroad:
     Attributes
     ----------
     switches : dict
-        Dictionary of Railroad_Switch elements found along the specified road.
+        Dictionary of RailroadSwitch elements found along the specified road.
     """
     def __init__(self) -> None:
         self.switches = {}

@@ -1,4 +1,4 @@
-class Lane_Material:
+class LaneMaterial:
     """
     Defines the surface, friction and roughness of the material of a lane.
 
@@ -8,7 +8,7 @@ class Lane_Material:
     ----------
     s_offset: float
         Start position (s-coordinate) relative to the position of the preceding
-        Lane_Section element.
+        LaneSection element.
     friction : float
         Friction value.
     surface : str

@@ -1,4 +1,4 @@
-class Signal_Position_Road:
+class SignalPositionRoad:
     """
     Describes the reference point of the physical position in road coordinates
     in cases where it deviates from the logical position.

@@ -9,7 +9,7 @@ class Lane:
     If linkage between lanes is ambiguous, junctions must be used.
     Otherwise, specify the predecessor ID / successor ID for the Lane.
 
-    Found within a Lane_Section element.
+    Found within a LaneSection element.
 
     Parameters
     ----------
@@ -30,26 +30,26 @@ class Lane:
         ID of preceding lane.
     successor_id : int
         ID of succeeding lane.
-    width : Lane_Width
+    width : LaneWidth
         Object to describe the width of a lane defined along the
         t-coordinate.
-    border : Lane_Border
+    border : LaneBorder
         Object to describe the outer limits of a lane, independent
         of the parameters of their inner borders.
-    road_mark : Road_Mark
+    road_mark : RoadMark
         Object to provide detailed information about road marking
         types and lines.
-    material : Lane_Material
+    material : LaneMaterial
         Object to describe the material of the lane.
-    visibility : Lane_Visibility
+    visibility : LaneVisibility
         Object to describe the visibility in four directions relative
         to the lane's direction.
-    speed : Lane_Speed
+    speed : LaneSpeed
         Object to define the maximum allowed speed.
-    access : Lane_Access
+    access : LaneAccess
         Object to define access restrictions for certain types of
         road users.
-    rule : Lane_Rule
+    rule : LaneRule
         Object to provide further description on lane properties which are
         not covered by any of the other lane attributes defined within
         this framework.

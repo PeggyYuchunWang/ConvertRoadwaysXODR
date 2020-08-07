@@ -1,8 +1,8 @@
-class Road_Speed:
+class RoadSpeed:
     """
         Defines the maximum speed allowed on a road.
 
-        Found within a Road_Type element.
+        Found within a RoadType element.
 
         Parameters
         ----------

@@ -17,7 +17,7 @@ class Controller:
     attrib : dict
          Attributes dictionary for the parameters specified above.
     signal_control_records : list
-        List of Controller_Signal_Control element types.
+        List of ControllerSignalControl element types.
     """
     def __init__(self, id="", sequence="", name="") -> None:
         self.attrib = {

@@ -1,4 +1,4 @@
-class Road_Predecessor_Successor:
+class RoadPredecessorSuccessor:
     """
     Represents the linkage between a road and its predecessor or its successor.
 

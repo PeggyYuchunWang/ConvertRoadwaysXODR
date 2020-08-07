@@ -1,4 +1,4 @@
-class Object_Parking_Space:
+class ObjectParkingSpace:
     """
     Details for a parking space object.
 

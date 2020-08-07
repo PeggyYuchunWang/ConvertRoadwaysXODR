@@ -1,4 +1,4 @@
-class Param_Poly3:
+class ParamPoly3:
     """
     Describes a part of a road's reference line as a parametric cubic curve.
 

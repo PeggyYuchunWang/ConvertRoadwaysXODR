@@ -1,4 +1,4 @@
-class Object_Validity:
+class ObjectValidity:
     """
     Defines an object's validity with respect to the ID of certain lanes.
 

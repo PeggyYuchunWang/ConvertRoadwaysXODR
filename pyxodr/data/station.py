@@ -18,7 +18,7 @@ class Station:
     attrib : dict
         Attributes dictionary for the parameters specified above.
     platforms : list
-        List of Station_Platform elements that describe the platforms that make
+        List of StationPlatform elements that describe the platforms that make
         up the specified station.
     """
     def __init__(

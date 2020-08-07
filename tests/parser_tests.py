@@ -3,78 +3,78 @@ import unittest
 from pyxodr.parser.open_drive_parser import OpenDriveParser
 
 from pyxodr.data.header import Header
-from pyxodr.data.geo_reference import Geo_Reference
+from pyxodr.data.geo_reference import GeoReference
 from pyxodr.data.offset import Offset
 from pyxodr.data.road import Road
-from pyxodr.data.road_predecessor_successor import Road_Predecessor_Successor
-from pyxodr.data.road_type import Road_Type
-from pyxodr.data.road_speed import Road_Speed
+from pyxodr.data.road_predecessor_successor import RoadPredecessorSuccessor
+from pyxodr.data.road_type import RoadType
+from pyxodr.data.road_speed import RoadSpeed
 from pyxodr.data.geometry import Geometry
 from pyxodr.data.spiral import Spiral
 from pyxodr.data.arc import Arc
 from pyxodr.data.poly3 import Poly3
-from pyxodr.data.param_poly3 import Param_Poly3
+from pyxodr.data.param_poly3 import ParamPoly3
 from pyxodr.data.elevation import Elevation
 
-from pyxodr.data.lateral_profile import Lateral_Profile
-from pyxodr.data.lateral_profile_superelevation import Lateral_Profile_Superelevation
-from pyxodr.data.lateral_profile_shape import Lateral_Profile_Shape
+from pyxodr.data.lateral_profile import LateralProfile
+from pyxodr.data.lateral_profile_superelevation import LateralProfileSuperelevation
+from pyxodr.data.lateral_profile_shape import LateralProfileShape
 
 from pyxodr.data.lanes import Lanes
-from pyxodr.data.lane_offset import Lane_Offset
-from pyxodr.data.lane_section import Lane_Section
+from pyxodr.data.lane_offset import LaneOffset
+from pyxodr.data.lane_section import LaneSection
 from pyxodr.data.lane import Lane
-from pyxodr.data.lane_width import Lane_Width
-from pyxodr.data.lane_height import Lane_Height
-from pyxodr.data.lane_border import Lane_Border
+from pyxodr.data.lane_width import LaneWidth
+from pyxodr.data.lane_height import LaneHeight
+from pyxodr.data.lane_border import LaneBorder
 
-from pyxodr.data.road_mark import Road_Mark
-from pyxodr.data.road_mark_type import Road_Mark_Type
-from pyxodr.data.road_mark_line import Road_Mark_Line
+from pyxodr.data.road_mark import RoadMark
+from pyxodr.data.road_mark_type import RoadMarkType
+from pyxodr.data.road_mark_line import RoadMarkLine
 
 from pyxodr.data.junction import Junction
-from pyxodr.data.junction_connection import Junction_Connection
-from pyxodr.data.junction_lane_link import Junction_Lane_Link
-from pyxodr.data.junction_priority import Junction_Priority
-from pyxodr.data.junction_predecessor_successor import Junction_Predecessor_Successor
-from pyxodr.data.junction_controller import Junction_Controller
+from pyxodr.data.junction_connection import JunctionConnection
+from pyxodr.data.junction_lane_link import JunctionLaneLink
+from pyxodr.data.junction_priority import JunctionPriority
+from pyxodr.data.junction_predecessor_successor import JunctionPredecessorSuccessor
+from pyxodr.data.junction_controller import JunctionController
 
-from pyxodr.data.junction_group import Junction_Group
+from pyxodr.data.junction_group import JunctionGroup
 
 from pyxodr.data.objects import Objects
 from pyxodr.data.object import Object
-from pyxodr.data.object_repeat import Object_Repeat
-from pyxodr.data.object_outline import Object_Outline
-from pyxodr.data.object_outline_corner_road import Object_Outline_Corner_Road
-from pyxodr.data.object_outline_corner_local import Object_Outline_Corner_Local
-from pyxodr.data.object_material import Object_Material
-from pyxodr.data.object_validity import Object_Validity
-from pyxodr.data.object_parking_space import Object_Parking_Space
-from pyxodr.data.object_marking import Object_Marking
-from pyxodr.data.object_border import Object_Border
-from pyxodr.data.object_reference import Object_Reference
-from pyxodr.data.object_tunnel import Object_Tunnel
-from pyxodr.data.object_bridge import Object_Bridge
+from pyxodr.data.object_repeat import ObjectRepeat
+from pyxodr.data.object_outline import ObjectOutline
+from pyxodr.data.object_outline_corner_road import ObjectOutlineCornerRoad
+from pyxodr.data.object_outline_corner_local import ObjectOutlineCornerLocal
+from pyxodr.data.object_material import ObjectMaterial
+from pyxodr.data.object_validity import ObjectValidity
+from pyxodr.data.object_parking_space import ObjectParkingSpace
+from pyxodr.data.object_marking import ObjectMarking
+from pyxodr.data.object_border import ObjectBorder
+from pyxodr.data.object_reference import ObjectReference
+from pyxodr.data.object_tunnel import ObjectTunnel
+from pyxodr.data.object_bridge import ObjectBridge
 
 from pyxodr.data.signal import Signal
-from pyxodr.data.signal_validity import Signal_Validity
-from pyxodr.data.signal_dependency import Signal_Dependency
-from pyxodr.data.signal_reference import Signal_Reference
-from pyxodr.data.signal_position_inertial import Signal_Position_Inertial
-from pyxodr.data.signal_position_road import Signal_Position_Road
-from pyxodr.data.signal_repeat import Signal_Repeat
+from pyxodr.data.signal_validity import SignalValidity
+from pyxodr.data.signal_dependency import SignalDependency
+from pyxodr.data.signal_reference import SignalReference
+from pyxodr.data.signal_position_inertial import SignalPositionInertial
+from pyxodr.data.signal_position_road import SignalPositionRoad
+from pyxodr.data.signal_repeat import SignalRepeat
 
 from pyxodr.data.controller import Controller
-from pyxodr.data.controller_signal_control import Controller_Signal_Control
+from pyxodr.data.controller_signal_control import ControllerSignalControl
 
 from pyxodr.data.railroad import Railroad
-from pyxodr.data.railroad_switch import Railroad_Switch
-from pyxodr.data.railroad_track import Railroad_Track
-from pyxodr.data.railroad_switch_partner import Railroad_Switch_Partner
+from pyxodr.data.railroad_switch import RailroadSwitch
+from pyxodr.data.railroad_track import RailroadTrack
+from pyxodr.data.railroad_switch_partner import RailroadSwitchPartner
 
 from pyxodr.data.station import Station
-from pyxodr.data.station_platform import Station_Platform
-from pyxodr.data.station_platform_segment import Station_Platform_Segment
+from pyxodr.data.station_platform import StationPlatform
+from pyxodr.data.station_platform_segment import StationPlatformSegment
 
 
 class ParserTests(unittest.TestCase):
@@ -176,14 +176,14 @@ class ParserTests(unittest.TestCase):
             self.assertEqual(ll.attrib["type"],"sidewalk")
             self.assertEqual(ll.attrib["level"],False)
 
-            self.assertIsInstance(ll.width, Lane_Width)
+            self.assertIsInstance(ll.width, LaneWidth)
             self.assertEqual(ll.width.attrib["s_offset"],0)
             self.assertEqual(ll.width.attrib["a"],3.0000000000000000e+00)
             self.assertEqual(ll.width.attrib["b"],0)
             self.assertEqual(ll.width.attrib["c"],0)
             self.assertEqual(ll.width.attrib["d"],0)
 
-            self.assertIsInstance(ll.height, Lane_Height)
+            self.assertIsInstance(ll.height, LaneHeight)
             self.assertEqual(ll.height.attrib["s_offset"],0)
             self.assertEqual(ll.height.attrib["inner"],1.2000000000000000e-01)
             self.assertEqual(ll.height.attrib["outer"],1.2000000000000000e-01)
@@ -203,7 +203,7 @@ class ParserTests(unittest.TestCase):
             self.assertEqual(ll.attrib["type"],"driving")
             self.assertEqual(ll.attrib["level"],False)
 
-            self.assertIsInstance(ll.width, Lane_Width)
+            self.assertIsInstance(ll.width, LaneWidth)
             self.assertEqual(ll.width.attrib["s_offset"],0)
             self.assertEqual(ll.width.attrib["a"],3.2500000000000000e+00)
             self.assertEqual(ll.width.attrib["b"],0)
@@ -269,10 +269,10 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(o.attrib["subtype"], "")
 
         outline = o.outlines[0]
-        self.assertIsInstance(outline, Object_Outline)
+        self.assertIsInstance(outline, ObjectOutline)
         self.assertEqual(outline.attrib["id"], "0")
         cr = outline.corner_roads[0]
-        self.assertIsInstance(cr, Object_Outline_Corner_Road)
+        self.assertIsInstance(cr, ObjectOutlineCornerRoad)
         self.assertEqual(cr.attrib["s"], 5.0)
         self.assertEqual(cr.attrib["t"], 3.5)
         self.assertEqual(cr.attrib["dz"], 0.0)
@@ -280,7 +280,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(cr.attrib["id"], "0")
 
         marking = o.markings[0]
-        self.assertIsInstance(marking, Object_Marking)
+        self.assertIsInstance(marking, ObjectMarking)
         self.assertEqual(marking.attrib["width"], 0.1)
         self.assertEqual(marking.attrib["color"], "white")
         self.assertEqual(marking.attrib["z_offset"], 0.005)
@@ -321,7 +321,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(c.attrib["id"], "1")
         self.assertEqual(c.attrib["name"], "ctrl001")
         sc = c.signal_control_records[0]
-        self.assertIsInstance(sc, Controller_Signal_Control)
+        self.assertIsInstance(sc, ControllerSignalControl)
         self.assertEqual(sc.attrib["signal_id"], "8")
         self.assertEqual(sc.attrib["type"], "0")
 
@@ -330,26 +330,26 @@ class ParserTests(unittest.TestCase):
         self.assertIsInstance(r, Railroad)
 
         s = r.switches["32"]
-        self.assertIsInstance(s, Railroad_Switch)
+        self.assertIsInstance(s, RailroadSwitch)
         self.assertEqual(s.attrib["position"], "dynamic")
         self.assertEqual(s.attrib["id"], "1")
         self.assertEqual(s.attrib["name"], "Switch32")
 
 
         mt = r.main_track
-        self.assertIsInstance(mt, Railroad_Track)
+        self.assertIsInstance(mt, RailroadTrack)
         self.assertEqual(mt.attrib["id"], "3")
         self.assertEqual(mt.attrib["s"], 1.0000000000000000e+01)
         self.assertEqual(mt.attrib["dir"], "+")
 
         st = r.side_track
-        self.assertIsInstance(st, Railroad_Track)
+        self.assertIsInstance(st, RailroadTrack)
         self.assertEqual(mt.attrib["id"], "2")
         self.assertEqual(mt.attrib["s"], 3.4898261533109149e+01)
         self.assertEqual(mt.attrib["dir"], "-")
 
         ps = r.switch_parter
-        self.assertIsInstance(ps, Railroad_Switch_Partner)
+        self.assertIsInstance(ps, RailroadSwitchPartner)
         self.assertEqual(mt.attrib["name"], "Switch12")
         self.assertEqual(mt.attrib["id"], "12")
 
@@ -361,12 +361,12 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(s.attrib["type"], "small")
 
         p = s.platforms[0]
-        self.assertIsInstance(p, Station_Platform)
+        self.assertIsInstance(p, StationPlatform)
         self.assertEqual(p.attrib["id"], "12-1")
         self.assertEqual(p.attrib["name"], "platform1")
 
         seg = p.segments[0]
-        self.assertIsInstance(seg, Station_Platform_Segment)
+        self.assertIsInstance(seg, StationPlatformSegment)
         self.assertEqual(seg.attrib["road_id"], "2")
         self.assertEqual(seg.attrib["s_start"], 1.6500000000000000e+01)
         self.assertEqual(seg.attrib["s_end"], 5.1000000000000000e+01)
@@ -374,7 +374,7 @@ class ParserTests(unittest.TestCase):
 
     def test_junction_group(self):
         jg = self.parser.data.junction_groups["1"]
-        self.assertIsInstance(jg, Junction_Group)
+        self.assertIsInstance(jg, JunctionGroup)
         self.assertEqual(jg.attrib["id"], "1")
         self.assertEqual(jg.attrib["name"], "ExampleRoundabout")
         self.assertEqual(jg.attrib["type"], "roundabout")

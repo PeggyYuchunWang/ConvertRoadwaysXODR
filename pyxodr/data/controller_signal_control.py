@@ -1,4 +1,4 @@
-class Controller_Signal_Control:
+class ControllerSignalControl:
     """
     Provides information about a single signal controlled by corresponding
     controller.

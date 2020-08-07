@@ -1,4 +1,4 @@
-class Signal_Position_Inertial:
+class SignalPositionInertial:
     """
     Describes the reference point of the physical position in inertial
     coordinates in cases where it deviates from the logical position.

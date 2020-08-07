@@ -1,7 +1,7 @@
 import pyxodr.data.abcd_base as abcd_base
 
 
-class Elevation(abcd_base.ABCD_base):
+class Elevation(abcd_base.ABCDBase):
     """
     Describes the elevation of a road along its reference line. 
     Road elevation is defined per road cross section, specified in meters.

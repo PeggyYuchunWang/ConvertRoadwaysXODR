@@ -1,7 +1,7 @@
 class Geometry:
     """
     Allows for the generation of arbitrary road courses through the combination
-    of different geometry elements (Line, Spiral, Arc, Poly3 and Param_Poly3).
+    of different geometry elements (Line, Spiral, Arc, Poly3 and ParamPoly3).
     To avoid leaps in the curvature, it is recommended to use spirals to
     combine lines with arcs.
 
@@ -24,7 +24,7 @@ class Geometry:
     ----------
     attrib : dict
         Attributes dictionary for the parameters specified above.
-    type : Spiral, Arc, Poly3, or Param_Poly3
+    type : Spiral, Arc, Poly3, or ParamPoly3
         Object that specifies more information about the actual geometry
         of the Geometry element. If type = None, then the geometry specifies
         a line.

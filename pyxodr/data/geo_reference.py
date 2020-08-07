@@ -1,4 +1,4 @@
-class Geo_Reference:
+class GeoReference:
     """
     Information about the geographic reference for an OpenDRIVE dataset.
     Defined by parameters describing the geodetic datum.

@@ -1,7 +1,7 @@
-class Lane_Speed:
+class LaneSpeed:
     """
-    Defines the maximum allowed speed on a give lane. Lane_Speed overrides any
-    Road_Speed limits.
+    Defines the maximum allowed speed on a give lane. LaneSpeed overrides any
+    RoadSpeed limits.
 
     If there are multiple lane speed limit elements per lane section, the
     elements must be defined in ascending order.
@@ -12,7 +12,7 @@ class Lane_Speed:
     ----------
     s_offset: float
         Start position (s-coordinate) relative to the position of the preceding
-        Lane_Section element.
+        LaneSection element.
     max : int
         Maximum speed allowed.
     unit : str

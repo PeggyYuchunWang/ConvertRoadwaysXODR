@@ -10,10 +10,10 @@ class Lanes:
     Attributes
     ----------
     lane_offsets : list
-        List of Lane_Offset elements to describe the shift of the center lane
+        List of LaneOffset elements to describe the shift of the center lane
         away from the road reference line.
     lane_sections : list
-        List of Lane_Section elements that make up the lanes.
+        List of LaneSection elements that make up the lanes.
     """
     def __init__(self) -> None:
         self.lane_offsets = []

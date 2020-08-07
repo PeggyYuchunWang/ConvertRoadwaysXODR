@@ -1,4 +1,4 @@
-class Junction_Priority:
+class JunctionPriority:
     """
     Provides information about priority of a connecting road over another
     connecting road.

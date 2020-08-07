@@ -1,4 +1,4 @@
-class Open_Drive_Framework:
+class OpenDriveFramework:
     """
         Compilation of all Open Drive elements information in an
         object oriented framework.

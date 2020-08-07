@@ -1,4 +1,4 @@
-class Object_Marking:
+class ObjectMarking:
     """
     Specifies a marking that is either attached to one side of an object's
     bounding box or referencing outline points.

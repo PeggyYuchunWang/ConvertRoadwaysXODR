@@ -1,4 +1,4 @@
-class Lane_Rule:
+class LaneRule:
     """
     Further description on lane properties which are not covered by any of the
     other lane attributes defined within this framework.
@@ -9,7 +9,7 @@ class Lane_Rule:
     ----------
     s_offset: float
         Start position (s-coordinate) relative to the position of the preceding
-        Lane_Section element.
+        LaneSection element.
     value : str
         Free text, with current recommended values being:
             "no stopping at any time"

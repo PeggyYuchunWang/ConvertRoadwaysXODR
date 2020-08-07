@@ -1,4 +1,4 @@
-class Object_Border:
+class ObjectBorder:
     """
     Defines the border of an object.
 

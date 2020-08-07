@@ -1,4 +1,4 @@
-class Railroad_Track:
+class RailroadTrack:
     """
     Represents the courses for rail bound traffic. Can either
     be a main track or a side track.

@@ -1,9 +1,9 @@
-class Junction_Lane_Link:
+class JunctionLaneLink:
     """
     Provides information about the lanes that are linked
     between an incoming road and a connecting road.
 
-    Found within a Junction_Connection element.
+    Found within a JunctionConnection element.
 
     Parameters
     ----------

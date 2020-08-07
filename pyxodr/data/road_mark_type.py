@@ -1,8 +1,8 @@
-class Road_Mark_Type:
+class RoadMarkType:
     """
     Detailed information about road marking types and lines.
 
-    Found within a Road_Mark element.
+    Found within a RoadMark element.
 
     Parameters
     ----------

@@ -1,4 +1,4 @@
-class Object_Bridge:
+class ObjectBridge:
     """
     Details about a bridge element. Valid for the complete cross section of a
     road.

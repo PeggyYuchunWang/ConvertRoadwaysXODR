@@ -1,4 +1,4 @@
-class Junction_Connection:
+class JunctionConnection:
     """
     Provides information about a single connection within a junction.
 
@@ -21,14 +21,14 @@ class Junction_Connection:
     ----------
     attrib : dict
         Attributes dictionary for the parameters specified above.
-    predecessor : Junction_Predecessor_Successor
+    predecessor : JunctionPredecessorSuccessor
         Object used to represent the linkage between the current junction
         and the road that comes before it.
-    successor : Junction_Predecessor_Successor
+    successor : JunctionPredecessorSuccessor
         Object used to represent the linkage between the current junction
         and the road that comes after it.
     lane_links : list
-        List of Junction_Lane_Link elements to provide information about
+        List of JunctionLaneLink elements to provide information about
         the lanes that are linked between an incoming road and a
         connecting road.
     """

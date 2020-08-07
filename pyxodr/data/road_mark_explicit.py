@@ -1,9 +1,9 @@
-class Road_Mark_Explicit:
+class RoadMarkExplicit:
     """
     Detailed information about irregular road markings that cannot be described
     by repetitive line patterns.
 
-    Found within a Road_Mark element.
+    Found within a RoadMark element.
 
     Parameters
     ----------

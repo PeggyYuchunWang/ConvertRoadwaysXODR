@@ -1,4 +1,4 @@
-class Railroad_Switch_Partner:
+class RailroadSwitchPartner:
     """
     Defines the switch that leads out of a side track after is has been
     entered.

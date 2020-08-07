@@ -1,11 +1,11 @@
 import pyxodr.data.abcd_base as abcd_base
 
 
-class Lane_Width(abcd_base.ABCD_base):
+class LaneWidth(abcd_base.ABCDBase):
     """
     Specifies the width of a lane. Center lanes do not have a width.
 
-    Lane_Width and Lane_Border are mutually exclusive.
+    LaneWidth and LaneBorder are mutually exclusive.
 
     Found within a Lane element.
 
@@ -13,7 +13,7 @@ class Lane_Width(abcd_base.ABCD_base):
     ----------
     s_offset: float
         Start position (s-coordinate) relative to the position of the preceding
-        Lane_Section element.
+        LaneSection element.
     a : float
         Polynom parameter a.
     b : float

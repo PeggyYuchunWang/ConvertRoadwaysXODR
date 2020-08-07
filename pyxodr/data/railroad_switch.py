@@ -1,4 +1,4 @@
-class Railroad_Switch:
+class RailroadSwitch:
     """
     Allows rail-bound vehicles to change tracks.
 
@@ -18,9 +18,9 @@ class Railroad_Switch:
     ----------
     attrib : dict
          Attributes dictionary for the parameters specified above.
-    main_track : Railroad_Track
-    side_track : Railroad_Track
-    switch_partnet : Railroad_Switch_Partner
+    main_track : RailroadTrack
+    side_track : RailroadTrack
+    switch_partnet : RailroadSwitchPartner
     """
     def __init__(self, name="", id="", position="") -> None:
         self.attrib = {

@@ -1,4 +1,4 @@
-class Object_Outline:
+class ObjectOutline:
     """
     Defines an outline of objects that describe a series of corner points,
     mainly used to describe traffic islands, irregularly shaped parking spaces
@@ -26,10 +26,10 @@ class Object_Outline:
     attrib : dict
          Attributes dictionary for the parameters specified above.
     corner_roads : list
-        List of Object_Outline_Corner_Road elements that describe non-linear
+        List of ObjectOutlineCornerRoad elements that describe non-linear
         forms of objects. Mutually exclusive with corner_locals.
     corner_locals : list
-        List of Object_Outline_Corner_Local elements that describe non-linear
+        List of ObjectOutlineCornerLocal elements that describe non-linear
         forms of objects. Mutually exclusive with corner_roads.
 
     """
