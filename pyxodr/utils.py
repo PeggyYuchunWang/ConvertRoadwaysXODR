@@ -60,7 +60,7 @@ def createCurveLine(road, lane, geometry, previous_y, nsamples):
     """
     Creates a Curve element with the properties of @geometry and @lane.
     Uses @previous_y to recognize the y position of the lane with the
-    preceeding id value (allows for lanes with different widths within
+    preceding id value (allows for lanes with different widths within
     the same lane_section_id). Returns a Curve element.
     """
     curve = None
