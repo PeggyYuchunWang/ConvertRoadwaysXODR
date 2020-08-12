@@ -1,3 +1,5 @@
+import math
+
 import xml.etree.ElementTree as ET
 import pyxodr.utils as utils
 import pyxodr.data.open_drive_framework as odf
@@ -99,10 +101,13 @@ class OpenDriveParser:
     def __init__(self):
         self.data = odf.OpenDriveFramework()
         self.parse_curves = False
+        self.nsamples = 0
         self.curves = {}  # dict with keys (road_id, lane_section_id, lane_id)
 
-    def parse_file(self, filename="test_data/carlaExs/Town02.xodr",
-                   parse_curves=False):
+    def parse_file(self,
+                   filename="test_data/carlaExs/Town02.xodr",
+                   parse_curves=False,
+                   nsamples=2):
         """
         Parses an xml file, written using the OpenDrive standard, and stores
         its contents in the parser's data object.
@@ -119,6 +124,7 @@ class OpenDriveParser:
         print("parsing: ", filename)
         root = ET.parse(filename).getroot()
         self.parse_curves = parse_curves
+        self.nsamples = nsamples
         self.__parse(xml_root=root)
         print("done parsing: ", filename)
 
@@ -264,16 +270,29 @@ class OpenDriveParser:
         framework.roads[r.attrib["id"]] = r
 
     def __parse_curves(self, road):
-        nsamples = 2
-        for geo in road.plan_view:
-            for lane_section in road.lanes.lane_sections:
-                if (geo.attrib["s"] <= lane_section.attrib["s"]
-                   < geo.attrib["s"] + geo.attrib["length"]):
+        # collect all starting s-coordinates of the lane sections
+        ls_s = [0.0] * len(road.lanes.lane_sections)
+        for i in range(0, len(road.lanes.lane_sections)):
+            ls_s[i] = road.lanes.lane_sections[i].attrib["s"]
+
+        for i in range(0, len(road.lanes.lane_sections)):
+            lane_section = road.lanes.lane_sections[i]
+            if i == len(road.lanes.lane_sections)-1: 
+                next_ls_s = math.inf
+            else:
+                next_ls_s = ls_s[i+1]
+
+            for geo in road.plan_view:
+                if (lane_section.attrib["s"] <= geo.attrib["s"] and 
+                    geo.attrib["s"] + geo.attrib["length"] < next_ls_s):
                     # found a lane_section for which current Geometry element
                     # is applicable
+                    print(geo.type)
                     ls_curves = utils.createCurves(road,
-                                                   lane_section,
-                                                   geo, nsamples)
+                                                    lane_section,
+                                                    geo,
+                                                    self.nsamples)
+                    print(ls_curves)
                     if ls_curves is not None:
                         self.curves.update(ls_curves)
 

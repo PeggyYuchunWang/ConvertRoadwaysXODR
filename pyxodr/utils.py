@@ -1,5 +1,10 @@
 import math
 from pyxodr.data.curve import Curve
+from pyxodr.data.spiral import Spiral
+from pyxodr.data.arc import Arc
+from pyxodr.data.poly3 import Poly3
+from pyxodr.data.param_poly3 import ParamPoly3
+from pyxodr.data.elevation import Elevation
 
 
 def convertStringToBool(boolean_str):
@@ -32,38 +37,48 @@ def createCurves(road, lane_section, geometry, nsamples):
     (road_id, lane_section_id, lane_id) keys and Curve element values.
     Returns None type if geometry is of an unimplemented type.
     """
-    if geometry.type is None:
-        # a line
-        curves = {}
-        lane_section_id = road.lanes.lane_sections.index(lane_section)
+    curves = {}
+    lane_section_id = road.lanes.lane_sections.index(lane_section)
 
-        for i, side in enumerate([lane_section.left_lanes,
-                                  lane_section.right_lanes]):
-            previous_y = 0
-            # step through each lane
-            for lane in side:
-                tag = (road.attrib["id"], lane_section_id, lane.attrib["id"])
-                previous_y, c = createCurveLine(road,
-                                                lane,
-                                                geometry,
-                                                previous_y, nsamples)
-                if c is not None:
-                    curves[tag] = c
-
-        return curves
+    for i, side in enumerate([lane_section.left_lanes,
+                                lane_section.right_lanes]):
+        current_y = geometry.attrib["y"]
+        
+        # step through each lane
+        for lane in side:
+            tag = (road.attrib["id"], lane_section_id, lane.attrib["id"])
+            current_y, c = createCurveLine(road,
+                                            lane,
+                                            geometry,
+                                            current_y,
+                                            nsamples)
+            if c is not None:
+                curves[tag] = c
+    return curves
 
     # invalid geometry type
     return None
 
 
-def createCurveLine(road, lane, geometry, previous_y, nsamples):
+def createCurveLine(road, lane, geometry, current_y=0, nsamples=2):
     """
     Creates a Curve element with the properties of @geometry and @lane.
-    Uses @previous_y to recognize the y position of the lane with the
+    Uses @current_y to recognize the y position of the lane with respect to the
     preceeding id value (allows for lanes with different widths within
     the same lane_section_id). Returns a Curve element.
     """
     curve = None
+
+    geo_type = "line"
+    if geometry.type is not None:
+        if type(geometry.type) is Arc:
+            geo_type = "arc"
+        if type(geometry.type) is Spiral:
+            geo_type = "spiral"
+        if type(geometry.type) is Poly3:
+            geo_type = "poly3"
+        if type(geometry.type) is ParamPoly3:
+            geo_type = "polyparam3"
 
     width = 4.0  # default width
     if lane.width is not None:
@@ -71,22 +86,24 @@ def createCurveLine(road, lane, geometry, previous_y, nsamples):
 
     length = road.attrib["length"]
     heading = geometry.attrib["hdg"]
-    x1 = geometry.attrib["x"]
-    x2 = geometry.attrib["x"] + length * math.cos(heading)
 
-    y1 = geometry.attrib["y"] + previous_y
+    x1 = geometry.attrib["x"]
+    x2 = x1 + length * math.cos(heading)
+
+    y1 = current_y
     y2 = y1 + length * math.sin(heading)
 
-    dx = ((width * lane.attrib["id"]) * math.sin(heading))
+    dx = ((width * math.copysign(1.0, lane.attrib["id"])) * math.sin(heading))
     dy = (((width/2.0) * math.cos(heading)) *
           math.copysign(1.0, lane.attrib["id"]))
 
     curve = Curve(
         [x1 + dx, -(y1 + dy)],
         [x2 + dx, -(y2 + dy)],
-        nsamples
+        nsamples,
+        geo_type
     )
 
-    previous_y = y1 + math.copysign(width, float(lane.attrib["id"]))
+    next_y = y1 + (math.copysign(width, float(lane.attrib["id"]) * math.cos(heading))) 
 
-    return previous_y, curve
+    return next_y, curve
