@@ -384,6 +384,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(jg.attrib["name"], "ExampleRoundabout")
         self.assertEqual(jg.attrib["type"], "roundabout")
 
+        self.assertEqual(len(jg.junction_references), 3)
         r = jg.junction_references[0]
         self.assertIsInstance(r, str)
         self.assertEqual(r, "42")

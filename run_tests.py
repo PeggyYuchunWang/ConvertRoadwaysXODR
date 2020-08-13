@@ -15,9 +15,9 @@ def suite():
     suite.addTest(ParserTests("test_signals"))
     suite.addTest(ParserTests("test_railroad"))
     suite.addTest(ParserTests("test_junctions"))
+    suite.addTest(ParserTests("test_junction_group"))
     # suite.addTest(ParserTests("test_controllers"))
     # suite.addTest(ParserTests("test_station"))
-    # suite.addTest(ParserTests("test_junction_group"))
 
     # Run curve related tests
     suite.addTest(CurveTests("test_curves"))
