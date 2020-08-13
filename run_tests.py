@@ -7,7 +7,7 @@ def suite():
     suite = unittest.TestSuite()
 
     # Run parser related tests
-    # suite.addTest(ParserTests("test_header"))
+    suite.addTest(ParserTests("test_header"))
     # suite.addTest(ParserTests("test_road"))
     # suite.addTest(ParserTests("test_lanes"))
     # suite.addTest(ParserTests("test_junctions"))

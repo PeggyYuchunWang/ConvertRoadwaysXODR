@@ -81,8 +81,7 @@ class ParserTests(unittest.TestCase):
     def setUp(self):
         self.parser = OpenDriveParser()
         self.parser.parse_file(
-            filename="test_data/OpenDriveExs/Ex_Straight-Road.xodr",
-            parse_curves=True
+            filename="test_data/OpenDriveExs/Ex_Compilation.xodr"
         )
 
     def tearDown(self):
