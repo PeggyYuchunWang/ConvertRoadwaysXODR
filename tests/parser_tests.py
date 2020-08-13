@@ -295,24 +295,26 @@ class ParserTests(unittest.TestCase):
         sgnls = self.parser.data.roads["1"].signals
         s = sgnls["1"]
         self.assertIsInstance(s, Signal)
-        self.assertEqual(s.attrib["s"], 1.0000000000000000e+01)
-        self.assertEqual(s.attrib["t"], -0.0000000000000000e+00)
+        self.assertEqual(s.attrib["s"], 10.0)
+        self.assertEqual(s.attrib["t"], 0.00)
         self.assertEqual(s.attrib["id"], "1")
         self.assertEqual(s.attrib["name"], "Crosswalk")
         self.assertEqual(s.attrib["dynamic"], "no")
         self.assertEqual(s.attrib["orientation"], "none")
-        self.assertEqual(s.attrib["z_offset"], 0.0000000000000000e+00)
+        self.assertEqual(s.attrib["z_offset"], 0.0)
         self.assertEqual(s.attrib["type"], "1000003")
         self.assertEqual(s.attrib["country"], "OpenDRIVE")
         self.assertEqual(s.attrib["country_revision"], "2013")
         self.assertEqual(s.attrib["subtype"], "-1")
-        self.assertEqual(s.attrib["value"], 4.0000000000000000e+00)
+        self.assertEqual(s.attrib["value"], 4.0)
         self.assertEqual(s.attrib["unit"], "m")
-        self.assertEqual(s.attrib["h_offset"], 0)
-        self.assertEqual(s.attrib["pitch"], 0)
-        self.assertEqual(s.attrib["roll"], 0)
+        self.assertEqual(s.attrib["h_offset"], 0.0)
+        self.assertEqual(s.attrib["pitch"], 0.0)
+        self.assertEqual(s.attrib["roll"], 0.0)
         self.assertEqual(s.attrib["height"], 0.01)
         self.assertEqual(s.attrib["width"], 10.40)
+
+        # TODO: Need to add unit test for reference data once implimented
 
     def test_controllers(self):
         print("Running parser test - Controllers")
