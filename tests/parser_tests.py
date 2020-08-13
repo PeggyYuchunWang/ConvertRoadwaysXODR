@@ -321,8 +321,9 @@ class ParserTests(unittest.TestCase):
         controllers = self.parser.data.controllers
         c = controllers["1"]
         self.assertIsInstance(c, Controller)
-        self.assertEqual(c.attrib["id"], "1")
         self.assertEqual(c.attrib["name"], "ctrl001")
+        self.assertEqual(c.attrib["id"], "1")
+
         sc = c.signal_control_records[0]
         self.assertIsInstance(sc, ControllerSignalControl)
         self.assertEqual(sc.attrib["signal_id"], "8")
