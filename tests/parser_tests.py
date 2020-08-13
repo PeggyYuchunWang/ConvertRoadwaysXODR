@@ -335,27 +335,26 @@ class ParserTests(unittest.TestCase):
 
         s = r.switches["32"]
         self.assertIsInstance(s, RailroadSwitch)
-        self.assertEqual(s.attrib["position"], "dynamic")
-        self.assertEqual(s.attrib["id"], "1")
         self.assertEqual(s.attrib["name"], "Switch32")
+        self.assertEqual(s.attrib["id"], "32")
+        self.assertEqual(s.attrib["position"], "dynamic")
 
-
-        mt = r.main_track
+        mt = s.main_track
         self.assertIsInstance(mt, RailroadTrack)
         self.assertEqual(mt.attrib["id"], "3")
-        self.assertEqual(mt.attrib["s"], 1.0000000000000000e+01)
+        self.assertEqual(mt.attrib["s"], 10.0)
         self.assertEqual(mt.attrib["dir"], "+")
 
-        st = r.side_track
+        st = s.side_track
         self.assertIsInstance(st, RailroadTrack)
-        self.assertEqual(mt.attrib["id"], "2")
-        self.assertEqual(mt.attrib["s"], 3.4898261533109149e+01)
-        self.assertEqual(mt.attrib["dir"], "-")
+        self.assertEqual(st.attrib["id"], "2")
+        self.assertEqual(st.attrib["s"], 34.898261533109149)
+        self.assertEqual(st.attrib["dir"], "-")
 
-        ps = r.switch_parter
+        ps = s.switch_partner
         self.assertIsInstance(ps, RailroadSwitchPartner)
-        self.assertEqual(mt.attrib["name"], "Switch12")
-        self.assertEqual(mt.attrib["id"], "12")
+        self.assertEqual(ps.attrib["name"], "Switch12")
+        self.assertEqual(ps.attrib["id"], "12")
 
     def test_station(self):
         print("Running parser test - Station")
