@@ -1,5 +1,3 @@
-import unittest
-
 from pyxodr.parser.open_drive_parser import OpenDriveParser
 
 from pyxodr.data.header import Header
@@ -76,6 +74,8 @@ from pyxodr.data.station import Station
 from pyxodr.data.station_platform import StationPlatform
 from pyxodr.data.station_platform_segment import StationPlatformSegment
 
+import unittest
+
 
 class ParserTests(unittest.TestCase):
     def setUp(self):
@@ -88,27 +88,29 @@ class ParserTests(unittest.TestCase):
         self.parser = None
 
     def test_header(self):
+        print("Running parser test - Header")
         header = self.parser.data.header
         self.assertIsInstance(header, Header)
         self.assertEqual(header.attrib["rev_major"], 1)
         self.assertEqual(header.attrib["rev_minor"], 6)
-        self.assertEqual(header.attrib["name"], "")
+        self.assertEqual(header.attrib["name"], "Compilation Example")
         self.assertEqual(header.attrib["version"], "1.00")
         self.assertEqual(header.attrib["date"], "Wed Feb 26 17:41:13 2020")
-        self.assertAlmostEqual(header.attrib["north"], 0.0)
-        self.assertAlmostEqual(header.attrib["south"], 0.0)
-        self.assertAlmostEqual(header.attrib['east'], 0.0)
-        self.assertAlmostEqual(header.attrib["west"], 0.0)
+        self.assertEqual(header.attrib["north"], 0.0)
+        self.assertEqual(header.attrib["south"], 0.0)
+        self.assertEqual(header.attrib['east'], 0.0)
+        self.assertEqual(header.attrib["west"], 0.0)
         self.assertEqual(header.attrib["vendor"], "")
         self.assertIsNone(header.geo_reference)
         self.assertIsNone(header.offset)
 
     def test_road(self):
+        print("Running parser test - Road")
         for key in self.parser.data.roads:
             road = self.parser.data.roads[key]
             self.assertIsInstance(road, Road)
             self.assertEqual(road.attrib["name"], "")
-            self.assertEqual(road.attrib["length"], 5.0000000000000000e+01)
+            self.assertEqual(road.attrib["length"], 50.0)
             self.assertEqual(road.attrib["id"], "1")
             self.assertEqual(road.attrib["junction"], "-1")
             self.assertEqual(road.attrib["rule"], "RHT")
@@ -118,25 +120,26 @@ class ParserTests(unittest.TestCase):
 
             g = road.plan_view[0]
             self.assertIsInstance(g, Geometry)
-            self.assertEqual(g.attrib["s"], 0)
-            self.assertEqual(g.attrib["x"], 0)
-            self.assertEqual(g.attrib["y"], 0)
-            self.assertEqual(g.attrib["hdg"], 1.5707963267948966e+00)
-            self.assertEqual(g.attrib["length"], 5.0000000000000000e+01)
+            self.assertEqual(g.attrib["s"], 0.0)
+            self.assertEqual(g.attrib["x"], 0.0)
+            self.assertEqual(g.attrib["y"], 0.0)
+            self.assertAlmostEqual(g.attrib["hdg"], 1.57079632679)
+            self.assertEqual(g.attrib["length"], 50.0)
             self.assertIsNone(g.type)
 
             e = road.elevation_profile[0]
             self.assertIsInstance(e, Elevation)
-            self.assertEqual(e.attrib["s"], 0)
-            self.assertEqual(e.attrib["a"], 0)
-            self.assertEqual(e.attrib["b"], 0)
-            self.assertEqual(e.attrib["c"], 0)
-            self.assertEqual(e.attrib["d"], 0)
+            self.assertEqual(e.attrib["s"], 0.0)
+            self.assertEqual(e.attrib["a"], 0.0)
+            self.assertEqual(e.attrib["b"], 0.0)
+            self.assertEqual(e.attrib["c"], 0.0)
+            self.assertEqual(e.attrib["d"], 0.0)
 
             self.assertIsNone(road.lateral_profile.super_elevation)
-            self.assertEqual(len(road.lateral_profile.shapes), 0)
+            self.assertEqual(len(road.lateral_profile.shapes), 0.0)
 
     def test_lanes(self):
+        print("Running parser test - Lanes")
         for key in self.parser.data.roads:
             r = self.parser.data.roads[key]
             lanes = r.lanes
@@ -201,6 +204,7 @@ class ParserTests(unittest.TestCase):
             self.assertIsNone(ll.rule)
 
     def test_junctions(self):
+        print("Running parser test - Junctions")
         for key in self.parser.data.junctions:
             j = self.parser.data.junctions[key]
             self.assertIsInstance(j, Junction)
@@ -228,6 +232,7 @@ class ParserTests(unittest.TestCase):
             self.assertEqual(c.attrib["type"], "0")
 
     def test_objects(self):
+        print("Running parser test - Objects")
         objs = self.parser.data.roads["1"].objects
         o = objs.objects[0]
         self.assertIsInstance(o, Object)
@@ -271,6 +276,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(cr_id, "0")
 
     def test_signals(self):
+        print("Running parser test - Signals")
         sgnls = self.parser.data.roads["1"].signals
         s = sgnls["1"]
         self.assertIsInstance(s, Signal)
@@ -294,6 +300,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(s.attrib["width"], 10.40)
 
     def test_controllers(self):
+        print("Running parser test - Controllers")
         controllers = self.parser.data.controllers
         c = controllers["1"]
         self.assertIsInstance(c, Controller)
@@ -305,6 +312,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(sc.attrib["type"], "0")
 
     def test_railroad(self):
+        print("Running parser test - Railroad")
         r = self.parser.data.roads["1"].railroad
         self.assertIsInstance(r, Railroad)
 
@@ -333,6 +341,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(mt.attrib["id"], "12")
 
     def test_station(self):
+        print("Running parser test - Station")
         s = self.parser.data.stations["12"]
         self.assertIsInstance(s, Station)
         self.assertEqual(s.attrib["id"], "12")
@@ -352,6 +361,7 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(seg.attrib["side"], "right")
 
     def test_junction_group(self):
+        print("Running parser test - Junction Group")
         jg = self.parser.data.junction_groups["1"]
         self.assertIsInstance(jg, JunctionGroup)
         self.assertEqual(jg.attrib["id"], "1")

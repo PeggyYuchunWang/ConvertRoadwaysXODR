@@ -1,6 +1,6 @@
-import unittest
-
 from pyxodr.parser.open_drive_parser import OpenDriveParser
+
+import unittest
 
 
 class CurveTests(unittest.TestCase):
