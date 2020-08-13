@@ -10,7 +10,7 @@ def suite():
     # Run parser related tests
     suite.addTest(ParserTests("test_header"))
     suite.addTest(ParserTests("test_road"))
-    # suite.addTest(ParserTests("test_lanes"))
+    suite.addTest(ParserTests("test_lanes"))
     # suite.addTest(ParserTests("test_junctions"))
     # suite.addTest(ParserTests("test_objects"))
     # suite.addTest(ParserTests("test_signals"))

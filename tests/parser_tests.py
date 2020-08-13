@@ -148,27 +148,27 @@ class ParserTests(unittest.TestCase):
             self.assertEqual(len(lanes.lane_sections), 1)
 
             ls = lanes.lane_sections[0]
-            self.assertEqual(ls.attrib["s"],0)
-            self.assertEqual(ls.attrib["single_side"],False)
+            self.assertEqual(ls.attrib["s"], 0.0)
+            self.assertEqual(ls.attrib["single_side"], False)
 
             lls = ls.left_lanes
-            self.assertEqual(len(lls),7)
+            self.assertEqual(len(lls), 7)
             ll = lls[0]
-            self.assertEqual(ll.attrib["id"],7)
-            self.assertEqual(ll.attrib["type"],"sidewalk")
-            self.assertEqual(ll.attrib["level"],False)
+            self.assertEqual(ll.attrib["id"], 7)
+            self.assertEqual(ll.attrib["type"], "sidewalk")
+            self.assertEqual(ll.attrib["level"], False)
 
             self.assertIsInstance(ll.width, LaneWidth)
-            self.assertEqual(ll.width.attrib["s_offset"],0)
-            self.assertEqual(ll.width.attrib["a"],3.0000000000000000e+00)
-            self.assertEqual(ll.width.attrib["b"],0)
-            self.assertEqual(ll.width.attrib["c"],0)
-            self.assertEqual(ll.width.attrib["d"],0)
+            self.assertEqual(ll.width.attrib["s_offset"], 0.0)
+            self.assertEqual(ll.width.attrib["a"], 3.0)
+            self.assertEqual(ll.width.attrib["b"], 0.0)
+            self.assertEqual(ll.width.attrib["c"], 0.0)
+            self.assertEqual(ll.width.attrib["d"], 0.0)
 
             self.assertIsInstance(ll.height, LaneHeight)
-            self.assertEqual(ll.height.attrib["s_offset"],0)
-            self.assertEqual(ll.height.attrib["inner"],1.2000000000000000e-01)
-            self.assertEqual(ll.height.attrib["outer"],1.2000000000000000e-01)
+            self.assertEqual(ll.height.attrib["s_offset"], 0.0)
+            self.assertEqual(ll.height.attrib["inner"], 0.12)
+            self.assertEqual(ll.height.attrib["outer"], 0.12)
 
             self.assertIsNone(ll.predecessor_id)
             self.assertIsNone(ll.successor_id)
@@ -180,28 +180,43 @@ class ParserTests(unittest.TestCase):
             self.assertIsNone(ll.access)
             self.assertIsNone(ll.rule)
 
-            ll = lls[6]
-            self.assertEqual(ll.attrib["id"],1)
-            self.assertEqual(ll.attrib["type"],"driving")
-            self.assertEqual(ll.attrib["level"],False)
+            ll = lls[1]
+            self.assertEqual(ll.attrib["id"], 6)
+            self.assertEqual(ll.attrib["type"], "biking")
+            self.assertNotEqual(ll.attrib["level"], True)
 
             self.assertIsInstance(ll.width, LaneWidth)
-            self.assertEqual(ll.width.attrib["s_offset"],0)
-            self.assertEqual(ll.width.attrib["a"],3.2500000000000000e+00)
-            self.assertEqual(ll.width.attrib["b"],0)
-            self.assertEqual(ll.width.attrib["c"],0)
-            self.assertEqual(ll.width.attrib["d"],0)
+            self.assertNotEqual(ll.width.attrib["s_offset"], 1.0)
+            self.assertNotEqual(ll.width.attrib["a"], 1.5)
+            self.assertNotEqual(ll.width.attrib["b"], 2.0)
+            self.assertNotEqual(ll.width.attrib["c"], 6.0)
+            self.assertNotEqual(ll.width.attrib["d"], 3.0)
 
-            self.assertIsNone(ll.predecessor_id)
-            self.assertIsNone(ll.successor_id)
-            self.assertIsNone(ll.height)
-            self.assertIsNone(ll.border)
-            self.assertIsNone(ll.road_mark)
-            self.assertIsNone(ll.material)
-            self.assertIsNone(ll.visibility)
-            self.assertIsNone(ll.speed)
-            self.assertIsNone(ll.access)
-            self.assertIsNone(ll.rule)
+            self.assertIsInstance(ll.height, LaneHeight)
+            self.assertNotEqual(ll.height.attrib["s_offset"], 20.0)
+            self.assertNotEqual(ll.height.attrib["inner"], 0.125)
+            self.assertNotEqual(ll.height.attrib["outer"], 0.4)
+
+            ll = lls[2]
+            self.assertEqual(ll.attrib["id"], 5)
+            self.assertEqual(ll.attrib["type"], "border")
+
+            ll = lls[3]
+            self.assertEqual(ll.attrib["id"], 4)
+            self.assertEqual(ll.attrib["type"], "shoulder")
+            self.assertNotEqual(ll.attrib["type"], "curb")
+
+            center_lane = ls.center_lane
+            self.assertNotIsInstance(center_lane, list)
+            self.assertEqual(center_lane.attrib["id"], 0)
+            self.assertEqual(center_lane.attrib["type"], "driving")
+
+            rls = ls.right_lanes
+            self.assertEqual(len(rls), 7)
+            rl = rls[2]
+            self.assertEqual(rl.attrib["id"], -3)
+            self.assertEqual(rl.attrib["type"], "curb")
+            self.assertEqual(rl.attrib["level"], False)
 
     def test_junctions(self):
         print("Running parser test - Junctions")
