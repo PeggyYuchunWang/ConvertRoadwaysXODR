@@ -88,6 +88,8 @@ from pyxodr.data.station import Station
 from pyxodr.data.station_platform import StationPlatform
 from pyxodr.data.station_platform_segment import StationPlatformSegment
 
+from pyxodr.data.curve import Curve
+
 
 class OpenDriveParser:
     """
@@ -282,19 +284,27 @@ class OpenDriveParser:
             else:
                 next_ls_s = ls_s[i+1]
 
+            curr_geos = []
             for geo in road.plan_view:
                 if (lane_section.attrib["s"] <= geo.attrib["s"] and 
                     geo.attrib["s"] + geo.attrib["length"] < next_ls_s):
                     # found a lane_section for which current Geometry element
                     # is applicable
-                    print(geo.type)
-                    ls_curves = utils.createCurves(road,
-                                                    lane_section,
-                                                    geo,
-                                                    self.nsamples)
-                    print(ls_curves)
-                    if ls_curves is not None:
-                        self.curves.update(ls_curves)
+                    curr_geos.append(geo)
+
+            ls_curves = utils.createCurves(road,
+                                           lane_section,
+                                           curr_geos,
+                                           self.nsamples)
+
+            # for key in ls_curves:
+            #     c = ls_curves[key]
+            #     for cp in c:
+            #         print(cp.pos)
+            #     print()
+
+            if ls_curves is not None:
+                self.curves.update(ls_curves)
 
     def __parse_road_predecessor_and_successor(self, r, pred, succ):
         if pred is not None:
