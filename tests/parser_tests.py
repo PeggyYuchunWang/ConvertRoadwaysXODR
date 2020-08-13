@@ -361,20 +361,20 @@ class ParserTests(unittest.TestCase):
         print("Running parser test - Station")
         s = self.parser.data.stations["12"]
         self.assertIsInstance(s, Station)
-        self.assertEqual(s.attrib["id"], "12")
         self.assertEqual(s.attrib["name"], "H12")
+        self.assertEqual(s.attrib["id"], "12")
         self.assertEqual(s.attrib["type"], "small")
 
         p = s.platforms[0]
         self.assertIsInstance(p, StationPlatform)
-        self.assertEqual(p.attrib["id"], "12-1")
         self.assertEqual(p.attrib["name"], "platform1")
+        self.assertEqual(p.attrib["id"], "12-1")
 
         seg = p.segments[0]
         self.assertIsInstance(seg, StationPlatformSegment)
         self.assertEqual(seg.attrib["road_id"], "2")
-        self.assertEqual(seg.attrib["s_start"], 1.6500000000000000e+01)
-        self.assertEqual(seg.attrib["s_end"], 5.1000000000000000e+01)
+        self.assertEqual(seg.attrib["s_start"], 16.5)
+        self.assertEqual(seg.attrib["s_end"], 51.0)
         self.assertEqual(seg.attrib["side"], "right")
 
     def test_junction_group(self):
