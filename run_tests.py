@@ -1,10 +1,12 @@
 import unittest
 from tests.parser_tests import ParserTests
+from tests.curve_tests import CurveTests
 
 
 def suite():
     suite = unittest.TestSuite()
-    suite.addTest(ParserTests("test_curves"))
+
+    # Run parser related tests
     # suite.addTest(ParserTests("test_header"))
     # suite.addTest(ParserTests("test_road"))
     # suite.addTest(ParserTests("test_lanes"))
@@ -14,6 +16,9 @@ def suite():
     # suite.addTest(ParserTests("test_controllers"))
     # suite.addTest(ParserTests("test_station"))
     # suite.addTest(ParserTests("test_junction_group"))
+
+    # Run curve related tests
+    suite.addTest(CurveTests("test_curves"))
 
 
     return suite
