@@ -931,8 +931,8 @@ class OpenDriveParser:
                 r = SignalReference(
                     att["elementType"]
                 )
-                if "elementID" in att:
-                    r.attrib["element_id"] = att["elementID"]
+                if "elementId" in att:
+                    r.attrib["element_id"] = att["elementId"]
                 if "type" in att:
                     r.attrib["type"] = float(att["type"])
                 s.references.append(r)

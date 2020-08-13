@@ -314,7 +314,11 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(s.attrib["height"], 0.01)
         self.assertEqual(s.attrib["width"], 10.40)
 
-        # TODO: Need to add unit test for reference data once implimented
+        self.assertEqual(len(s.references), 1)
+        ref = s.references[0]
+        self.assertIsInstance(ref, SignalReference)
+        self.assertEqual(ref.attrib["element_type"], "object")
+        self.assertEqual(ref.attrib["element_id"], "10")
 
     def test_controllers(self):
         print("Running parser test - Controllers")
