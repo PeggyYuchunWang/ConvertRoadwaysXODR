@@ -35,6 +35,21 @@ class CurvePt:
         self.k = float(k)
         self.kd = float(kd)
 
+    def __str__(self):
+        return (
+            "pos: <{:.8f}, {:.8f}> m\n"
+            "\u03f4: {:.8f} \u33ad ({:.8f}\u00b0)\n"
+            "s: {:.8f}\n"
+            "k: {:.8f}\n"
+            "\u03b4: {:.8f}\n".format(
+                self.pos[0], self.pos[1],
+                self.theta, self.theta*180/math.pi,
+                self.s,
+                self.k,
+                self.kd
+            )
+        )
+
 
 class Curve:
     """
@@ -53,3 +68,15 @@ class Curve:
     """
     def __init__(self, curve_points=[]) -> None:
         self.curve_points = curve_points
+
+    def __str__(self):
+        return (
+            "Start\n{}\nEnd\n{}".format(
+                self.curve_points[0],self.curve_points[-1]
+            )
+        )
+
+    def print_positions(self):
+        print("Curve:")
+        for i, point in enumerate(self.curve_points):
+            print("{}: <{:.8f}, {:.8f}>".format(i, point.pos[0], point.pos[1]))
