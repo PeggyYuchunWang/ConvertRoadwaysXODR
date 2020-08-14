@@ -1,5 +1,6 @@
 import math
 import numpy as np
+from scipy.optimize import fsolve
 from pyxodr.data.curve import Curve
 from pyxodr.data.curve import CurvePt
 from pyxodr.data.spiral import Spiral
@@ -41,38 +42,39 @@ def createCurves(road, lane_section, curr_geos, nsamples):
 
     for i, side in enumerate([lane_section.left_lanes,
                               lane_section.right_lanes]):
-        for geometry in curr_geos:
-            current_y = geometry.attrib["y"]
-            # step through each lane
-            for lane in side:
-                
-                tag = (road.attrib["id"], lane_section_id, lane.attrib["id"])
-                current_y, c = createLaneCurve(road,
-                                               lane,
-                                               geometry,
-                                               current_y,
-                                               nsamples)
-                if c is not None:
-                    if tag in curves.keys():
-                        curves[tag].curve_points.extend(c.curve_points[1:])
-                    else:
-                        curves[tag] = c
+        if len(side) != 0:
+            for geometry in curr_geos:
+                current_x = geometry.attrib["x"]
+                current_y = geometry.attrib["y"]
             
-            # for k in curves.keys():
-            #     print(k)
-            #     c = curves[k]
-            #     for cp in c:
-            #         print(cp.pos)
-            #     print()
-
-
+                # step through each lane
+                for lane in side:
+                    tag = (road.attrib["id"], lane_section_id, lane.attrib["id"])
+                    current_x, current_y, c = createLaneCurve(road,
+                                                              lane,
+                                                              geometry,
+                                                              current_x,
+                                                              current_y,
+                                                              nsamples)
+                    if c is not None:
+                        if tag in curves.keys():
+                            curves[tag].curve_points.extend(c.curve_points[1:])
+                        else:
+                            curves[tag] = c
+                
+                # for k in curves.keys():
+                #     print(k)
+                #     c = curves[k]
+                #     for cp in c:
+                #         print(cp.pos)
+                #     print()
     return curves
 
     # invalid geometry type
     return None
 
 
-def createLaneCurve(road, lane, geometry, current_y=0, nsamples=2):
+def createLaneCurve(road, lane, geometry, current_x=0, current_y=0, nsamples=2):
     """
     Creates a list of CurvePt elements that describe the properties of @geometry and @lane.
     Uses @current_y to recognize the y position of the lane with respect to the
@@ -88,42 +90,38 @@ def createLaneCurve(road, lane, geometry, current_y=0, nsamples=2):
     length = geometry.attrib["length"]
     heading = geometry.attrib["hdg"]
 
+    lane_sign = math.copysign(1.0, lane.attrib["id"])
+    dx = (width/2.0) * math.sin(heading) * lane_sign 
+    dy = (width/2.0) * math.cos(heading) * lane_sign
+
     if geometry.type is None:
-        x1 = geometry.attrib["x"]
+        x1 = current_x
         x2 = x1 + length * math.cos(heading)
 
         y1 = current_y
         y2 = y1 + length * math.sin(heading)
 
-        dx = ((width * math.copysign(1.0, lane.attrib["id"])) * math.sin(heading))
-        dy = (((width/2.0) * math.cos(heading)) *
-                math.copysign(1.0, lane.attrib["id"]))
-
         curve = populate_curve_points_line(
-            [x1 + dx, -(y1 + dy)],
-            [x2 + dx, -(y2 + dy)],
+            [x1 + dx, y1 + dy],
+            [x2 + dx, y2 + dy],
             nsamples
-        )
+        )     
     elif type(geometry.type) is Arc:
         arc = geometry.type
-        x1 = geometry.attrib["x"]
-        #print("radius: ", 1/arc.attrib["curvature"])
-        #angular_displacement = geometry.attrib["length"] *  arc.attrib["curvature"]
-        x2 = x1 + 100
 
+        x1 = current_x
         y1 = current_y
-        y2 = y1 + length * math.sin(heading)
+        r = 1/arc.attrib["curvature"]  # radius
 
-        dx = ((width * math.copysign(1.0, lane.attrib["id"])) * math.sin(heading))
-        dy = (((width/2.0) * math.cos(heading)) *
-                math.copysign(1.0, lane.attrib["id"]))
+        # solve for center points of circle that represents the arc
+        x0, y0 = fsolve(arc_equations, [math.pow(r,2), heading], args=(x1, y1))
 
         curve = populate_curve_points_arc(
-            [x1 + dx, -(y1 + dy)],
-            [x2 + dx, -(y2 + dy)],
-            #geometry.type.attrib["curvature"],
+            [x1 + dx, y1 + dy],
+            [x0, y0],
             nsamples
         )
+
     # elif type(geometry.type) is Spiral:
     #     geo_type = "spiral"
     # elif type(geometry.type) is Poly3:
@@ -131,9 +129,10 @@ def createLaneCurve(road, lane, geometry, current_y=0, nsamples=2):
     # elif type(geometry.type) is ParamPoly3:
     #     geo_type = "polyparam3"
 
-    next_y = y1 + (math.copysign(width, float(lane.attrib["id"]) * math.cos(heading))) 
-
-    return next_y, curve
+    next_x = x1 + (math.copysign(width, float(lane.attrib["id"]) * math.sin(heading)))
+    next_y = y1 + (math.copysign(width, float(lane.attrib["id"]) * math.cos(heading)))
+    
+    return next_x, next_y, curve
 
 def populate_curve_points_line(start, end, nsamples):
         """
@@ -181,3 +180,9 @@ def populate_curve_points_arc(start, end, curvature, nsamples=5):
             s += delta
 
         return Curve(curve_points)
+
+def arc_equations(vars, x1, y1):
+    x0, y0 = vars
+    eq1 = math.pow((x1 - x0),2) - math.pow((y1 - y0),2)  # set equal to radius^2
+    eq2 = math.atan((y1-y0)/(x1-x0))  # set equal to heading 
+    return [eq1, eq2]
