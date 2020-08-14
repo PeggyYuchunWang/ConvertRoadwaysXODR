@@ -20,7 +20,7 @@ def suite():
     suite.addTest(ParserTests("test_station"))
 
     # Run curve related tests
-    suite.addTest(CurveTests("test_curves"))
+    suite.addTest(CurveTests("test_line_curves"))
 
     return suite
 
