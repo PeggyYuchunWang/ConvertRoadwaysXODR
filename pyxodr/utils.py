@@ -1,6 +1,3 @@
-import math
-import numpy as np
-from scipy.optimize import fsolve
 from pyxodr.data.curve import Curve
 from pyxodr.data.curve import CurvePt
 from pyxodr.data.spiral import Spiral
@@ -8,6 +5,10 @@ from pyxodr.data.arc import Arc
 from pyxodr.data.poly3 import Poly3
 from pyxodr.data.param_poly3 import ParamPoly3
 from pyxodr.data.elevation import Elevation
+
+import math
+
+import numpy as np
 
 
 def convertStringToBool(boolean_str):
@@ -49,8 +50,6 @@ def createCurves(road, lane_section, curr_geos, nsamples):
             
                 # step through each lane
                 for lane in side:
-                    # print("current_x: ", current_x)
-                    # print("current_y: ", current_y)
                     tag = (road.attrib["id"], lane_section_id, lane.attrib["id"])
                     current_x, current_y, c = createLaneCurve(road,
                                                               lane,
@@ -63,13 +62,6 @@ def createCurves(road, lane_section, curr_geos, nsamples):
                             curves[tag].curve_points.extend(c.curve_points) #[1:])
                         else:
                             curves[tag] = c
-                
-                # for k in curves.keys():
-                #     print(k)
-                #     c = curves[k]
-                #     for cp in c:
-                #         print(cp.pos)
-                #     print()
     return curves
 
     # invalid geometry type
@@ -96,11 +88,11 @@ def createLaneCurve(road, lane, geometry, current_x=0, current_y=0, nsamples=2):
     dx = (width/2.0) * math.sin(heading) * lane_sign 
     dy = (width/2.0) * math.cos(heading) * lane_sign
 
-    if geometry.type is None:
-        x1 = current_x
-        x2 = x1 + length * math.cos(heading)
+    x1 = current_x
+    y1 = current_y
 
-        y1 = current_y
+    if geometry.type is None:
+        x2 = x1 + length * math.cos(heading)
         y2 = y1 + length * math.sin(heading)
 
         curve = populate_curve_points_line(
@@ -111,32 +103,30 @@ def createLaneCurve(road, lane, geometry, current_x=0, current_y=0, nsamples=2):
     elif type(geometry.type) is Arc:
         arc = geometry.type
 
-        x1 = current_x
-        y1 = current_y
         print("x1: ", x1)
         print("y1: ", y1)
         radius = 1.0 / arc.attrib["curvature"]
         r_squared = math.pow(radius,2)
 
         # solve for center points of circle that represents the arc
-        # root = fsolve(arc_equations, [x1*.95, y1*.95], args=(x1, y1, radius, heading))
-        # print(np.isclose(arc_equations(root, x1, y1, radius, heading), [0.0, 0.0]))
+        # x0, y0 = fsolve(arc_equations, [x1*.95, y1*.95], args=(x1, y1, radius, heading))
+        # print(np.isclose(arc_equations([x0,y0], x1, y1, radius, heading), [0.0, 0.0]))
+        # y0 = y1 - ((radius*math.tan(heading)) / math.sqrt(1+math.pow(math.tan(heading),2)))
+        # x0 = x1 - ((y1 - y0)/math.tan(heading))
         
         x0 = x1 - math.sqrt(r_squared / (1 - math.pow(math.tan(heading), 2)))
         y0 = y1 - math.sqrt(r_squared - math.pow((x1-x0),2))
-        
-        print("x0, y0: ", x0 , " , ", y0 )
-        
-        # print("r^2 ", math.pow(radius,2), " = ", math.pow((x1 - x0), 2) - math.pow((y1 - y0), 2))  # set equal to radius^2
-        # print("heading ", heading, " = ", math.atan((y1-y0)/(x1-x0)))
 
-        curve = populate_curve_points_arc(
+
+        print("x0, y0: ", x0 , " , ", y0 )
+
+        curve = populate_curve_points_line(
             [x1 + dx, y1 + dy],
             [x0, y0],
-            heading,
-            radius,
-            geometry.attrib["length"],
-            nsamples
+            # heading,
+            # radius,
+            # geometry.attrib["length"],
+            2
         )
 
     # elif type(geometry.type) is Spiral:
@@ -184,20 +174,23 @@ def populate_curve_points_arc(start, center, heading, radius, arc_length, nsampl
             # invalid start/center points
             return None
 
-        theta_end = arc_length / radius  
+        center = [250, -100-20]
+        total_theta = arc_length / radius  
+        print("te: ", total_theta)
         theta = heading  
-        delta_theta = (arc_length / (nsamples-1)) / radius
+        delta_theta = (arc_length / nsamples) / radius
+        print("dt: ", delta_theta)
 
         s = 0.0
         curve_points = [CurvePt] * nsamples
-        for i in range(0, nsamples):
-            cp_theta = theta_end - theta
+        for i in range(1, nsamples+1):
+            cp_theta = theta - total_theta
             P_x = radius * math.cos(cp_theta) + center[0]
             P_y = radius * math.sin(cp_theta) + center[1]
-            curve_points[i] = CurvePt([P_x, P_y], cp_theta, s, 0.0)
+            curve_points[nsamples-i] = CurvePt([P_x, P_y], cp_theta, s, 0.0)
             s += P_x
             theta += delta_theta
-
+            print([P_x, P_y])
         return Curve(curve_points)
 
 def arc_equations(vars, x1, y1, radius, heading):

@@ -1,6 +1,3 @@
-import math
-
-import xml.etree.ElementTree as ET
 import pyxodr.utils as utils
 import pyxodr.data.open_drive_framework as odf
 
@@ -89,6 +86,10 @@ from pyxodr.data.station_platform import StationPlatform
 from pyxodr.data.station_platform_segment import StationPlatformSegment
 
 from pyxodr.data.curve import Curve
+
+import xml.etree.ElementTree as ET
+
+import math
 
 
 class OpenDriveParser:
