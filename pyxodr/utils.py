@@ -180,10 +180,10 @@ def populate_curve_points_arc(
 
     curve_points = [CurvePt] * nsamples
 
-    for i in range(1, nsamples+1):
+    for i in range(0, nsamples):
         P_x = radius * math.cos(theta) + center[0]
         P_y = radius * math.sin(theta) + center[1]
-        curve_points[nsamples-i] = CurvePt([P_x, P_y], theta, s, 0.0)
+        curve_points[i] = CurvePt([P_x, P_y], theta, s, 0.0)
         s += delta_arc
         theta += delta_theta
         print("P_{}: {}".format(i, [P_x, P_y]))
