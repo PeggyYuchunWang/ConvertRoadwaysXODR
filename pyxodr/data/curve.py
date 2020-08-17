@@ -1,5 +1,4 @@
 import math
-import numpy as np
 
 
 class CurvePt:
@@ -11,7 +10,7 @@ class CurvePt:
     pos : list
         Global x,y position within a two element list.
     theta : float
-        Orientation angle (converted to radians).
+        Orientation angle in radians.
     s : float
         Distance along the curve.
     k : float
@@ -30,7 +29,7 @@ class CurvePt:
     """
     def __init__(self, pos=[0.0, 0.0], theta=0, s=0, k=0, kd=0):
         self.pos = pos
-        self.theta = math.radians(theta)
+        self.theta = theta
         self.s = float(s)
         self.k = float(k)
         self.kd = float(kd)
@@ -43,7 +42,7 @@ class CurvePt:
             "k: {:.8f}\n"
             "\u03b4: {:.8f}\n".format(
                 self.pos[0], self.pos[1],
-                self.theta, self.theta*180/math.pi,
+                self.theta, math.degrees(self.theta),
                 self.s,
                 self.k,
                 self.kd
@@ -72,7 +71,7 @@ class Curve:
     def __str__(self):
         return (
             "Start\n{}\nEnd\n{}".format(
-                self.curve_points[0],self.curve_points[-1]
+                self.curve_points[0], self.curve_points[-1]
             )
         )
 
