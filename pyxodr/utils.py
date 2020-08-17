@@ -6,9 +6,9 @@ from pyxodr.data.poly3 import Poly3
 from pyxodr.data.param_poly3 import ParamPoly3
 from pyxodr.data.elevation import Elevation
 
-import math
-
 import numpy as np
+
+import math
 
 
 def convertStringToBool(boolean_str):
@@ -47,7 +47,7 @@ def createCurves(road, lane_section, curr_geos, nsamples):
             for geometry in curr_geos:
                 current_x = geometry.attrib["x"]
                 current_y = geometry.attrib["y"]
-            
+
                 # step through each lane
                 for lane in side:
                     tag = (road.attrib["id"], lane_section_id, lane.attrib["id"])
@@ -59,20 +59,21 @@ def createCurves(road, lane_section, curr_geos, nsamples):
                                                               nsamples)
                     if c is not None:
                         if tag in curves.keys():
+<<<<<<< HEAD
                             curves[tag].curve_points.extend(c.curve_points)#[1:])
+=======
+                            curves[tag].curve_points.extend(c.curve_points)
+>>>>>>> 534f1b3395443a21f24f7db4de520608704ecb9a
                         else:
                             curves[tag] = c
     return curves
-
-    # invalid geometry type
-    return None
 
 
 def createLaneCurve(road, lane, geometry, current_x=0, current_y=0, nsamples=2):
     """
     Creates a list of CurvePt elements that describe the properties of @geometry and @lane.
     Uses @current_y to recognize the y position of the lane with respect to the
-    y position of the preceeding id value (allows for lanes with different widths within
+    y position of the preceding id value (allows for lanes with different widths within
     the same lane_section_id). Returns a list of CurvePt elements.
     """
     curve = None
@@ -83,9 +84,10 @@ def createLaneCurve(road, lane, geometry, current_x=0, current_y=0, nsamples=2):
 
     length = geometry.attrib["length"]
     heading = geometry.attrib["hdg"]
+    s = geometry.attrib["s"]
 
     lane_sign = math.copysign(1.0, lane.attrib["id"])
-    dx = (width/2.0) * math.sin(heading) * lane_sign 
+    dx = (width/2.0) * math.sin(heading) * lane_sign
     dy = (width/2.0) * math.cos(heading) * lane_sign
 
     x1 = current_x
@@ -99,32 +101,30 @@ def createLaneCurve(road, lane, geometry, current_x=0, current_y=0, nsamples=2):
             [x1 + dx, y1 + dy],
             [x2 + dx, y2 + dy],
             nsamples
-        )     
+        )
     elif type(geometry.type) is Arc:
         arc = geometry.type
-
         radius = 1.0 / arc.attrib["curvature"]
-        r_squared = math.pow(radius,2)
+        print("x1: ", x1)
+        print("y1: ", y1)
 
-        # solve for center points of circle that represents the arc
-        x0 = x1 - math.sqrt(r_squared / (1 - math.pow(math.tan(heading), 2)))
-        y0 = y1 - math.sqrt(r_squared - math.pow((x1-x0),2))
+        # Calculate initial arc parameters
+        phi = heading - math.pi / 2.0
+        phi_total = length / radius
 
-        # using these for x0,y0 is techinically wrong but gets us the values we
-        # are expecting..... 
-        # y0 = y1 - math.sqrt(r_squared / (1 - math.pow(math.tan(heading), 2)))
-        # x0 = x1 - math.sqrt(r_squared - math.pow((y1-y0),2))
-
-        # print("x1, y1 ", x1, " , ", y1)
-        # print("x0, y0: ", x0 , " , ", y0)
-        # print()
+        x0 = x1 - radius*math.cos(phi)
+        y0 = y1 - radius*math.sin(phi)
+        print("x0, y0: ", x0 , " , ", y0 )
+        # Calculate radius with lane center offset
+        radius += math.sqrt(dx*dx + dy*dy)
 
         curve = populate_curve_points_arc(
-            [x0 + dx, y0 + dy],
-            heading,
+            [x0, y0],
+            s,
+            phi,
+            phi_total,
             radius,
-            geometry.attrib["length"],
-            3
+            nsamples
         )
 
     # elif type(geometry.type) is Spiral:
@@ -136,10 +136,14 @@ def createLaneCurve(road, lane, geometry, current_x=0, current_y=0, nsamples=2):
 
     next_x = x1 + (width * math.sin(heading) * lane_sign)
     next_y = y1 + (width * math.cos(heading) * lane_sign)
-    
+
+    # TODO Pass back dx and dy? Do all lanes in a lane sections at once instead?
+
     return next_x, next_y, curve
 
+
 def populate_curve_points_line(start, end, nsamples=2):
+<<<<<<< HEAD
         """
         Populates a Curve element with @nsamples CurvePt elements that
         describe the curve of a lane with a line geometry type.
@@ -191,3 +195,55 @@ def arc_equations(vars, x1, y1, radius, heading):
     eq1 = math.pow((x1-x0), 2) + math.pow((y1-y0), 2) - math.pow(radius, 2) 
     eq2 = math.atan((y1-y0)/(x1-x0)) - heading 
     return eq1, eq2
+=======
+    """
+    Populates a Curve element with @nsamples CurvePt elements that
+    describe the curve of a lane with a line geometry type.
+    If @start and @end are the same, returns None.
+    Otherwise, returns a Curve element populated with CurvePt elements.
+    """
+    if start == end:
+        # invalid start/end points
+        return None
+
+    theta = math.atan2(end[1]-start[1], end[0]-start[0])
+    delta = np.linalg.norm([end[0]-start[0], end[1]-start[1]]) / (nsamples-1)
+
+    s = 0.0
+    curve_points = [CurvePt] * nsamples
+    for i in range(1, nsamples+1):
+        t = (i-1)/(nsamples-1)
+        P_x = start[0] + (end[0]-start[0])*t
+        P_y = start[1] + (end[1]-start[1])*t
+        curve_points[i-1] = CurvePt([P_x, P_y], theta, s, 0.0)
+        s += delta
+
+    return Curve(curve_points)
+
+
+def populate_curve_points_arc(
+    center,
+    s,
+    theta,
+    theta_total,
+    radius,
+    nsamples=3
+):
+    """
+    """
+    arc_length = theta_total * radius
+    delta_arc = arc_length / nsamples
+    delta_theta = (theta_total - theta) / nsamples
+
+    curve_points = [CurvePt] * nsamples
+
+    for i in range(1, nsamples+1):
+        P_x = radius * math.cos(theta) + center[0]
+        P_y = radius * math.sin(theta) + center[1]
+        curve_points[nsamples-i] = CurvePt([P_x, P_y], theta, s, 0.0)
+        s += delta_arc
+        theta += delta_theta
+        print("P_{}: {}".format(i, [P_x, P_y]))
+
+    return Curve(curve_points)
+>>>>>>> 534f1b3395443a21f24f7db4de520608704ecb9a
