@@ -189,6 +189,5 @@ def populate_curve_points_arc(
         curve_points[i] = CurvePt([P_x, P_y], theta, s, 0.0)
         s += delta_arc
         theta += delta_theta
-        print("P_{}: {}".format(i, [P_x, P_y]))
 
     return Curve(curve_points)
