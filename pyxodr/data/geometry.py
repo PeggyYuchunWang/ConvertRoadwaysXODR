@@ -10,7 +10,7 @@ class Geometry:
     Parameters
     ----------
     s : float
-        Start posiiton (s-coordinate).
+        Start position (s-coordinate).
     x : float
         Start position (x-inertial).
     y : float
@@ -38,3 +38,20 @@ class Geometry:
             "length": float(length)
         }
         self.type = None
+
+    def __str__(self):
+        return (
+            "Geometry - {}:\n"
+            "   s: {:.8f} m\n"
+            "   x: {:.8f} m\n"
+            "   y: {:.8f} m\n"
+            "   \u03f4: {:.8f} \u33ad\n"
+            "   L: {:.8f} m".format(
+                type(self.type).__name__ if self.type else "Line",
+                self.attrib["s"],
+                self.attrib["x"],
+                self.attrib["y"],
+                self.attrib["hdg"],
+                self.attrib["length"]
+            )
+        )
