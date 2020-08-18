@@ -51,12 +51,14 @@ def createCurves(road, lane_section, curr_geos, nsamples):
                 # step through each lane
                 for lane in side:
                     tag = (road.attrib["id"], lane_section_id, lane.attrib["id"])
-                    x_offset, y_offset, c = createLaneCurve(road,
-                                                              lane,
-                                                              geometry,
-                                                              x_offset,
-                                                              y_offset,
-                                                              nsamples)
+                    x_offset, y_offset, c = createLaneCurve(
+                        road,
+                        lane,
+                        geometry,
+                        x_offset,
+                        y_offset,
+                        nsamples
+                    )
                     if c is not None:
                         if tag in curves.keys():
                             curves[tag].curve_points.extend(c.curve_points)
@@ -86,7 +88,7 @@ def createLaneCurve(road, lane, geometry, x_offset=0, y_offset=0, nsamples=2):
 
     # Calculate the distance to the center of the lane
     lane_sign = math.copysign(1.0, lane.attrib["id"])
-    dx = (width/2.0) * math.sin(heading) * lane_sign
+    dx = (width/2.0) * math.sin(-heading) * lane_sign
     dy = (width/2.0) * math.cos(heading) * lane_sign
 
     # Calculate the new start position of the curve after offset and distance
