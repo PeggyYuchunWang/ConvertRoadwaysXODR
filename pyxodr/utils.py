@@ -45,17 +45,17 @@ def createCurves(road, lane_section, curr_geos, nsamples):
                               lane_section.right_lanes]):
         if len(side) != 0:
             for geometry in curr_geos:
-                current_x = geometry.attrib["x"]
-                current_y = geometry.attrib["y"]
+                x_offset = 0.0
+                y_offset = 0.0
 
                 # step through each lane
                 for lane in side:
                     tag = (road.attrib["id"], lane_section_id, lane.attrib["id"])
-                    current_x, current_y, c = createLaneCurve(road,
+                    x_offset, y_offset, c = createLaneCurve(road,
                                                               lane,
                                                               geometry,
-                                                              current_x,
-                                                              current_y,
+                                                              x_offset,
+                                                              y_offset,
                                                               nsamples)
                     if c is not None:
                         if tag in curves.keys():
@@ -65,10 +65,10 @@ def createCurves(road, lane_section, curr_geos, nsamples):
     return curves
 
 
-def createLaneCurve(road, lane, geometry, current_x=0, current_y=0, nsamples=2):
+def createLaneCurve(road, lane, geometry, x_offset=0, y_offset=0, nsamples=2):
     """
     Creates a list of CurvePt elements that describe the properties of @geometry and @lane.
-    Uses @current_y to recognize the y position of the lane with respect to the
+    Uses @y_offset to recognize the y position of the lane with respect to the
     y position of the preceding id value (allows for lanes with different widths within
     the same lane_section_id). Returns a list of CurvePt elements.
     """
@@ -78,41 +78,45 @@ def createLaneCurve(road, lane, geometry, current_x=0, current_y=0, nsamples=2):
     if lane.width is not None:
         width = lane.width.attrib["a"]
 
-    length = geometry.attrib["length"]
-    heading = geometry.attrib["hdg"]
     s = geometry.attrib["s"]
+    x_start = geometry.attrib["x"]
+    y_start = geometry.attrib["y"]
+    heading = geometry.attrib["hdg"]
+    length = geometry.attrib["length"]
 
+    # Calculate the distance to the center of the lane
     lane_sign = math.copysign(1.0, lane.attrib["id"])
     dx = (width/2.0) * math.sin(heading) * lane_sign
     dy = (width/2.0) * math.cos(heading) * lane_sign
 
-    x1 = current_x
-    y1 = current_y
+    # Calculate the new start position of the curve after offset and distance
+    # to center of lane
+    x_start += x_offset + dx
+    y_start += y_offset + dy
 
     if geometry.type is None:
-        x2 = x1 + length * math.cos(heading)
-        y2 = y1 + length * math.sin(heading)
+        x_end = x_start + length * math.cos(heading)
+        y_end = y_start + length * math.sin(heading)
 
         curve = populate_curve_points_line(
-            [x1 + dx, y1 + dy],
-            [x2 + dx, y2 + dy],
+            [x_start, y_start],
+            [x_end, y_end],
             nsamples
         )
     elif type(geometry.type) is Arc:
         arc = geometry.type
         radius = 1.0 / arc.attrib["curvature"]
-        print("x1: ", x1)
-        print("y1: ", y1)
 
         # Calculate initial arc parameters
         phi = heading - math.pi / 2.0
         phi_total = length / radius
 
-        x0 = x1 - radius*math.cos(phi)
-        y0 = y1 - radius*math.sin(phi)
-        print("x0, y0: ", x0 , " , ", y0 )
-        # Calculate radius with lane center offset
-        radius += math.sqrt(dx*dx + dy*dy)
+        # Calculate radius and circle center with lane center offset
+        radius += math.sqrt(
+            math.pow(x_offset + dx, 2) + math.pow(y_offset + dy, 2)
+        )
+        x0 = x_start - radius*math.cos(phi)
+        y0 = y_start - radius*math.sin(phi)
 
         curve = populate_curve_points_arc(
             [x0, y0],
@@ -130,12 +134,11 @@ def createLaneCurve(road, lane, geometry, current_x=0, current_y=0, nsamples=2):
     # elif type(geometry.type) is ParamPoly3:
     #     geo_type = "polyparam3"
 
-    next_x = x1 + (width * math.sin(heading) * lane_sign)
-    next_y = y1 + (width * math.cos(heading) * lane_sign)
+    # Update x and y offset with distance to far end of lane
+    x_offset += 2.0*dx
+    y_offset += 2.0*dy
 
-    # TODO Pass back dx and dy? Do all lanes in a lane sections at once instead?
-
-    return next_x, next_y, curve
+    return x_offset, y_offset, curve
 
 
 def populate_curve_points_line(start, end, nsamples=2):
@@ -175,8 +178,8 @@ def populate_curve_points_arc(
     """
     """
     arc_length = theta_total * radius
-    delta_arc = arc_length / nsamples
-    delta_theta = (theta_total - theta) / nsamples
+    delta_arc = arc_length / (nsamples - 1)
+    delta_theta = theta_total / (nsamples - 1)
 
     curve_points = [CurvePt] * nsamples
 
