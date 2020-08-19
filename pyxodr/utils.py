@@ -221,7 +221,7 @@ def populate_curve_points_arc(
     for i in range(0, nsamples):
         P_x = radius * math.cos(theta) + center[0]
         P_y = radius * math.sin(theta) + center[1]
-        curve_points[i] = CurvePt([P_x, P_y], theta, s, 0.0)
+        curve_points[i] = CurvePt([P_x, P_y], theta + math.pi/2.0, s, 0.0)
         s += delta_arc
         theta += delta_theta
 
