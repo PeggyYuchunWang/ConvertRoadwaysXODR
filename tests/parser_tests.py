@@ -1,5 +1,3 @@
-import unittest
-
 from pyxodr.parser.open_drive_parser import OpenDriveParser
 
 from pyxodr.data.header import Header
@@ -76,37 +74,43 @@ from pyxodr.data.station import Station
 from pyxodr.data.station_platform import StationPlatform
 from pyxodr.data.station_platform_segment import StationPlatformSegment
 
+import unittest
+
 
 class ParserTests(unittest.TestCase):
     def setUp(self):
         self.parser = OpenDriveParser()
-        self.parser.parse_file(filename="test_data/OpenDriveExs/Ex_Stadium.xodr", parse_curves=True)
+        self.parser.parse_file(
+            filename="test_data/OpenDriveExs/Ex_Compilation.xodr"
+        )
 
     def tearDown(self):
         self.parser = None
 
     def test_header(self):
+        print("Running parser test - Header")
         header = self.parser.data.header
         self.assertIsInstance(header, Header)
         self.assertEqual(header.attrib["rev_major"], 1)
         self.assertEqual(header.attrib["rev_minor"], 6)
-        self.assertEqual(header.attrib["name"], "")
+        self.assertEqual(header.attrib["name"], "Compilation Example")
         self.assertEqual(header.attrib["version"], "1.00")
         self.assertEqual(header.attrib["date"], "Wed Feb 26 17:41:13 2020")
-        self.assertAlmostEqual(header.attrib["north"], 0.0)
-        self.assertAlmostEqual(header.attrib["south"], 0.0)
-        self.assertAlmostEqual(header.attrib['east'], 0.0)
-        self.assertAlmostEqual(header.attrib["west"], 0.0)
+        self.assertEqual(header.attrib["north"], 0.0)
+        self.assertEqual(header.attrib["south"], 0.0)
+        self.assertEqual(header.attrib['east'], 0.0)
+        self.assertEqual(header.attrib["west"], 0.0)
         self.assertEqual(header.attrib["vendor"], "")
         self.assertIsNone(header.geo_reference)
         self.assertIsNone(header.offset)
 
     def test_road(self):
+        print("Running parser test - Road")
         for key in self.parser.data.roads:
             road = self.parser.data.roads[key]
             self.assertIsInstance(road, Road)
             self.assertEqual(road.attrib["name"], "")
-            self.assertEqual(road.attrib["length"], 5.0000000000000000e+01)
+            self.assertEqual(road.attrib["length"], 50.0)
             self.assertEqual(road.attrib["id"], "1")
             self.assertEqual(road.attrib["junction"], "-1")
             self.assertEqual(road.attrib["rule"], "RHT")
@@ -116,48 +120,26 @@ class ParserTests(unittest.TestCase):
 
             g = road.plan_view[0]
             self.assertIsInstance(g, Geometry)
-            self.assertEqual(g.attrib["s"], 0)
-            self.assertEqual(g.attrib["x"], 0)
-            self.assertEqual(g.attrib["y"], 0)
-            self.assertEqual(g.attrib["hdg"], 1.5707963267948966e+00)
-            self.assertEqual(g.attrib["length"], 5.0000000000000000e+01)
+            self.assertEqual(g.attrib["s"], 0.0)
+            self.assertEqual(g.attrib["x"], 0.0)
+            self.assertEqual(g.attrib["y"], 0.0)
+            self.assertAlmostEqual(g.attrib["hdg"], 1.57079632679)
+            self.assertEqual(g.attrib["length"], 50.0)
             self.assertIsNone(g.type)
 
             e = road.elevation_profile[0]
             self.assertIsInstance(e, Elevation)
-            self.assertEqual(e.attrib["s"], 0)
-            self.assertEqual(e.attrib["a"], 0)
-            self.assertEqual(e.attrib["b"], 0)
-            self.assertEqual(e.attrib["c"], 0)
-            self.assertEqual(e.attrib["d"], 0)
+            self.assertEqual(e.attrib["s"], 0.0)
+            self.assertEqual(e.attrib["a"], 0.0)
+            self.assertEqual(e.attrib["b"], 0.0)
+            self.assertEqual(e.attrib["c"], 0.0)
+            self.assertEqual(e.attrib["d"], 0.0)
 
             self.assertIsNone(road.lateral_profile.super_elevation)
-            self.assertEqual(len(road.lateral_profile.shapes), 0)
-
-    def test_curves(self, do_print=True):
-        if do_print:
-            print()
-            print("(road_id, lane_section_id, lane_id)")
-            print(" [ CurvePt 1 ]")
-            print(" ...")
-            print(" [ CurvePt nsamples ]")
-            for key in self.parser.curves:
-                curve = self.parser.curves[key]
-                if do_print:
-                    print()
-                    print(key)
-                    for cp in curve.curve_points:
-                        print(cp.pos)
-
-        # key = ("1", 0, -1)
-        # self.assertEqual(self.parser.curves[key].curve_points[0].pos, [0.0, 3.0])
-        # self.assertEqual(self.parser.curves[key].curve_points[1].pos, [2000.0, 3.0])
-
-        # key = ("1", 0, -2)
-        # self.assertEqual(self.parser.curves[key].curve_points[0].pos, [0.0, 9.0])
-        # self.assertEqual(self.parser.curves[key].curve_points[1].pos, [2000.0, 9.0])
+            self.assertEqual(len(road.lateral_profile.shapes), 0.0)
 
     def test_lanes(self):
+        print("Running parser test - Lanes")
         for key in self.parser.data.roads:
             r = self.parser.data.roads[key]
             lanes = r.lanes
@@ -166,27 +148,27 @@ class ParserTests(unittest.TestCase):
             self.assertEqual(len(lanes.lane_sections), 1)
 
             ls = lanes.lane_sections[0]
-            self.assertEqual(ls.attrib["s"],0)
-            self.assertEqual(ls.attrib["single_side"],False)
+            self.assertEqual(ls.attrib["s"], 0.0)
+            self.assertEqual(ls.attrib["single_side"], False)
 
             lls = ls.left_lanes
-            self.assertEqual(len(lls),7)
+            self.assertEqual(len(lls), 7)
             ll = lls[0]
-            self.assertEqual(ll.attrib["id"],7)
-            self.assertEqual(ll.attrib["type"],"sidewalk")
-            self.assertEqual(ll.attrib["level"],False)
+            self.assertEqual(ll.attrib["id"], 7)
+            self.assertEqual(ll.attrib["type"], "sidewalk")
+            self.assertEqual(ll.attrib["level"], False)
 
             self.assertIsInstance(ll.width, LaneWidth)
-            self.assertEqual(ll.width.attrib["s_offset"],0)
-            self.assertEqual(ll.width.attrib["a"],3.0000000000000000e+00)
-            self.assertEqual(ll.width.attrib["b"],0)
-            self.assertEqual(ll.width.attrib["c"],0)
-            self.assertEqual(ll.width.attrib["d"],0)
+            self.assertEqual(ll.width.attrib["s_offset"], 0.0)
+            self.assertEqual(ll.width.attrib["a"], 3.0)
+            self.assertEqual(ll.width.attrib["b"], 0.0)
+            self.assertEqual(ll.width.attrib["c"], 0.0)
+            self.assertEqual(ll.width.attrib["d"], 0.0)
 
             self.assertIsInstance(ll.height, LaneHeight)
-            self.assertEqual(ll.height.attrib["s_offset"],0)
-            self.assertEqual(ll.height.attrib["inner"],1.2000000000000000e-01)
-            self.assertEqual(ll.height.attrib["outer"],1.2000000000000000e-01)
+            self.assertEqual(ll.height.attrib["s_offset"], 0.0)
+            self.assertEqual(ll.height.attrib["inner"], 0.12)
+            self.assertEqual(ll.height.attrib["outer"], 0.12)
 
             self.assertIsNone(ll.predecessor_id)
             self.assertIsNone(ll.successor_id)
@@ -198,30 +180,46 @@ class ParserTests(unittest.TestCase):
             self.assertIsNone(ll.access)
             self.assertIsNone(ll.rule)
 
-            ll = lls[6]
-            self.assertEqual(ll.attrib["id"],1)
-            self.assertEqual(ll.attrib["type"],"driving")
-            self.assertEqual(ll.attrib["level"],False)
+            ll = lls[1]
+            self.assertEqual(ll.attrib["id"], 6)
+            self.assertEqual(ll.attrib["type"], "biking")
+            self.assertNotEqual(ll.attrib["level"], True)
 
             self.assertIsInstance(ll.width, LaneWidth)
-            self.assertEqual(ll.width.attrib["s_offset"],0)
-            self.assertEqual(ll.width.attrib["a"],3.2500000000000000e+00)
-            self.assertEqual(ll.width.attrib["b"],0)
-            self.assertEqual(ll.width.attrib["c"],0)
-            self.assertEqual(ll.width.attrib["d"],0)
+            self.assertNotEqual(ll.width.attrib["s_offset"], 1.0)
+            self.assertNotEqual(ll.width.attrib["a"], 1.5)
+            self.assertNotEqual(ll.width.attrib["b"], 2.0)
+            self.assertNotEqual(ll.width.attrib["c"], 6.0)
+            self.assertNotEqual(ll.width.attrib["d"], 3.0)
 
-            self.assertIsNone(ll.predecessor_id)
-            self.assertIsNone(ll.successor_id)
-            self.assertIsNone(ll.height)
-            self.assertIsNone(ll.border)
-            self.assertIsNone(ll.road_mark)
-            self.assertIsNone(ll.material)
-            self.assertIsNone(ll.visibility)
-            self.assertIsNone(ll.speed)
-            self.assertIsNone(ll.access)
-            self.assertIsNone(ll.rule)
+            self.assertIsInstance(ll.height, LaneHeight)
+            self.assertNotEqual(ll.height.attrib["s_offset"], 20.0)
+            self.assertNotEqual(ll.height.attrib["inner"], 0.125)
+            self.assertNotEqual(ll.height.attrib["outer"], 0.4)
+
+            ll = lls[2]
+            self.assertEqual(ll.attrib["id"], 5)
+            self.assertEqual(ll.attrib["type"], "border")
+
+            ll = lls[3]
+            self.assertEqual(ll.attrib["id"], 4)
+            self.assertEqual(ll.attrib["type"], "shoulder")
+            self.assertNotEqual(ll.attrib["type"], "curb")
+
+            center_lane = ls.center_lane
+            self.assertNotIsInstance(center_lane, list)
+            self.assertEqual(center_lane.attrib["id"], 0)
+            self.assertEqual(center_lane.attrib["type"], "driving")
+
+            rls = ls.right_lanes
+            self.assertEqual(len(rls), 7)
+            rl = rls[2]
+            self.assertEqual(rl.attrib["id"], -3)
+            self.assertEqual(rl.attrib["type"], "curb")
+            self.assertEqual(rl.attrib["level"], False)
 
     def test_junctions(self):
+        print("Running parser test - Junctions")
         for key in self.parser.data.junctions:
             j = self.parser.data.junctions[key]
             self.assertIsInstance(j, Junction)
@@ -249,6 +247,7 @@ class ParserTests(unittest.TestCase):
             self.assertEqual(c.attrib["type"], "0")
 
     def test_objects(self):
+        print("Running parser test - Objects")
         objs = self.parser.data.roads["1"].objects
         o = objs.objects[0]
         self.assertIsInstance(o, Object)
@@ -292,93 +291,105 @@ class ParserTests(unittest.TestCase):
         self.assertEqual(cr_id, "0")
 
     def test_signals(self):
+        print("Running parser test - Signals")
         sgnls = self.parser.data.roads["1"].signals
         s = sgnls["1"]
         self.assertIsInstance(s, Signal)
-        self.assertEqual(s.attrib["s"], 1.0000000000000000e+01)
-        self.assertEqual(s.attrib["t"], -0.0000000000000000e+00)
+        self.assertEqual(s.attrib["s"], 10.0)
+        self.assertEqual(s.attrib["t"], 0.00)
         self.assertEqual(s.attrib["id"], "1")
         self.assertEqual(s.attrib["name"], "Crosswalk")
         self.assertEqual(s.attrib["dynamic"], "no")
         self.assertEqual(s.attrib["orientation"], "none")
-        self.assertEqual(s.attrib["z_offset"], 0.0000000000000000e+00)
+        self.assertEqual(s.attrib["z_offset"], 0.0)
         self.assertEqual(s.attrib["type"], "1000003")
         self.assertEqual(s.attrib["country"], "OpenDRIVE")
         self.assertEqual(s.attrib["country_revision"], "2013")
         self.assertEqual(s.attrib["subtype"], "-1")
-        self.assertEqual(s.attrib["value"], 4.0000000000000000e+00)
+        self.assertEqual(s.attrib["value"], 4.0)
         self.assertEqual(s.attrib["unit"], "m")
-        self.assertEqual(s.attrib["h_offset"], 0)
-        self.assertEqual(s.attrib["pitch"], 0)
-        self.assertEqual(s.attrib["roll"], 0)
+        self.assertEqual(s.attrib["h_offset"], 0.0)
+        self.assertEqual(s.attrib["pitch"], 0.0)
+        self.assertEqual(s.attrib["roll"], 0.0)
         self.assertEqual(s.attrib["height"], 0.01)
         self.assertEqual(s.attrib["width"], 10.40)
 
+        self.assertEqual(len(s.references), 1)
+        ref = s.references[0]
+        self.assertIsInstance(ref, SignalReference)
+        self.assertEqual(ref.attrib["element_type"], "object")
+        self.assertEqual(ref.attrib["element_id"], "10")
+
     def test_controllers(self):
+        print("Running parser test - Controllers")
         controllers = self.parser.data.controllers
         c = controllers["1"]
         self.assertIsInstance(c, Controller)
-        self.assertEqual(c.attrib["id"], "1")
         self.assertEqual(c.attrib["name"], "ctrl001")
+        self.assertEqual(c.attrib["id"], "1")
+
         sc = c.signal_control_records[0]
         self.assertIsInstance(sc, ControllerSignalControl)
         self.assertEqual(sc.attrib["signal_id"], "8")
         self.assertEqual(sc.attrib["type"], "0")
 
     def test_railroad(self):
+        print("Running parser test - Railroad")
         r = self.parser.data.roads["1"].railroad
         self.assertIsInstance(r, Railroad)
 
         s = r.switches["32"]
         self.assertIsInstance(s, RailroadSwitch)
-        self.assertEqual(s.attrib["position"], "dynamic")
-        self.assertEqual(s.attrib["id"], "1")
         self.assertEqual(s.attrib["name"], "Switch32")
+        self.assertEqual(s.attrib["id"], "32")
+        self.assertEqual(s.attrib["position"], "dynamic")
 
-
-        mt = r.main_track
+        mt = s.main_track
         self.assertIsInstance(mt, RailroadTrack)
         self.assertEqual(mt.attrib["id"], "3")
-        self.assertEqual(mt.attrib["s"], 1.0000000000000000e+01)
+        self.assertEqual(mt.attrib["s"], 10.0)
         self.assertEqual(mt.attrib["dir"], "+")
 
-        st = r.side_track
+        st = s.side_track
         self.assertIsInstance(st, RailroadTrack)
-        self.assertEqual(mt.attrib["id"], "2")
-        self.assertEqual(mt.attrib["s"], 3.4898261533109149e+01)
-        self.assertEqual(mt.attrib["dir"], "-")
+        self.assertEqual(st.attrib["id"], "2")
+        self.assertEqual(st.attrib["s"], 34.898261533109149)
+        self.assertEqual(st.attrib["dir"], "-")
 
-        ps = r.switch_parter
+        ps = s.switch_partner
         self.assertIsInstance(ps, RailroadSwitchPartner)
-        self.assertEqual(mt.attrib["name"], "Switch12")
-        self.assertEqual(mt.attrib["id"], "12")
+        self.assertEqual(ps.attrib["name"], "Switch12")
+        self.assertEqual(ps.attrib["id"], "12")
 
     def test_station(self):
+        print("Running parser test - Station")
         s = self.parser.data.stations["12"]
         self.assertIsInstance(s, Station)
-        self.assertEqual(s.attrib["id"], "12")
         self.assertEqual(s.attrib["name"], "H12")
+        self.assertEqual(s.attrib["id"], "12")
         self.assertEqual(s.attrib["type"], "small")
 
         p = s.platforms[0]
         self.assertIsInstance(p, StationPlatform)
-        self.assertEqual(p.attrib["id"], "12-1")
         self.assertEqual(p.attrib["name"], "platform1")
+        self.assertEqual(p.attrib["id"], "12-1")
 
         seg = p.segments[0]
         self.assertIsInstance(seg, StationPlatformSegment)
         self.assertEqual(seg.attrib["road_id"], "2")
-        self.assertEqual(seg.attrib["s_start"], 1.6500000000000000e+01)
-        self.assertEqual(seg.attrib["s_end"], 5.1000000000000000e+01)
+        self.assertEqual(seg.attrib["s_start"], 16.5)
+        self.assertEqual(seg.attrib["s_end"], 51.0)
         self.assertEqual(seg.attrib["side"], "right")
 
     def test_junction_group(self):
+        print("Running parser test - Junction Group")
         jg = self.parser.data.junction_groups["1"]
         self.assertIsInstance(jg, JunctionGroup)
         self.assertEqual(jg.attrib["id"], "1")
         self.assertEqual(jg.attrib["name"], "ExampleRoundabout")
         self.assertEqual(jg.attrib["type"], "roundabout")
 
+        self.assertEqual(len(jg.junction_references), 3)
         r = jg.junction_references[0]
         self.assertIsInstance(r, str)
         self.assertEqual(r, "42")

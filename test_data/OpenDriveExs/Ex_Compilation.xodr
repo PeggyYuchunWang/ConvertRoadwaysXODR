@@ -1,6 +1,6 @@
 <?xml version="1.0" standalone="yes"?>
 <OpenDRIVE>
-    <header revMajor="1" revMinor="6" name="" version="1.00" date="Wed Feb 26 17:41:13 2020" north="0.0000000000000000e+00" south="0.0000000000000000e+00" east="0.0000000000000000e+00" west="0.0000000000000000e+00">
+    <header revMajor="1" revMinor="6" name="Compilation Example" version="1.00" date="Wed Feb 26 17:41:13 2020" north="0.0000000000000000e+00" south="0.0000000000000000e+00" east="0.0000000000000000e+00" west="0.0000000000000000e+00">
     </header>
     <road name="" length="5.0000000000000000e+01" id="1" junction="-1" rule="RHT">
         <link>

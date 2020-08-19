@@ -89,6 +89,7 @@ from pyxodr.data.curve import Curve
 
 import xml.etree.ElementTree as ET
 
+import logging
 import math
 
 
@@ -124,12 +125,12 @@ class OpenDriveParser:
             Flag used to specify whether the parser should populate the curves
             attribute. Default is False.
         """
-        print("parsing: ", filename)
+        logging.info("Parsing file: {}".format(filename))
         root = ET.parse(filename).getroot()
         self.parse_curves = parse_curves
         self.nsamples = nsamples
         self.__parse(xml_root=root)
-        print("done parsing: ", filename)
+        logging.info("Parsing complete")
 
     def __parse(self, xml_root):
         for header in xml_root.findall("header"):
@@ -238,7 +239,7 @@ class OpenDriveParser:
                 if "unit" in att:
                     r.type.speed.attrib["unit"] = att["unit"]
                 else:
-                    print("Unknown type child tag: ", child.tag)
+                    logging.error("Unknown type child tag: ", child.tag)
 
         self.__parse_road_geometrys(r, road.findall("planView/geometry"))
 
@@ -350,7 +351,7 @@ class OpenDriveParser:
                         float(att["dV"])
                     )
                 else:
-                    print("unkown geometry child tag: ", child.tag)
+                    logging.error("Unknown geometry child tag: ", child.tag)
                 
             r.plan_view.append(geo)
 
@@ -380,7 +381,7 @@ class OpenDriveParser:
             elif child.tag == "lateralProfile":
                 continue
             else:
-                print("unkown lateral profile child: ", child.tag)
+                logging.error("Unknown lateral profile child: ", child.tag)
 
     def __parse_lanes(self, lanes):
         output = Lanes()
@@ -600,7 +601,7 @@ class OpenDriveParser:
                         ex.lines.append(ex_line)
                     lane.road_mark.explicit = ex
                 else:
-                    print("Unknown road mark child tag: ", child.tag)
+                    logging.error("Unknown road mark child tag: ", child.tag)
 
     def __parse_objects(self, objects):
         objs = Objects()
@@ -930,8 +931,8 @@ class OpenDriveParser:
                 r = SignalReference(
                     att["elementType"]
                 )
-                if "elementID" in att:
-                    r.attrib["element_id"] = att["elementID"]
+                if "elementId" in att:
+                    r.attrib["element_id"] = att["elementId"]
                 if "type" in att:
                     r.attrib["type"] = float(att["type"])
                 s.references.append(r)
