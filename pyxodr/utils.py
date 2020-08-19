@@ -34,40 +34,73 @@ def convertStringToBool(boolean_str):
         return True
 
 
-def createCurves(road, lane_section, curr_geos, nsamples):
-    """
-    DESCRIPTION
-    """
+def generateRoadCurves(road, nsamples):
     curves = {}
-    lane_section_id = road.lanes.lane_sections.index(lane_section)
 
-    for i, side in enumerate([lane_section.left_lanes,
-                              lane_section.right_lanes]):
-        if len(side) != 0:
-            for geometry in curr_geos:
-                x_offset = 0.0
-                y_offset = 0.0
+    section_id = 0
 
-                # step through each lane
-                for lane in side:
-                    tag = (road.attrib["id"], lane_section_id, lane.attrib["id"])
-                    x_offset, y_offset, c = createLaneCurve(
-                        road,
-                        lane,
-                        geometry,
-                        x_offset,
-                        y_offset,
-                        nsamples
-                    )
-                    if c is not None:
-                        if tag in curves.keys():
-                            curves[tag].curve_points.extend(c.curve_points)
-                        else:
-                            curves[tag] = c
+    for i, geom in enumerate(road.plan_view):
+        if len(road.lanes.lane_sections) == 1:
+            section_id = i + 1
+            createSectionCurves(
+                curves,
+                road.attrib["id"],
+                road.lanes.lane_sections[0],
+                section_id,
+                geom,
+                nsamples
+            )
+        else:
+            # TODO: Figure out how to handle multiple lane sections with
+            # multiple geometries
+            pass
+
     return curves
 
 
-def createLaneCurve(road, lane, geometry, x_offset=0, y_offset=0, nsamples=2):
+def createSectionCurves(curves, road_id, lane_section, section_id, geometry, nsamples):
+    """
+    DESCRIPTION
+    """
+    x_offset = 0.0
+    y_offset = 0.0
+
+    # Generate the curves for the left lanes
+    if lane_section.left_lanes:
+        lane_section.left_lanes.reverse()
+        for lane in lane_section.left_lanes:
+            tag = (road_id, section_id, lane.attrib["id"])
+            x_offset, y_offset, c = createLaneCurve(
+                lane,
+                geometry,
+                x_offset,
+                y_offset,
+                nsamples
+            )
+
+            if c is not None:
+                curves[tag] = c
+
+    # Must reset offset values for other side of road
+    x_offset = 0.0
+    y_offset = 0.0
+
+    if lane_section.right_lanes:
+        for lane in lane_section.right_lanes:
+            tag = (road_id, section_id, lane.attrib["id"])
+            x_offset, y_offset, c = createLaneCurve(
+                lane,
+                geometry,
+                x_offset,
+                y_offset,
+                nsamples
+            )
+
+            if c is not None:
+                curves[tag] = c
+
+
+def createLaneCurve(lane, geometry, x_offset, y_offset, nsamples):
     """
     Creates a list of CurvePt elements that describe the properties of @geometry and @lane.
     Uses @y_offset to recognize the y position of the lane with respect to the
