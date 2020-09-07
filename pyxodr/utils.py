@@ -35,6 +35,24 @@ def convertStringToBool(boolean_str):
 
 
 def generateRoadCurves(road, nsamples):
+    """
+    Converts a pyxodr Road object into a collection of curves representing
+    waypoints along the center of each lane contained in the Road object.
+
+    Parameters
+    ----------
+    road : pyxodr.data.Road
+        A pyxodr Road object in which to generate waypoints along the center of
+        all the lanes.
+
+    Returns
+    -------
+    dict
+        A Python dictionary of curves along the center of each lane.
+
+        key:  (Road.attrib["id"], Road.lane_sections index, Lane.attrib["id"])
+        value: pyxodr.data.Curve
+    """
     curves = {}
 
     section_id = 0
@@ -58,9 +76,36 @@ def generateRoadCurves(road, nsamples):
     return curves
 
 
-def createSectionCurves(curves, road_id, lane_section, section_id, geometry, nsamples):
+def createSectionCurves(
+    curves,
+    road_id,
+    lane_section,
+    section_id,
+    geometry,
+    nsamples
+):
     """
-    DESCRIPTION
+    Fills the dictionary, curves, with entries for each lane in the provided
+    lane section and geometry.
+
+    Parameters
+    ----------
+    curves : dict
+        A Python dictionary of curves along the center of each lane.
+
+        key:  (Road.attrib["id"], Road.lane_sections index, Lane.attrib["id"])
+        value: pyxodr.data.Curve
+    road_id : string
+        The id of the road, which should be taken from Road.attrib["id"]
+    lane_section : LaneSection
+        The lane section to generate the curves.
+    section_id : int
+        An integer representing the section id (index from Road.lane_sections.)
+    geometry : Geometry
+        The geometry that represents the given LaneSection object.
+    nsamples : int
+        The number of points that will be used to generate (interpolate) the
+        curve.
     """
     x_offset = 0.0
     y_offset = 0.0
@@ -208,9 +253,33 @@ def populate_curve_points_arc(
     theta,
     theta_total,
     radius,
-    nsamples=3
+    nsamples=20
 ):
     """
+    Creates a Curve object that represents the center of a lane following an
+    arc geometry.
+
+    Parameters
+    ----------
+    center : list
+        A list or numpy.array representing the center point of the circle for
+        the arc.
+    s : float
+        The starting point of the s curve.
+    theta : float [radians]
+        The starting angle along the circle to start the arc.
+    theta_total : float [radians]
+        The total angle from start to finish of the arc.
+    radius : float
+        The distance from the center of the circle to the edge.
+    nsamples : int, optional
+        The number of CurvePts that will be in the Curve.
+
+    Returns
+    -------
+    Curve
+        The collection of CurvePts representing the center of the lane
+        following an arc geometry.
     """
     arc_length = theta_total * radius
     delta_arc = arc_length / (nsamples - 1)
